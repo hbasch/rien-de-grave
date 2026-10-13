@@ -1,0 +1,1284 @@
+<title>Rue des Tilleuls · à pied</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Caveat:wght@500;700&family=Special+Elite&display=swap">
+<style>
+/* Layout: a full-screen 3D street diorama; the story floats over it as paper (letters, scenes) and one caption strip. Single dark look by choice. */
+:root {
+  color-scheme: dark;
+  --night: #0d1424;
+  --ink: #f4eee3;
+  --muted: #b8b1a5;
+  --paper: #efe6d1;
+  --paper-ink: #2b2723;
+  --stamp: #c42a2f;
+  --fic: #2d3a5c;
+  --post: #f3c23a;
+  --cit: #a9c8ff;
+  --f-body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-type: "Special Elite", "Courier New", ui-monospace, monospace;
+  --f-hand: "Caveat", "Segoe Print", "Bradley Hand", cursive;
+}
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--night); color: var(--ink); font-family: var(--f-body); overflow: hidden; -webkit-font-smoothing: antialiased; }
+#c { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+body.film #c { filter: saturate(.72) contrast(1.08) sepia(.1); }
+.veil { position: fixed; inset: 0; pointer-events: none; opacity: .7;
+  background:
+    radial-gradient(ellipse at 50% 45%, transparent 58%, rgba(5,8,16,.5) 100%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .45 0 0 0 0 .4 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+body.gouache .veil { opacity: 1; }
+#hots { position: fixed; inset: 0; pointer-events: none; }
+.hot { position: absolute; left: 0; top: 0; pointer-events: auto; border: 0; background: none; color: var(--ink);
+  font: 700 0.95rem/1.2 var(--f-body); display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem; cursor: pointer; translate: -1.1rem -50%; }
+.hot .ring { width: 1.4rem; height: 1.4rem; border-radius: 50%; background: var(--post); flex: none; animation: pulse 1.6s infinite; display: grid; place-items: center; font-size: 0.75rem; color: #1b1b1b; }
+.hot.cit .ring { background: var(--cit); }
+.hot .lbl { background: rgba(13,20,36,.85); padding: 0.3rem 0.6rem; border-radius: 0.3rem; white-space: nowrap; }
+.hot .kind { display: block; font: 400 0.68rem/1.1 var(--f-type); letter-spacing: .08em; text-transform: uppercase; color: var(--post); }
+.hot.cit .kind { color: var(--cit); }
+.hot[data-edge="r"] .t::after { content: " →"; }
+.hot[data-edge="l"] .t::before { content: "← "; }
+.hot:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; border-radius: 0.4rem; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(243,194,58,.6); } 70% { box-shadow: 0 0 0 1rem rgba(243,194,58,0); } 100% { box-shadow: 0 0 0 0 rgba(243,194,58,0); } }
+
+#cap { position: fixed; left: 50%; bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px)); translate: -50% 0; width: min(38rem, calc(100% - 2rem)); box-sizing: border-box;
+  background: var(--paper); color: var(--paper-ink); border-radius: 0.2rem; padding: 0.95rem 1.15rem 0.9rem 1.35rem; display: grid; gap: 0.35rem; cursor: pointer;
+  box-shadow: 0 0.8rem 2.2rem rgba(0,0,0,.5), inset 4px 0 0 var(--post); animation: arrive .35s ease-out; }
+#capWho { margin: 0; font: 400 0.78rem/1 var(--f-type); letter-spacing: .1em; text-transform: uppercase; color: #8a5a12; }
+#capWho:empty { display: none; }
+#capText { margin: 0; font-size: 1.12rem; line-height: 1.45; text-wrap: pretty; }
+#capLegend { margin: 0.2rem 0 0; font-size: 0.85rem; color: #6b6458; display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; }
+#capLegend .p { color: #c79416; } #capLegend .q { color: #4d7cc4; }
+#capNext { justify-self: end; margin-top: 0.15rem; font: 700 0.92rem var(--f-body); color: var(--paper); background: var(--paper-ink); border: 0; border-radius: 0.25rem; padding: 0.45rem 0.9rem; cursor: pointer; }
+button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
+
+#card { z-index: 14; position: fixed; inset: 0; display: grid; place-content: center; justify-items: center; text-align: center; gap: 0.9rem; padding-inline: 1rem;
+  background: radial-gradient(ellipse at 50% 50%, rgba(13,20,36,.82) 0%, rgba(5,8,16,.96) 75%); transition: opacity 0.9s ease; }
+#card.off { opacity: 0; pointer-events: none; }
+#cardSub { margin: 0; font: 400 0.95rem var(--f-type); letter-spacing: .14em; text-transform: uppercase; color: #ff8a7f; border: 2px solid currentColor; padding: 0.35rem 0.7rem; rotate: -2deg; }
+#cardTitle { margin: 0; font: 700 clamp(3rem, 10vw, 6rem)/1 var(--f-hand); color: var(--ink); text-wrap: balance; text-shadow: 0 0.3rem 2rem rgba(0,0,0,.6); }
+
+#letter { z-index: 12; position: fixed; inset: 0; display: grid; place-items: center; padding: 1rem; background: rgba(8,11,20,.55); overflow-y: auto; animation: dim .6s ease-out; }
+@keyframes dim { from { background: rgba(8,11,20,0); } }
+.paper { position: relative; width: min(30rem, 100%); box-sizing: border-box; background: var(--paper); color: var(--paper-ink); padding: 1.5rem 1.4rem 1.2rem;
+  border-radius: 0.15rem; box-shadow: 0 1.5rem 3rem rgba(0,0,0,.45); rotate: -0.6deg; animation: arrive .7s cubic-bezier(.2,.8,.3,1) .15s backwards; }
+.paper.scene { background: #1a2236; color: var(--ink); rotate: 0deg; border-radius: 0.5rem; }
+@keyframes arrive { from { transform: translateY(2rem); opacity: 0; } }
+#lKind { margin: 0 0 0.5rem; font: 700 0.72rem var(--f-body); letter-spacing: .1em; text-transform: uppercase; color: #8a6a14; }
+.paper.scene #lKind { color: var(--cit); }
+#lFrom { margin: 0 0 1rem; font: 700 1.02rem/1.35 var(--f-type); letter-spacing: .06em; text-transform: uppercase; border-bottom: 1px solid rgba(43,39,35,.3); padding-bottom: 0.6rem; }
+.paper.scene #lFrom { border-color: rgba(244,238,227,.2); color: var(--ink); }
+#lBody { font: 400 1.05rem/1.55 var(--f-type); white-space: pre-line; margin: 0 0 1.2rem; }
+.paper.scene #lBody { font-family: var(--f-body); font-size: 1.1rem; }
+#lStamps { display: grid; gap: 0.8rem; justify-items: start; }
+.stamp .links { display: flex; flex-wrap: wrap; gap: 0.2rem 0.9rem; margin-top: 0.35rem; font-size: 0.82rem; font-weight: 400; }
+.stamp .links a { color: inherit; }
+.stamp { display: inline-block; border: 3px solid currentColor; padding: 0.45rem 0.7rem; rotate: -3deg; font: 700 0.92rem/1.35 var(--f-body); max-width: 100%; box-sizing: border-box; background: rgba(239,230,209,.94); }
+.stamp b { display: block; font-size: 1.05rem; letter-spacing: .1em; text-transform: uppercase; }
+.stamp.real { color: var(--stamp); }
+.stamp.fic { color: var(--fic); border-style: dashed; }
+.stamp.prog, .stamp.prop { color: #7a3d00; border-style: double; border-width: 5px; }
+.stamp.prop { color: #5a4a12; }
+#lSrc { margin: 0.9rem 0 0; font-size: 0.85rem; }
+#lSrc a { color: inherit; }
+#lClose { margin-top: 1.1rem; font: 700 1rem var(--f-body); background: var(--paper-ink); color: var(--paper); border: 0; border-radius: 0.3rem; padding: 0.6rem 1rem; cursor: pointer; }
+.paper.scene #lClose { background: var(--ink); color: var(--night); }
+
+.screen { position: fixed; inset: 0; overflow-y: auto; background: radial-gradient(ellipse at 50% 30%, #1c2742 0%, var(--night) 70%); }
+.screen-in { width: min(40rem, 100%); margin: 0 auto; padding-inline: 1.25rem; padding-block: max(3rem, 9vh) 3rem; display: grid; gap: 1.1rem; box-sizing: border-box; }
+#title { background: linear-gradient(90deg, rgba(8,11,20,.95) 0%, rgba(8,11,20,.86) 36%, rgba(8,11,20,.25) 68%, rgba(8,11,20,0) 100%); display: grid; align-items: center; }
+#title .screen-in { margin: 0; padding-inline: clamp(1.25rem, 6vw, 5rem); padding-block: 2rem; width: min(40rem, 100%); gap: 0.9rem; }
+@media (max-width: 760px) { #title { background: linear-gradient(180deg, rgba(8,11,20,.55) 0%, rgba(8,11,20,.92) 45%); align-items: end; } }
+#title h1 { margin: 0; font: 700 clamp(3.6rem, 12vw, 5.8rem)/0.9 var(--f-hand); text-shadow: 0 0.3rem 2rem rgba(0,0,0,.5); }
+#title p { margin: 0; font-size: 1.15rem; line-height: 1.5; }
+#title .warn { font-size: 0.92rem; color: var(--muted); }
+#title .lead { font-size: 1.2rem; }
+.years { list-style: none; margin: 0.2rem 0; padding: 0 0 0 1.1rem; display: grid; gap: 0.45rem; border-left: 2px dashed rgba(244,238,227,.35); }
+.years li { position: relative; display: flex; flex-wrap: wrap; gap: 0.2rem 0.8rem; align-items: baseline; }
+.years li::before { content: ""; position: absolute; left: -1.5rem; top: 0.45rem; width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--post); }
+.years b { font: 400 0.85rem var(--f-type); letter-spacing: .06em; text-transform: uppercase; min-width: 8.5rem; color: var(--post); }
+.years span { color: var(--ink); }
+@media (min-width: 900px) {
+  .years { grid-template-columns: repeat(6, 1fr); padding: 0.9rem 0 0; border-left: 0; border-top: 2px dashed rgba(244,238,227,.35); gap: 0.6rem; }
+  .years li { flex-direction: column; gap: 0.15rem; }
+  .years li::before { left: 0; top: -1.28rem; }
+  .years b { min-width: 0; }
+  .years span { font-size: 0.92rem; }
+}
+.legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1.4rem; }
+.legend p { margin: 0; font-size: 0.95rem; color: var(--muted); display: flex; gap: 0.6rem; align-items: center; }
+.mini { font: 700 0.72rem var(--f-body); letter-spacing: .1em; text-transform: uppercase; border: 2px solid currentColor; padding: 0.15rem 0.45rem; rotate: -2deg; background: rgba(239,230,209,.94); white-space: nowrap; }
+.mini.real { color: var(--stamp); }
+.mini.fic { color: var(--fic); border-style: dashed; }
+.mini.prog { color: #7a3d00; border-style: double; border-width: 4px; }
+.meta { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0; padding: 0; list-style: none; }
+.meta li { font: 400 0.78rem var(--f-type); letter-spacing: .06em; text-transform: uppercase; color: var(--ink); border: 1px solid rgba(244,238,227,.3); border-radius: 2rem; padding: 0.3rem 0.7rem; }
+.big { justify-self: start; font: 700 1.1rem var(--f-body); background: var(--post); color: var(--night); border: 0; border-radius: 0.35rem; padding: 0.9rem 1.5rem; cursor: pointer; text-decoration: none; display: inline-block; box-shadow: 0 0.4rem 1.2rem rgba(243,194,58,.25); }
+.ghost { justify-self: start; font: 700 1rem var(--f-body); background: none; color: var(--ink); border: 1px solid rgba(244,238,227,.4); border-radius: 0.35rem; padding: 0.7rem 1.1rem; cursor: pointer; }
+.tag { font: 400 0.8rem var(--f-type); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0; }
+
+#end h2 { margin: 0; font: 700 clamp(2.6rem, 8vw, 3.8rem)/1 var(--f-hand); text-wrap: balance; }
+#end h3 { margin: 0.8rem 0 0; justify-self: start; font: 700 0.8rem var(--f-body); letter-spacing: .12em; text-transform: uppercase; border: 2px solid currentColor; padding: 0.3rem 0.6rem; rotate: -1.5deg; }
+#end h3.real { color: #ff7a72; }
+#end h3.fic { color: #a9bce6; border-style: dashed; }
+#end h3.prog { color: #f0b46a; border-style: double; border-width: 4px; }
+#end h3.more { color: var(--post); }
+#end h3.prog + ul li { border-left: 3px double #f0b46a; }
+#end h3.more + ul li { border-left: 3px solid var(--post); }
+#end ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.55rem; }
+#end li { line-height: 1.5; padding: 0.7rem 0.9rem; background: rgba(244,238,227,.05); border-radius: 0.35rem; border-left: 3px solid #ff7a72; }
+#end h3.fic + ul li { border-left: 3px dashed #a9bce6; }
+#end li a { color: var(--ink); text-underline-offset: 0.15em; }
+#end li small { display: block; color: var(--muted); font-size: 0.88rem; margin-top: 0.15rem; }
+#end p { margin: 0; line-height: 1.55; }
+#end .vote { background: rgba(243,194,58,.12); border: 1px solid rgba(243,194,58,.4); border-radius: 0.5rem; padding: 1.1rem; display: grid; gap: 0.7rem; }
+#end .credits { font-size: 0.85rem; color: var(--muted); }
+
+#tag { z-index: 12; position: fixed; left: 50%; bottom: calc(0.9rem + env(safe-area-inset-bottom, 0px)); translate: -50% 0; width: min(34rem, calc(100% - 1.5rem)); max-height: 50vh; overflow-y: auto; box-sizing: border-box;
+  background: var(--paper); color: var(--paper-ink); border-radius: 0.25rem; padding: 1rem 1.15rem 1.05rem; display: grid; gap: 0.5rem; box-shadow: 0 1rem 2.5rem rgba(0,0,0,.5), inset 4px 0 0 var(--stamp); animation: arrive .6s cubic-bezier(.2,.8,.3,1); }
+#tKind { margin: 0; font: 400 0.78rem/1 var(--f-type); letter-spacing: .1em; text-transform: uppercase; color: #8a5a12; }
+#tTitle { margin: 0; font: 700 2rem/1 var(--f-hand); }
+#tBody { margin: 0; font-size: 1.02rem; line-height: 1.5; white-space: pre-line; text-wrap: pretty; }
+#tStamps { display: grid; gap: 0.6rem; justify-items: start; margin-top: 0.2rem; }
+#tStamps .stamp { font-size: 0.86rem; padding: 0.4rem 0.6rem; }
+#tStamps .stamp b { font-size: 0.92rem; }
+#tNext { justify-self: end; font: 700 0.95rem var(--f-body); color: var(--paper); background: var(--paper-ink); border: 0; border-radius: 0.25rem; padding: 0.55rem 1rem; cursor: pointer; }
+@media (orientation: landscape) { #tag { left: auto; right: 0.75rem; translate: none; bottom: 0.75rem; width: min(27rem, 46vw); max-height: calc(100vh - 6.5rem); } }
+@media (orientation: landscape) and (min-width: 900px) { #tag { right: 1.5rem; bottom: 1.5rem; max-height: calc(100vh - 9rem); } }
+#bar { position: fixed; top: calc(0.6rem + env(safe-area-inset-top, 0px)); left: 0.75rem; right: 0.75rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 0.5rem; pointer-events: none; }
+#bar > * { pointer-events: auto; }
+#clock { pointer-events: none !important; background: var(--paper); color: var(--paper-ink); border-radius: 0.2rem; padding: 0.5rem 0.75rem 0.55rem; box-shadow: 0 0.4rem 1.2rem rgba(0,0,0,.4); display: grid; gap: 0.15rem; min-width: 12.5rem; }
+#clock p { margin: 0; }
+#clkDay { font: 400 0.78rem var(--f-type); letter-spacing: .06em; text-transform: uppercase; }
+#clkTime { font: 700 1.55rem/1 var(--f-body); font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+#clkTime i { font-style: normal; font-weight: 400; font-size: 1rem; margin-inline: 0.12em; opacity: .7; }
+#clkCount { font: 400 0.68rem/1.3 var(--f-body); color: rgba(43,39,35,.75); }
+#clkCount b { font-weight: 700; color: #b3261e; }
+#clkLine { list-style: none; margin: 0.35rem 0 0; padding: 0.35rem 0 0; border-top: 1px dashed rgba(43,39,35,.35); display: grid; grid-template-columns: repeat(9, 1fr); gap: 0.1rem; }
+#clkLine li { font: 400 0.58rem/1.15 var(--f-type); text-transform: uppercase; color: rgba(43,39,35,.45); text-align: center; position: relative; padding-top: 0.45rem; }
+#clkLine li::before { content: ""; position: absolute; top: 0; left: 50%; translate: -50% 0; width: 0.35rem; height: 0.35rem; border-radius: 50%; background: currentColor; }
+#clkLine li.done { color: rgba(43,39,35,.7); }
+#clkLine li.now { color: #b3261e; font-weight: 700; }
+#clkLine li.now::before { width: 0.5rem; height: 0.5rem; top: -0.05rem; }
+@media (max-width: 600px) { #clock { min-width: 0; padding: 0.4rem 0.6rem; } #clkTime { font-size: 1.2rem; } #clkLine li { font-size: 0; padding-top: 0.4rem; } #clkLine { margin-top: 0.25rem; padding-top: 0.25rem; } }
+#proto { margin: 0; font: 400 0.72rem var(--f-type); letter-spacing: .1em; text-transform: uppercase; color: var(--paper-ink); background: var(--paper); padding: 0.3rem 0.6rem; border-radius: 0.15rem; box-shadow: 0 0.3rem 1rem rgba(0,0,0,.35); pointer-events: none !important; }
+#styles { display: flex; gap: 0.25rem; align-items: center; background: rgba(10,14,26,.78); border: 1px solid rgba(244,238,227,.18); border-radius: 0.35rem; padding: 0.2rem; }
+#styles span { font: 400 0.7rem var(--f-type); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding-inline: 0.4rem; }
+#styles button { font: 700 0.8rem var(--f-body); color: var(--ink); background: none; border: 0; border-radius: 0.25rem; padding: 0.35rem 0.55rem; cursor: pointer; }
+#styles button[aria-pressed="true"] { background: var(--ink); color: var(--night); }
+.tools { display: flex; gap: 0.4rem; }
+#menuBtn { font: 700 0.8rem var(--f-body); background: var(--paper); color: var(--paper-ink); border: 0; border-radius: 0.3rem; padding: 0.4rem 0.75rem; cursor: pointer; box-shadow: 0 0.3rem 1rem rgba(0,0,0,.35); }
+#menu { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 1rem; background: rgba(5,8,16,.78); backdrop-filter: blur(3px); }
+.menu-in { width: min(26rem, 100%); background: #141c30; border: 1px solid rgba(244,238,227,.15); border-radius: 0.6rem; padding: 1.5rem 1.4rem; display: grid; gap: 0.9rem; box-shadow: 0 1.5rem 3rem rgba(0,0,0,.5); }
+.menu-in h2 { margin: 0; font: 700 2.8rem/1 var(--f-hand); }
+.menu-btns { display: grid; gap: 0.5rem; }
+.menu-btns button { justify-self: stretch; text-align: left; }
+.about { margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--muted); }
+.end-btns { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+#mute { font: 700 0.8rem var(--f-body); background: rgba(10,14,26,.78); color: var(--ink); border: 1px solid rgba(244,238,227,.2); border-radius: 0.3rem; padding: 0.4rem 0.65rem; cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { .hot .ring { animation: none; } .paper { animation: none; } #card { transition: none; } }
+</style>
+
+<canvas id="c" aria-hidden="true"></canvas>
+<div class="veil"></div>
+<div id="hots"></div>
+
+<div id="cap" hidden role="status" aria-live="polite">
+  <p id="capWho"></p>
+  <p id="capText"></p>
+  <p id="capLegend" hidden><span><b class="p">●</b> Ta tournée de factrice</span><span><b class="q">●</b> Ta vie de citoyenne</span></p>
+  <button id="capNext" type="button">Continuer</button>
+</div>
+
+<div id="card" class="off" aria-live="polite"><p id="cardSub"></p><h2 id="cardTitle"></h2></div>
+
+<div id="letter" hidden role="dialog" aria-modal="true" aria-labelledby="lFrom">
+  <div class="paper" id="paper">
+    <p id="lKind"></p>
+    <p id="lFrom"></p>
+    <p id="lBody"></p>
+    <div id="lStamps"></div>
+    <button id="lClose" type="button">Continuer</button>
+  </div>
+</div>
+
+<div id="tag" hidden role="dialog" aria-labelledby="tTitle">
+  <p id="tKind"></p>
+  <h3 id="tTitle"></h3>
+  <p id="tBody"></p>
+  <div id="tStamps"></div>
+  <button id="tNext" type="button">Continuer la marche</button>
+</div>
+
+<div id="bar" hidden>
+  <div id="clock" aria-live="polite">
+    <p id="clkDay">Dimanche 2 mai 2027</p>
+    <p id="clkTime"><span id="clkH">19</span><i>h</i><span id="clkM">58</span></p>
+    <p id="clkCount"></p>
+    <ol id="clkLine" aria-label="Chronologie"><li>2027</li><li>2028</li><li>2029</li><li>2030</li><li>2031</li><li>2032</li><li>2033</li><li>2034</li><li>2035</li></ol>
+  </div>
+  <div class="tools"><button id="mute" type="button" hidden aria-pressed="false">Couper le son</button><button id="menuBtn" type="button" aria-haspopup="dialog">Menu</button></div>
+</div>
+
+<div id="menu" hidden role="dialog" aria-modal="true" aria-labelledby="menuTitle">
+  <div class="menu-in">
+    <p class="tag">Pause</p>
+    <h2 id="menuTitle">Rue des Tilleuls</h2>
+    <div class="menu-btns">
+      <button id="mResume" class="big" type="button">Reprendre</button>
+      <button id="mSound" class="ghost" type="button">Son : activé</button>
+      <button id="mFull" class="ghost" type="button">Plein écran</button>
+      <button id="mFacts" class="ghost" type="button">Les faits et les sources</button>
+      <button id="mRestart" class="ghost" type="button">Recommencer depuis le début</button>
+    </div>
+    <p class="about">Fiction d'anticipation. Claire, Valberne et ses habitants sont inventés. Les tampons rouges « Déjà arrivé » renvoient à des faits réels et sourcés, les tampons « Au programme du RN » à des mesures annoncées, et les tampons bleus « Pas encore arrivé » à la fiction, toujours inspirée de faits réels. Aucune parole inventée n'est prêtée à une personne réelle.</p>
+  </div>
+</div>
+
+<section id="title" class="screen">
+  <div class="screen-in">
+    <p class="tag">Fiction d'anticipation · 12 min</p>
+    <h1>Rue des Tilleuls</h1>
+    <p class="tag">Prototype · à la première personne</p>
+    <p class="lead">Mai 2027 : le Rassemblement national gagne l'élection présidentielle.<br>Chaque année, le 2 mai, Claire descend la même rue. <strong>Neuf promenades, huit ans</strong>, jusqu'à l'élection suivante. Regarde ce qui change.</p>
+    <ul class="meta" aria-label="Les neuf promenades"><li>2027</li><li>2028</li><li>2029</li><li>2030</li><li>2031</li><li>2032</li><li>2033</li><li>2034</li><li>2035</li></ul>
+    <p>Ce jeu ne te demande pas pour qui tu as voté. Il imagine la suite à partir de faits réels : des villes dirigées par le FN et le RN, leur programme, et des pays qui ont pris ce chemin avant nous.</p>
+    <div class="legend">
+      <p><span class="mini real">Déjà arrivé</span> un fait réel, avec sa source</p>
+      <p><span class="mini prog">Au programme du RN</span> une mesure annoncée, avec sa source</p>
+      <p><span class="mini fic">Pas encore arrivé</span> la fiction, toujours inspirée de faits réels</p>
+    </div>
+    <button id="start" class="big" type="button">Commencer</button>
+    <p class="warn">Tu marches toute seule. Fais glisser pour regarder autour de toi. Avec le son.</p>
+  </div>
+</section>
+
+<section id="end" class="screen" hidden>
+  <div class="screen-in">
+    <p class="tag">Fin · Valberne n'existe pas. Le reste, si.</p>
+    <h2>Tout ce qui portait un tampon rouge a déjà eu lieu.</h2>
+    <h3 class="real">Déjà arrivé en France</h3>
+    <ul>
+      <li>À CV égal, les candidats au nom d'origine maghrébine sont rappelés 31,5 % moins souvent. <small>Testing Dares, 2019–2021.</small> <a href="https://www.insee.fr/fr/statistiques/6793310" target="_blank" rel="noopener">Source</a></li>
+      <li>149 000 € de subvention refusés à un théâtre après les critiques publiques de son directeur ; la Région est condamnée à payer. <small>Région Auvergne-Rhône-Alpes (LR), 2023 ; tribunal administratif de Lyon, octobre 2025.</small> <a href="https://www.lagazettedescommunes.com/wp-content/uploads/2025/11/2309825-1.pdf" target="_blank" rel="noopener">Source</a></li>
+      <li>Une prime de naissance réservée aux familles françaises ou européennes. <small>Vitrolles, mairie FN, 1998. Annulée par la justice ; la maire est condamnée.</small> <a href="https://www.universalis.fr/evenement/8-novembre-2000-condamnation-a-deux-ans-d-ineligibilite-de-catherine-megret/" target="_blank" rel="noopener">Source</a></li>
+      <li>La Ligue des droits de l'homme chassée de son local. <small>Hénin-Beaumont, mairie FN, 2014.</small> <a href="https://www.politis.fr/articles/2014/04/henin-beaumont-la-ldh-expulsee-26515/" target="_blank" rel="noopener">Source</a></li>
+      <li>L'eau, le gaz et l'électricité coupés au Secours populaire pour le faire partir de son local. <small>Hayange, mairie FN, 2016.</small> <a href="https://www.politis.fr/articles/2016/10/hayange-le-fn-veut-ejecter-le-secours-populaire-35494/" target="_blank" rel="noopener">Source</a></li>
+      <li>Des livres pour enfants retirés de la bibliothèque municipale, dont « Momo de Palestine ». <small>Orange, mairie FN, 1996.</small> <a href="https://www.livreshebdo.fr/article/lordre-regne-dans-les-bibliotheques" target="_blank" rel="noopener">Source</a></li>
+      <li>Plus de repas de remplacement à la cantine, du porc chaque lundi. <small>Beaucaire, mairie RN, depuis 2018, malgré le Conseil d'État.</small> <a href="https://www.objectifgard.com/politique/expresso-repas-sans-porc-a-beaucaire-la-mairie-deboutee-par-le-conseil-detat-116948.php" target="_blank" rel="noopener">Source</a></li>
+      <li>Une esplanade baptisée Pierre-Sergent, ancien chef de l'OAS condamné à mort par contumace, devenu député du Front national en 1986. <small>Perpignan, mairie RN, 2022 ; délibération annulée par la justice en 2025.</small> <a href="https://www.lemondedudroit.fr/public/282-droit-public-general/97174-denomination-des-lieux-publics-pas-de-place-pierre-sergent-a-perpignan.html" target="_blank" rel="noopener">Source</a> · <a href="https://fr.wikipedia.org/wiki/Pierre_Sergent" target="_blank" rel="noopener">En savoir plus</a></li>
+      <li>Le cinéma René-Vautier, du nom d'un résistant devenu cinéaste, rebaptisé : son nom était jugé trop « politique ». <small>Elne, conseil municipal du 22 septembre 2026.</small> <a href="https://lesmutins.org/extreme-droite-le-nom-de-rene" target="_blank" rel="noopener">Source</a> · <a href="https://fr.wikipedia.org/wiki/Ren%C3%A9_Vautier" target="_blank" rel="noopener">En savoir plus</a></li>
+      <li>« Passeport », une pièce d'Alexis Michalik sur des parcours d'exilés, déprogrammée par un maire qui dit ne pas l'avoir vue. <small>Castres, mairie RN, juin 2026.</small> <a href="https://www.lagazettefrance.fr/article/deprogrammations-coupes-budgetaires-dans-des-villes-rn-la-culture-sur-la-sellette" target="_blank" rel="noopener">Source</a></li>
+      <li>« Les associations qui participeront n'auront plus de subventions de la mairie. » Puis les syndicats sommés de rendre leurs locaux municipaux. <small>Carcassonne, mairie RN, avril 2026.</small> <a href="https://www.lagazettefrance.fr/article/a-carcassonne-conquise-par-le-rn-une-manifestation-contre-l-extreme-droite" target="_blank" rel="noopener">Source</a> · <a href="https://www.lagazettefrance.fr/article/deloges-de-locaux-municipaux-les-syndicats-protestent-contre-le-maire-rn-de-carcassonne" target="_blank" rel="noopener">Source</a></li>
+      <li>Un même milliardaire, Vincent Bolloré, contrôle la chaîne d'info la plus regardée (CNews), une grande radio (Europe 1), le JDD et le groupe Hachette. <small>2026.</small> <a href="https://www.lagazettefrance.fr/article/bollore-et-son-empire-au-centre-du-jeu-avant-2027" target="_blank" rel="noopener">Source</a> · <a href="https://www.brut.media/fr/articles/cnews-a-ete-la-premiere-chaine-dinformation-en-2025-devant-bfmtv" target="_blank" rel="noopener">Audiences</a></li>
+      <li>Un agriculteur condamné pour avoir aidé des migrants. Le « délit de solidarité » est limité en 2018 au nom de la fraternité, mais aider quelqu'un à entrer en France reste puni. <small>Cédric Herrou, vallée de la Roya, 2017.</small> <a href="https://www.vaticannews.va/fr/monde/news/2018-07/france-fraternite.html" target="_blank" rel="noopener">Source</a> · <a href="https://fr.wikipedia.org/wiki/D%C3%A9lit_de_solidarit%C3%A9" target="_blank" rel="noopener">En savoir plus</a></li>
+      <li>Le Sénat vote l'interdiction des signes religieux pour les parents qui accompagnent les sorties scolaires ; la mesure est ensuite retirée. <small>Amendement LR, 15 mai 2019.</small> <a href="https://www.publicsenat.fr/actualites/politique/sorties-scolaires-le-senat-vote-pour-l-interdiction-du-port-du-voile-pour-les" target="_blank" rel="noopener">Source</a></li>
+      <li>Philippe Pétain collabore avec l'Allemagne nazie ; près de 76 000 Juifs sont déportés depuis la France. Condamné à mort en 1945, il est gracié à cause de son âge. <small>État français, 1940–1944.</small> <a href="https://fr.wikipedia.org/wiki/Philippe_P%C3%A9tain" target="_blank" rel="noopener">En savoir plus</a></li>
+      <li>Les confédérations syndicales dissoutes par décret. <small>Régime de Vichy, 9 novembre 1940.</small> <a href="https://fr.wikipedia.org/wiki/R%C3%A9gime_de_Vichy" target="_blank" rel="noopener">En savoir plus</a></li>
+    </ul>
+    <h3 class="real">Ce qui touchera aussi ceux qui ont voté pour eux</h3>
+    <ul>
+      <li>Environ un emploi sur dix est occupé par une personne immigrée, bien plus chez les aides à domicile, les agents d'entretien, dans le bâtiment et la restauration. <small>France, Dares, 2021.</small> <a href="https://www.legisocial.fr/actualites-sociales/4691-sont-metiers-immigres.html" target="_blank" rel="noopener">Source</a></li>
+      <li>Interrogé sur l'abrogation de la réforme des retraites promise pendant la campagne : « Nous verrons ». <small>Jordan Bardella, juin 2024.</small> <a href="https://www.boursorama.com/bourse/actualites/retraites-jordan-bardella-n-est-plus-si-presse-d-abroger-la-reforme-de-macron-101b949b9967c92520b3be1c9ef2c30f" target="_blank" rel="noopener">Source</a></li>
+    </ul>
+    <h3 class="real">Sous les dictatures d'extrême droite</h3>
+    <ul>
+      <li>Plus de 3 000 opposants tués ou « disparus », souvent militants de gauche ou syndicalistes. <small>Chili, dictature de Pinochet, 1973–1990.</small> <a href="https://fr.wikipedia.org/wiki/Dictature_militaire_d%27Augusto_Pinochet" target="_blank" rel="noopener">En savoir plus</a></li>
+      <li>Une police politique qui arrête et détient sans jugement, et paie des voisins pour dénoncer. <small>Portugal de Salazar, PIDE, 1933–1974.</small> <a href="https://en.wikipedia.org/wiki/PIDE" target="_blank" rel="noopener">Source</a></li>
+      <li>Le seul opposant autorisé obtient 23 % dans une élection truquée, puis il est assassiné par la police politique. <small>Portugal, Humberto Delgado, 1958 et 1965.</small> <a href="https://fr.wikipedia.org/wiki/Humberto_Delgado" target="_blank" rel="noopener">Source</a></li>
+      <li>Interdiction de critiquer le régime, ses lois et sa version de l'histoire dans la presse. <small>Espagne de Franco, loi sur la presse de 1938.</small> <a href="https://www.briefhistory.co.uk/1939/scw-post-war-censorship" target="_blank" rel="noopener">Source</a></li>
+      <li>Un manuel scolaire unique écrit par l'État : « Tous les enfants d'Italie sont de petits fascistes. » <small>Italie fasciste, 1929.</small> <a href="https://www.focus.it/cultura/storia/cosa-si-imparava-a-scuola-durante-il-fascismo-oltre-al-saluto-romano" target="_blank" rel="noopener">Source</a></li>
+      <li>L'avortement devient un « crime contre la sûreté de l'État » ; une femme est guillotinée. <small>Régime de Vichy, 1942 et 1943.</small> <a href="https://www.pariszigzag.fr/insolite/histoire-insolite-paris/lhistoire-de-marie-louise-giraud-la-seule-faiseuse-danges-guillotinee-en-france/" target="_blank" rel="noopener">Source</a></li>
+    </ul>
+    <h3 class="real">Déjà arrivé ailleurs</h3>
+    <ul>
+      <li>Après le Brexit, il manque environ 100 000 chauffeurs routiers ; des stations-service sont à sec et l'armée livre l'essence. <small>Royaume-Uni, octobre 2021.</small> <a href="https://fr.le360.ma/monde/penurie-de-carburants-au-royaume-uni-larmee-deployee-des-lundi-246712/" target="_blank" rel="noopener">Source</a></li>
+      <li>Un père de famille expulsé vers une méga-prison du Salvador ; le gouvernement parle lui-même d'une « erreur administrative ». <small>États-Unis, Kilmar Abrego Garcia, mars 2025.</small> <a href="https://www.truthdig.com/articles/deportation-of-el-salvador-national-to-mega-prison-deemed-administrative-error/" target="_blank" rel="noopener">Source</a></li>
+      <li>« Maus », bande dessinée sur la Shoah, retirée du programme scolaire d'un comté. <small>États-Unis, Tennessee, janvier 2022.</small> <a href="https://www.livreshebdo.fr/article/lalbum-maus-interdit-dans-un-college-du-tennessee" target="_blank" rel="noopener">Source</a></li>
+      <li>La reconnaissance faciale autorisée pour identifier les participants d'une marche interdite. <small>Hongrie, 2025.</small> <a href="https://www.pbs.org/newshour/world/hungary-passes-anti-lgbtq-law-banning-pride-events" target="_blank" rel="noopener">Source</a></li>
+      <li>Le premier quotidien d'opposition fermé du jour au lendemain. <small>Hongrie, Népszabadság, octobre 2016.</small> <a href="https://www.hrw.org/news/2016/10/10/hungarys-biggest-oppositional-daily-shut-down" target="_blank" rel="noopener">Source</a></li>
+      <li>Les mères de quatre enfants exonérées d'impôt à vie ; un prêt aux couples mariés effacé au troisième enfant. <small>Hongrie, 2019.</small> <a href="https://www.lalibre.be/international/2019/02/14/pourquoi-la-hongrie-met-en-place-des-mesures-natalistes-KGAI3BDHWBAIHJM7PC6W3D5ELE/" target="_blank" rel="noopener">Source</a></li>
+      <li>Le seul candidat opposé à la guerre écarté de la présidentielle. <small>Russie, Boris Nadejdine, février 2024.</small> <a href="https://www.dhnet.be/actu/monde/2024/02/08/presidentielle-russe-le-seul-candidat-anti-poutine-annonce-que-sa-candidature-a-ete-rejetee-64CLXDYUXZHV5GUUGZZED7TGBE/" target="_blank" rel="noopener">Source</a></li>
+    </ul>
+    <h3 class="prog">Au programme du RN</h3>
+    <ul>
+      <li>La « priorité nationale » pour le logement social, l'emploi et les aides, inscrite dans la Constitution par référendum. <small>Programme du RN, 2022 et 2024.</small> <a href="https://lcp.fr/actualites/legislatives-2024-le-programme-du-rassemblement-national-en-matiere-d-immigration-a-l" target="_blank" rel="noopener">Source</a></li>
+      <li>Renvoyer les étrangers restés un an sans emploi. <small>Programme présidentiel de Marine Le Pen, 2022.</small> <a href="https://www.institutmontaigne.org/presidentielle-2022/marine-le-pen/renvoyer-les-etrangers-sans-emploi-depuis-un-an" target="_blank" rel="noopener">Source</a></li>
+      <li>Une centaine de postes « sensibles » interdits aux binationaux, liste fixée par décret et « évolutive ». <small>Jordan Bardella, juin 2024.</small> <a href="https://acteurspublics.fr/articles/postes-interdits-aux-binationaux-concours/" target="_blank" rel="noopener">Source</a></li>
+      <li>Des amendes pour les femmes voilées dans l'espace public, et un référendum sur « l'idéologie islamiste ». <small>Jean-Philippe Tanguy et Jordan Bardella, août 2026.</small> <a href="https://www.sudradio.fr/societe/interdiction-du-voile-et-amendes-le-rn-pousse-un-marqueur-du-lepenisme-et-propose-un-referendum" target="_blank" rel="noopener">Source</a></li>
+      <li>L'uniforme à l'école, et la « priorité absolue » à l'histoire de France. <small>Programme présidentiel de Marine Le Pen, 2022.</small> <a href="https://lcp.fr/actualites/presidentielle-la-bataille-de-l-enseignement-109272" target="_blank" rel="noopener">Source</a></li>
+      <li>Une « présomption de légitime défense » pour les forces de l'ordre. <small>Programme des législatives, juin 2024.</small> <a href="https://tnova.fr/site/assets/files/63488/terra_nova_-_les_non-dits_de_la_securite_selon_le_rn_-_27_06_2024.pdf" target="_blank" rel="noopener">Source</a></li>
+    </ul>
+    <h3 class="prog">Déjà proposé par d'autres</h3>
+    <ul>
+      <li>Interdire les prénoms « non français ». <small>Éric Zemmour, candidat à la présidentielle, septembre 2021.</small> <a href="https://fr.le360.ma/monde/video-sil-etait-president-eric-zemmour-interdirait-les-prenoms-musulmans-en-france-245761" target="_blank" rel="noopener">Source</a></li>
+      <li>Interdire La France insoumise. <small>Bruno Retailleau (LR), candidat à la présidentielle, sur BFMTV-RMC, 1er octobre 2026. Un juriste y voit une « fenêtre d'Overton » que d'autres pourraient reprendre.</small> <a href="https://www.publicsenat.fr/actualites/politique/colere-lyceenne-bruno-retailleau-suggere-de-dissoudre-lfi-est-ce-possible" target="_blank" rel="noopener">Source</a></li>
+    </ul>
+    <h3 class="fic">Pas encore arrivé</h3>
+    <ul>
+      <li>Le cinéma Maréchal-Pétain, le manuel « Notre France, une fierté », les deux files à l'agence HLM, la brigade sans matricule, la disparition de Julien. <small>La fiction de ce que ces mesures donneraient dans une rue.</small> </li>
+      <li>Dissoudre les syndicats, suspendre des journaux, faire disparaître des opposants, une élection à candidat unique. <small>Aucun programme ne le propose. C'est ce que d'autres pays ont connu quand plus rien ne les en empêchait.</small> </li>
+    </ul>
+    <h3 class="more">Pour aller plus loin</h3>
+    <ul>
+      <li>Comparer les programmes des candidats, mesure par mesure, avec leur coût. <small>Institut Montaigne.</small> <a href="https://www.institutmontaigne.org/presidentielle-2022" target="_blank" rel="noopener">Ouvrir</a></li>
+      <li>Voir ce que chaque député a voté à l'Assemblée nationale. <small>Datan, NosDéputés.fr.</small> <a href="https://datan.fr" target="_blank" rel="noopener">Datan</a> · <a href="https://www.nosdeputes.fr" target="_blank" rel="noopener">NosDéputés.fr</a></li>
+    </ul>
+    <p>Claire, Léo, Moussa, Bernadette, Michel, Samia et la ville de Valberne sont inventés. Aucune parole inventée n'est prêtée à une personne réelle. Les tampons « Pas encore arrivé » décrivent une fiction d'anticipation, toujours inspirée de faits réels.</p>
+    <div class="vote">
+      <p><strong>Rien de tout cela n'est écrit d'avance.</strong> Une élection se joue à quelques points, et ce sont souvent ceux qui ne votent pas qui décident.</p>
+      <a class="big" href="https://www.service-public.fr/particuliers/vosdroits/R51788" target="_blank" rel="noopener">Vérifier mon inscription sur les listes électorales</a>
+    </div>
+    <p class="credits">Un jeu indépendant, gratuit, sans publicité ni collecte de données. Sons : ElevenLabs. Moteur 3D : three.js (licence MIT). Polices : Atkinson Hyperlegible, Caveat, Special Elite (licence SIL OFL). Sources consultées en octobre 2026.</p>
+    <div class="end-btns"><button id="endBack" class="big" type="button" hidden>Revenir au jeu</button><button id="again" class="ghost" type="button">Rejouer</button></div>
+  </div>
+</section>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
+import { HorizontalTiltShiftShader } from 'three/addons/shaders/HorizontalTiltShiftShader.js';
+import { VerticalTiltShiftShader } from 'three/addons/shaders/VerticalTiltShiftShader.js';
+
+const $ = (s) => document.querySelector(s);
+const FAST = new URLSearchParams(location.search).has('fast'); // test mode only
+const wait = (ms) => new Promise((r) => setTimeout(r, FAST ? ms * 0.15 : ms));
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+try { await Promise.race([Promise.all(['700 40px "Atkinson Hyperlegible"', '40px "Special Elite"', '700 40px "Caveat"'].map((f) => document.fonts.load(f))), wait(2500)]); } catch (e) {}
+
+/* ===== SOUND: ambiences and effects published next to the page. Missing files are simply silent. ===== */
+// levels are normalised: the four ambiences were recorded at very different loudness
+const AUDIO = { musique: { nuit: ['sons/amb2.mp3', 2.2], jour: ['sons/amb1.mp3', 1.0], ete: ['sons/amb1.mp3', 0.75], pluie: ['sons/amb3.mp3', 2.2], tension: ['sons/amb2.mp3', 3.0], fin: ['sons/amb4.mp3', 3.6] },
+  sfx: { lettre: ['sons/lettre.mp3', 0.9], tampon: ['sons/tampon.mp3', 0.9], sirene: ['sons/sirene.mp3', 0.7] } };
+const SND = { ctx: null, buf: {}, loops: {}, cur: null, want: null, on: true };
+function loadAudio() {
+  if (SND.ctx) { SND.ctx.resume?.(); return; }
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)(); SND.ctx = ctx; ctx.resume?.(); SND.m = ctx.createGain(); SND.m.connect(ctx.destination);
+    // unlock on iOS: play one silent sample inside the click
+    { const b = ctx.createBuffer(1, 1, 22050), src = ctx.createBufferSource(); src.buffer = b; src.connect(ctx.destination); src.start(0); }
+    const urls = new Set(Object.values(AUDIO).flatMap((g) => Object.values(g).map((v) => v[0])));
+    urls.forEach(async (u) => {
+      try { const r = await fetch(u); if (!r.ok) throw 0; const data = await r.arrayBuffer(); SND.buf[u] = await new Promise((ok, no) => ctx.decodeAudioData(data, ok, no)); }
+      catch (e) { // fallback when fetch is not allowed: an <audio> element routed through the same gain graph
+        const el = new Audio(u); el.loop = true; el.preload = 'auto'; await new Promise((ok) => { el.addEventListener('canplaythrough', ok, { once: true }); el.addEventListener('error', ok, { once: true }); });
+        if (el.error) return; SND.buf[u] = { el };
+      }
+      $('#mute').hidden = false; if (SND.want !== null) music(SND.want, true);
+    });
+  } catch (e) { SND.ctx = null; }
+}
+function loopFor(name) {
+  const def = AUDIO.musique[name]; if (!def || !SND.ctx || !SND.buf[def[0]]) return null;
+  if (!SND.loops[name]) { const B = SND.buf[def[0]], g = SND.ctx.createGain(); g.gain.value = 0;
+    if (B.el) { const el = B.el.cloneNode(); el.loop = true; SND.ctx.createMediaElementSource(el).connect(g); el.play().catch(() => {}); } else { const src = SND.ctx.createBufferSource(); src.buffer = B; src.loop = true; src.connect(g); src.start(); }
+    g.connect(SND.m); SND.loops[name] = { g, vol: def[1] }; }
+  return SND.loops[name];
+}
+function music(name, retry = false) {
+  if (!retry && name === SND.want) return; SND.want = name; if (!SND.ctx) return; const t = SND.ctx.currentTime;
+  Object.entries(SND.loops).forEach(([k, l]) => { if (k !== name) { l.g.gain.cancelScheduledValues(t); l.g.gain.setValueAtTime(l.g.gain.value, t); l.g.gain.linearRampToValueAtTime(0, t + 2.5); } });
+  const l = name && loopFor(name); if (l) { l.g.gain.cancelScheduledValues(t); l.g.gain.setValueAtTime(l.g.gain.value, t); l.g.gain.linearRampToValueAtTime(l.vol, t + 2.5); }
+}
+function sfx(name) { const def = AUDIO.sfx[name]; if (!def || !SND.ctx || !SND.buf[def[0]] || SND.buf[def[0]].el) return; const src = SND.ctx.createBufferSource(); src.buffer = SND.buf[def[0]]; const g = SND.ctx.createGain(); g.gain.value = def[1]; src.connect(g).connect(SND.m); src.start(); }
+function toggleSound() { SND.on = !SND.on; if (SND.m) SND.m.gain.value = SND.on ? 1 : 0; $('#mute').textContent = SND.on ? 'Couper le son' : 'Remettre le son'; $('#mute').setAttribute('aria-pressed', String(!SND.on)); $('#mSound').textContent = 'Son : ' + (SND.on ? 'activé' : 'coupé'); }
+$('#mute').onclick = toggleSound;
+/* ===== MENU ===== */
+const openMenu = () => { $('#menu').hidden = false; $('#mResume').focus({ preventScroll: true }); };
+const closeMenu = () => { $('#menu').hidden = true; };
+$('#menuBtn').onclick = openMenu; $('#mResume').onclick = closeMenu; $('#mSound').onclick = toggleSound;
+$('#mFull').onclick = () => { const d = document; if (d.fullscreenElement) d.exitFullscreen?.(); else d.documentElement.requestFullscreen?.().catch(() => {}); closeMenu(); };
+$('#mRestart').onclick = () => { location.reload(); };
+$('#mFacts').onclick = () => { closeMenu(); $('#endBack').hidden = false; $('#again').hidden = true; $('#end').hidden = false; $('#end').scrollTop = 0; };
+$('#endBack').onclick = () => { $('#end').hidden = true; $('#endBack').hidden = true; $('#again').hidden = false; };
+addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#bar').hidden) { if ($('#menu').hidden && $('#end').hidden) openMenu(); else if (!$('#menu').hidden) closeMenu(); } });
+
+/* ===== RENDERER ===== */
+const canvas = $('#c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+const PHONE = Math.min(innerWidth, innerHeight) < 600 || /Mobi|Android/i.test(navigator.userAgent);
+const PR = Math.min(devicePixelRatio, PHONE ? 1.5 : 2);
+renderer.setPixelRatio(PR);
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#0d1424');
+scene.fog = new THREE.Fog('#0d1424', 22, 62);
+const camera = new THREE.PerspectiveCamera(30, 1, 0.6, 220);
+const pmrem = new THREE.PMREMGenerator(renderer);
+const envTex = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(1, 1, { samples: 4, type: THREE.HalfFloatType }));
+composer.addPass(new RenderPass(scene, camera));
+if (!PHONE) { const ao = new GTAOPass(scene, camera, innerWidth, innerHeight); ao.updateGtaoMaterial({ radius: 0.5, distanceExponent: 1.4, thickness: 1, scale: 1.4, samples: 12 }); ao.updatePdMaterial({ lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 5, rings: 2, samples: 12 }); ao.blendIntensity = 0.85; composer.addPass(ao); }
+const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.5, 0.55, 1.0); composer.addPass(bloom);
+const tiltH = new ShaderPass(HorizontalTiltShiftShader), tiltV = new ShaderPass(VerticalTiltShiftShader);
+tiltH.uniforms.r.value = tiltV.uniforms.r.value = 0.52;
+composer.addPass(tiltH); composer.addPass(tiltV);
+composer.addPass(new OutputPass());
+// film grade: split toning, saturation that drains year after year, gentle contrast, vignette, grain
+const grade = new ShaderPass({
+  uniforms: { tDiffuse: { value: null }, time: { value: 0 }, sat: { value: 0.95 }, contrast: { value: 1.12 }, shadow: { value: new THREE.Color(0.9, 0.97, 1.06) }, high: { value: new THREE.Color(1.05, 1.0, 0.92) }, lift: { value: new THREE.Color(0.02, 0.025, 0.035) }, vig: { value: 0.4 }, grain: { value: 0.04 } },
+  vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+  fragmentShader: `uniform sampler2D tDiffuse; uniform float time, sat, contrast, vig, grain; uniform vec3 shadow, high, lift; varying vec2 vUv;
+    float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233)) + time) * 43758.5453); }
+    void main(){ vec2 d = vUv - 0.5; float r = dot(d, d); vec3 c = texture2D(tDiffuse, vUv).rgb;
+      float l = dot(c, vec3(0.2126, 0.7152, 0.0722)); c = mix(vec3(l), c, sat);
+      c *= mix(shadow, vec3(1.0), smoothstep(0.0, 0.55, l)); c *= mix(vec3(1.0), high, smoothstep(0.45, 1.0, l));
+      c = mix(c, c * c * (3.0 - 2.0 * c), contrast - 1.0); c = lift + c * (1.0 - lift);
+      c *= 1.0 - vig * smoothstep(0.1, 0.5, r); c += (h(vUv * 1000.0) - 0.5) * grain;
+      gl_FragColor = vec4(clamp(c, 0.0, 1.0), 1.0); }`,
+});
+composer.addPass(grade);
+
+/* ===== MATERIALS: one spec, three styles ===== */
+let STYLE = 'maquette';
+const gradData = new Uint8Array([70, 70, 70, 255, 140, 140, 140, 255, 205, 205, 205, 255, 255, 255, 255, 255]);
+const grad = new THREE.DataTexture(gradData, 4, 1); grad.minFilter = grad.magFilter = THREE.NearestFilter; grad.needsUpdate = true;
+const specs = [];
+function build(spec, style) {
+  if (spec.cache[style]) return spec.cache[style];
+  const base = { color: spec.color, map: spec.map, transparent: spec.transparent, opacity: spec.opacity };
+  const m = style === 'gouache'
+    ? new THREE.MeshToonMaterial({ ...base, gradientMap: grad })
+    : new THREE.MeshStandardMaterial({ ...base, roughness: spec.rough, metalness: spec.metal, envMap: envTex, envMapIntensity: 0.4 });
+  m.userData.spec = spec; spec.cache[style] = m; return m;
+}
+function mat(color, o = {}) {
+  const spec = { color: new THREE.Color(color), map: o.map || null, transparent: !!o.transparent, opacity: o.opacity ?? 1, rough: o.rough ?? 0.88, metal: o.metal ?? 0, cache: {} };
+  specs.push(spec); return build(spec, STYLE);
+}
+function setOpacity(mesh, v) { const s = mesh.material.userData.spec; s.opacity = v; Object.values(s.cache).forEach((m) => (m.opacity = v)); }
+const shade = (o) => { o.traverse((c) => { if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; } }); return o; };
+const rnd = (a, b) => a + Math.random() * (b - a);
+function canvasTex(w, h, draw, repeat = [1, 1]) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(...repeat); t.anisotropy = 4; return t;
+}
+const plaster = canvasTex(256, 256, (x, w, h) => {
+  x.fillStyle = '#f2f0ec'; x.fillRect(0, 0, w, h);
+  for (let i = 0; i < 90; i++) { const v = Math.floor(rnd(215, 255)); x.fillStyle = `rgba(${v},${v - 4},${v - 10},.35)`; x.beginPath(); x.arc(rnd(0, w), rnd(0, h), rnd(6, 40), 0, 7); x.fill(); }
+  for (let i = 0; i < 2500; i++) { const v = Math.floor(rnd(190, 255)); x.fillStyle = `rgb(${v},${v},${v})`; x.fillRect(rnd(0, w), rnd(0, h), 1.5, 1.5); }
+});
+const tiles = canvasTex(128, 128, (x, w, h) => {
+  x.fillStyle = '#eee'; x.fillRect(0, 0, w, h);
+  for (let r = 0; r < 8; r++) { x.fillStyle = 'rgba(0,0,0,.28)'; x.fillRect(r * 16, 0, 3, h); for (let k = 0; k < 7; k++) { x.fillStyle = `rgba(0,0,0,${rnd(0.03, 0.14)})`; x.fillRect(r * 16 + 3, k * 21 + (r % 2) * 10 - 10, 13, 21); x.fillStyle = 'rgba(0,0,0,.18)'; x.fillRect(r * 16, k * 21 + (r % 2) * 10 - 10, 16, 1.5); } }
+}, [1.6, 1.6]);
+const cobble = canvasTex(128, 128, (x, w, h) => {
+  x.fillStyle = '#9d9483'; x.fillRect(0, 0, w, h);
+  for (let r = 0; r < 4; r++) for (let c = -1; c < 4; c++) { const v = Math.floor(rnd(205, 240)); x.fillStyle = `rgb(${v},${v - 6},${v - 16})`; x.beginPath(); x.roundRect(c * 32 + 2 + (r % 2) * 16, r * 32 + 2, 28, 28, 6); x.fill(); }
+}, [40, 1.6]);
+const asphalt = canvasTex(256, 64, (x, w, h) => { x.fillStyle = '#d2d2d2'; x.fillRect(0, 0, w, h); for (let i = 0; i < 3000; i++) { const v = Math.floor(rnd(150, 255)); x.fillStyle = `rgb(${v},${v},${v})`; x.fillRect(rnd(0, w), rnd(0, h), 1, 1); } }, [12, 1]);
+function textTex(lines, { w = 2, h = 0.5, bg = null, fg = '#222', font = 'Atkinson Hyperlegible', weight = 700, border = null, radius = 0.08 } = {}) {
+  const S = 256, cw = Math.round(w * S), ch = Math.round(h * S);
+  return canvasTex(cw, ch, (x) => {
+    if (bg) { x.fillStyle = bg; x.beginPath(); x.roundRect(0, 0, cw, ch, radius * S); x.fill(); }
+    if (border) { x.strokeStyle = border; x.lineWidth = Math.min(ch, cw) * 0.05; x.beginPath(); x.roundRect(ch * 0.07, ch * 0.07, cw - ch * 0.14, ch - ch * 0.14, radius * S * 0.6); x.stroke(); }
+    const L = String(lines).split('\n'); let size = (ch * 0.62) / L.length;
+    x.textBaseline = 'middle'; x.textAlign = 'center'; x.fillStyle = fg;
+    const fit = () => { x.font = `${weight} ${size}px "${font}", system-ui, sans-serif`; return Math.max(...L.map((l) => x.measureText(l).width)); };
+    while (fit() > cw * 0.86 && size > 8) size *= 0.92;
+    L.forEach((l, i) => x.fillText(l, cw / 2, ch / 2 + (i - (L.length - 1) / 2) * size * 1.18));
+  });
+}
+const sign = (text, w, h, opts = {}) => new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat('#ffffff', { map: textTex(text, { w, h, ...opts }), transparent: true, rough: 0.7 }));
+const box = (w, h, d, color, r = 0.04, o) => new THREE.Mesh(r ? new RoundedBoxGeometry(w, h, d, 2, Math.min(r, w / 2.1, h / 2.1, d / 2.1)) : new THREE.BoxGeometry(w, h, d), mat(color, o));
+const cyl = (rt, rb, h, color, seg = 10) => new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg), mat(color));
+
+/* ===== LIGHTS & GROUND ===== */
+const hemi = new THREE.HemisphereLight('#3a4d80', '#1a1612', 0.55); scene.add(hemi);
+const sun = new THREE.DirectionalLight('#9db0e8', 0.7);
+sun.castShadow = true; sun.shadow.mapSize.set(PHONE ? 2048 : 4096, PHONE ? 2048 : 4096); sun.shadow.radius = 3;
+Object.assign(sun.shadow.camera, { left: -26, right: 26, top: 18, bottom: -14, near: 1, far: 90 });
+sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.02;
+scene.add(sun, sun.target);
+const ground = box(70, 1.4, 25, '#6f6a5c', 0.12); ground.position.set(0, -0.72, -3.5); ground.receiveShadow = true; scene.add(ground);
+{ const lip = box(70.3, 0.12, 25.3, '#2a2420', 0.04); lip.position.set(0, -1.38, -3.5); scene.add(lip);
+  const foam = canvasTex(256, 32, (x, w, h) => { x.fillStyle = '#d9ccb4'; x.fillRect(0, 0, w, h); x.fillStyle = '#6f6a5c'; x.fillRect(0, 0, w, 5); for (let i = 0; i < 6; i++) { x.fillStyle = `rgba(120,96,70,${0.08 + i * 0.03})`; x.fillRect(0, 6 + i * 4, w, 2); } }, [12, 1]);
+  [[0, 9.01, 0, 70], [0, -16.01, Math.PI, 70], [35.01, -3.5, Math.PI / 2, 25], [-35.01, -3.5, -Math.PI / 2, 25]].forEach(([x, z, r, w]) => { const f = new THREE.Mesh(new THREE.PlaneGeometry(w, 1.4), mat('#ffffff', { map: foam })); f.position.set(x, -0.72, z); f.rotation.y = r; scene.add(f); });
+  const table = new THREE.Mesh(new THREE.PlaneGeometry(400, 300), mat('#241d19', { map: canvasTex(256, 256, (x, w, h) => { x.fillStyle = '#5a4636'; x.fillRect(0, 0, w, h); for (let i = 0; i < 70; i++) { x.strokeStyle = `rgba(30,20,12,${rnd(0.08, 0.25)})`; x.lineWidth = rnd(1, 3); x.beginPath(); const y = rnd(0, h); x.moveTo(0, y); x.bezierCurveTo(w * 0.3, y + rnd(-8, 8), w * 0.7, y + rnd(-8, 8), w, y + rnd(-4, 4)); x.stroke(); } }, [24, 18]), rough: 0.6 }));
+  table.rotation.x = -Math.PI / 2; table.position.y = -1.45; table.receiveShadow = true; scene.add(table); }
+// painted cardboard backdrop, like a model railway: tinted by the time of day
+const backdropTex = canvasTex(2048, 256, (x, w, h) => {
+  const g = x.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#ffffff'); g.addColorStop(0.75, '#e9e9e9'); g.addColorStop(1, '#d4d4d4'); x.fillStyle = g; x.fillRect(0, 0, w, h);
+  x.fillStyle = '#d9d9d9'; x.beginPath(); x.moveTo(0, h * 0.62); for (let i = 0; i <= 16; i++) x.quadraticCurveTo(i * w / 16 - w / 32, h * (0.5 + Math.random() * 0.12), i * w / 16, h * (0.58 + Math.random() * 0.08)); x.lineTo(w, h); x.lineTo(0, h); x.fill();
+  x.fillStyle = '#c6c6c6'; let px = 0; while (px < w) { const bw = 40 + Math.random() * 90, bh = 40 + Math.random() * 70; x.fillRect(px, h - bh - 30, bw, bh + 30); if (Math.random() < 0.6) { x.beginPath(); x.moveTo(px - 4, h - bh - 30); x.lineTo(px + bw / 2, h - bh - 58); x.lineTo(px + bw + 4, h - bh - 30); x.fill(); } if (Math.random() < 0.08) { x.fillRect(px + bw / 2 - 6, h - bh - 120, 12, 70); x.beginPath(); x.moveTo(px + bw / 2 - 10, h - bh - 120); x.lineTo(px + bw / 2, h - bh - 170); x.lineTo(px + bw / 2 + 10, h - bh - 120); x.fill(); } px += bw + Math.random() * 8; }
+});
+const backdrop = new THREE.Mesh(new THREE.PlaneGeometry(72, 11), new THREE.MeshBasicMaterial({ map: backdropTex, fog: false })); backdrop.position.set(0, 4.2, -15.8); scene.add(backdrop);
+{ const bb = box(72, 11.2, 0.12, '#3a302a', 0); bb.position.set(0, 4.2, -15.95); scene.add(bb); }
+[[-34, Math.PI / 2], [34, -Math.PI / 2]].forEach(([x, r]) => { const e = new THREE.Mesh(new THREE.PlaneGeometry(26, 11), new THREE.MeshBasicMaterial({ map: backdropTex, fog: true })); e.position.set(x, 4.2, -3.5); e.rotation.y = r; scene.add(e); });
+[[-4.0, 2.2], [4.3, 2.4]].forEach(([z, d]) => { const s = box(64, 0.14, d, '#ffffff', 0.05, { map: cobble }); s.position.set(0, 0.06, z); s.receiveShadow = true; scene.add(s); });
+[-2.9, 3.1].forEach((z) => { const c = box(64, 0.16, 0.18, '#bdb4a2', 0.03); c.position.set(0, 0.07, z); c.receiveShadow = true; scene.add(c); });
+const road = new THREE.Mesh(new THREE.PlaneGeometry(64, 6.2), mat('#5a5e68', { map: asphalt, rough: 0.95 })); road.rotation.x = -Math.PI / 2; road.position.set(0, 0.005, 0.15); road.receiveShadow = true; scene.add(road);
+for (let i = -30; i < 31; i += 3) { const d = new THREE.Mesh(new THREE.PlaneGeometry(1.4, 0.12), mat('#e2ddcd')); d.rotation.x = -Math.PI / 2; d.position.set(i, 0.012, 0.15); scene.add(d); }
+
+/* ===== BUILDINGS ===== */
+const windows = [], H = {}, ZF = 1.51, ZH = -6.6;
+function makeWindow(g, x, y, shutterColor, { w = 0.78, h = 1.05, flowers = false, balcony = false } = {}) {
+  const frame = new THREE.Mesh(new THREE.PlaneGeometry(w + 0.16, h + 0.16), mat('#f1ece2')); frame.position.set(x, y, ZF); g.add(frame);
+  const sill = box(w + 0.3, 0.07, 0.16, '#e6dfd0', 0.02); sill.position.set(x, y - h / 2 - 0.1, ZF + 0.07); g.add(sill);
+  const glassMat = new THREE.MeshBasicMaterial({ color: '#ffc96b' });
+  const glass = new THREE.Mesh(new THREE.PlaneGeometry(w, h), glassMat); glass.position.set(x, y, ZF + 0.01); g.add(glass);
+  const bar = new THREE.Mesh(new THREE.PlaneGeometry(0.05, h), mat('#f1ece2')); bar.position.set(x, y, ZF + 0.015); g.add(bar);
+  const dark = new THREE.Color(shutterColor).multiplyScalar(0.78);
+  const shutters = [-1, 1].map((side) => {
+    const pivot = new THREE.Group(); pivot.position.set(x + side * (w / 2 + 0.02), y, ZF + 0.03);
+    const p = box(w / 2, h + 0.04, 0.04, shutterColor, 0); p.position.x = side * (w / 4); pivot.add(p);
+    for (let k = -2; k <= 2; k++) { const s = box(w / 2 - 0.06, 0.03, 0.02, dark, 0); s.position.set(side * (w / 4), k * 0.2, 0.03); pivot.add(s); }
+    pivot.userData = { side }; g.add(pivot); return pivot;
+  });
+  if (flowers) {
+    const fb = box(w + 0.1, 0.2, 0.22, '#8b5a3c', 0.03); fb.position.set(x, y - h / 2 - 0.24, ZF + 0.14); g.add(fb);
+    for (let i = 0; i < 5; i++) { const f = new THREE.Mesh(new THREE.IcosahedronGeometry(0.09, 0), mat(i % 2 ? '#d64b4b' : '#e88aa2')); f.position.set(x - w / 2 + 0.1 + i * (w - 0.2) / 4, y - h / 2 - 0.08, ZF + 0.15); g.add(f); const l = new THREE.Mesh(new THREE.IcosahedronGeometry(0.08, 0), mat('#4f7a3c')); l.position.set(f.position.x + 0.05, y - h / 2 - 0.14, ZF + 0.2); g.add(l); }
+  }
+  if (balcony) {
+    const sl = box(w + 0.5, 0.08, 0.5, '#d9d2c3', 0.02); sl.position.set(x, y - h / 2 - 0.05, ZF + 0.25); g.add(sl);
+    const rail = box(w + 0.5, 0.04, 0.04, '#222526', 0); rail.position.set(x, y - h / 2 + 0.45, ZF + 0.48); g.add(rail);
+    for (let i = 0; i <= 8; i++) { const b = box(0.025, 0.48, 0.025, '#222526', 0); b.position.set(x - (w + 0.5) / 2 + i * (w + 0.5) / 8, y - h / 2 + 0.21, ZF + 0.48); g.add(b); }
+  }
+  const win = { glassMat, shutters, closed: false, tv: false }; windows.push(win); return win;
+}
+function roofOn(g, w, hgt, roof) {
+  const s = new THREE.Shape(); s.moveTo(-1.7, 0); s.lineTo(1.7, 0); s.lineTo(0, 1.3); s.lineTo(-1.7, 0);
+  const rg = new THREE.ExtrudeGeometry(s, { depth: w + 0.24, bevelEnabled: true, bevelSize: 0.05, bevelThickness: 0.05, bevelSegments: 2 });
+  const r = new THREE.Mesh(rg, mat(roof, { map: tiles })); r.rotation.y = Math.PI / 2; r.position.set(-(w + 0.24) / 2, hgt - 0.05, 0); g.add(r);
+  const ch = box(0.45, 0.9, 0.45, '#9b8572', 0.05, { map: plaster }); ch.position.set(w * 0.28, hgt + 0.85, -0.45); g.add(ch);
+  const gut = cyl(0.05, 0.05, w + 0.2, '#7d8287', 8); gut.rotation.z = Math.PI / 2; gut.position.set(0, hgt - 0.02, 1.62); g.add(gut);
+  const down = cyl(0.04, 0.04, hgt, '#7d8287', 8); down.position.set(w / 2 - 0.12, hgt / 2, 1.6); g.add(down);
+}
+function house(key, { x, w = 3.5, floors = 2, color, roof = '#a4553f', shutter = '#6f8f7a', shop = false, num, flowers = false, balcony = false }) {
+  const g = new THREE.Group(); g.position.set(x, 0, ZH); scene.add(g);
+  const hgt = floors * 2.15 + 0.35;
+  const body = box(w, hgt, 3, color, 0.14, { map: plaster }); body.position.y = hgt / 2; g.add(body);
+  const base = box(w + 0.04, 0.5, 3.04, new THREE.Color(color).multiplyScalar(0.72), 0.04); base.position.y = 0.25; g.add(base);
+  roofOn(g, w, hgt, roof);
+  const doorX = -w * 0.26, wins = [];
+  const door = box(0.95, 1.85, 0.12, '#5b3f33', 0.04); door.position.set(doorX, 0.98, ZF); g.add(door);
+  for (const yy of [0.55, 1.35]) { const pnl = box(0.7, 0.55, 0.04, '#4d342a', 0.03); pnl.position.set(doorX, yy, ZF + 0.07); g.add(pnl); }
+  const knob = new THREE.Mesh(new THREE.SphereGeometry(0.05, 8, 6), mat('#d9b25b', { metal: 0.8, rough: 0.3 })); knob.position.set(doorX + 0.32, 0.95, ZF + 0.1); g.add(knob);
+  const mb = box(0.34, 0.42, 0.16, '#3f5566', 0.04); mb.position.set(doorX + 0.75, 1.15, ZF + 0.06); g.add(mb);
+  const slot = box(0.22, 0.03, 0.02, '#1c1c1c', 0); slot.position.set(doorX + 0.75, 1.28, ZF + 0.15); g.add(slot);
+  if (num != null) { const n = sign(String(num), 0.3, 0.24, { bg: '#1f4f9a', fg: '#ffffff', border: '#ffffff', radius: 0.03 }); n.position.set(doorX, 2.12, ZF + 0.07); g.add(n); }
+  for (let f = 0; f < floors; f++) {
+    const y = 1.25 + f * 2.15;
+    if (f === 0 && shop) continue;
+    if (f === 0) { wins.push(makeWindow(g, w * 0.24, y, shutter, { flowers })); continue; }
+    wins.push(makeWindow(g, -w * 0.24, y, shutter, { balcony: balcony && f === 1 }));
+    wins.push(makeWindow(g, w * 0.24, y, shutter, { flowers: flowers && f === 1 }));
+  }
+  shade(g);
+  const world = (lx, ly, lz) => new THREE.Vector3(x + lx, ly, ZH + lz);
+  H[key] = { g, x, w, hgt, wins, door: world(doorX, 1.3, ZF + 0.3), box: world(doorX + 0.75, 1.2, ZF + 0.3), doorX: x + doorX };
+  return H[key];
+}
+function civic(key, { x, w = 5.6, color, roof = '#b9ad97', label, shutter = '#5c6a78' }) {
+  const g = new THREE.Group(); g.position.set(x, 0, ZH); scene.add(g);
+  const hgt = 2 * 2.15 + 0.35;
+  const body = box(w, hgt, 3, color, 0.12, { map: plaster }); body.position.y = hgt / 2; g.add(body);
+  const cap = box(w + 0.24, 0.3, 3.24, roof, 0.06); cap.position.y = hgt; g.add(cap);
+  const cor = box(w + 0.1, 0.14, 0.2, roof, 0.03); cor.position.set(0, 2.2, 1.55); g.add(cor);
+  const base = box(w + 0.04, 0.5, 3.04, new THREE.Color(color).multiplyScalar(0.75), 0.04); base.position.y = 0.25; g.add(base);
+  const door = box(1.4, 2.0, 0.12, '#3d4a57', 0.04); door.position.set(0, 1.05, ZF); g.add(door);
+  const split = box(0.04, 1.9, 0.03, '#25303a', 0); split.position.set(0, 1.05, ZF + 0.08); g.add(split);
+  const wins = [];
+  [-w * 0.32, w * 0.32].forEach((wx) => wins.push(makeWindow(g, wx, 1.25, shutter)));
+  [-w * 0.33, 0, w * 0.33].forEach((wx) => wins.push(makeWindow(g, wx, 3.4, shutter)));
+  if (label) { const s = sign(label, Math.min(w - 0.6, 4.2), 0.38, { fg: '#3b3a36', font: 'Special Elite', weight: 400, radius: 0.03 }); s.position.set(0, 2.55, ZF + 0.12); g.add(s); }
+  shade(g);
+  H[key] = { g, x, w, hgt, wins, door: new THREE.Vector3(x, 1.5, ZH + ZF + 0.3), doorX: x };
+  return H[key];
+}
+const X = { ecole: -22.2, bourse: -15.9, claire: -10.8, ferreira: -7.2, bakery: -3.6, samia: 0, camille: 3.6, delmas: 7.2, local: 10.8, cine: 15.9, media: 22.2 };
+civic('ecole', { x: X.ecole, w: 6, color: '#e7d7b9', roof: '#9b8f7a', label: 'ÉCOLE PUBLIQUE', shutter: '#3f6d8e' });
+civic('bourse', { x: X.bourse, w: 5.2, color: '#e9e1cf', label: 'BOURSE DU TRAVAIL' });
+house('claire', { x: X.claire, color: '#e3c8a0', shutter: '#5f7f9e', num: 1, flowers: true });
+house('ferreira', { x: X.ferreira, color: '#e5a58c', shutter: '#4f7a68', num: 2, balcony: true, flowers: true });
+const bakery = house('bakery', { x: X.bakery, floors: 3, color: '#f0e2c2', shutter: '#7d5a4a', shop: true, roof: '#8f4838', num: 4 });
+house('samia', { x: X.samia, color: '#9cb7a2', shutter: '#e8e0cc', num: 6, flowers: true });
+const agency = house('camille', { x: X.camille, floors: 3, color: '#a7b5cd', shutter: '#3f4f72', roof: '#844636', num: 8, shop: true, balcony: true });
+house('delmas', { x: X.delmas, color: '#d8b679', shutter: '#6c8a5a', num: 10, balcony: true });
+const local = house('local', { x: X.local, color: '#c88e78', shutter: '#e6dccb', num: 12 });
+const cine = civic('cine', { x: X.cine, w: 5.2, color: '#d9cbb8', roof: '#6f2f2f', shutter: '#7a3a3a' });
+civic('media', { x: X.media, w: 6, color: '#cfd4d6', roof: '#7f8a90', label: 'MÉDIATHÈQUE', shutter: '#40606e' });
+
+function shopfront(hs, { glass, awning, label, bg, fg }) {
+  const g = hs.g;
+  const fr = box(1.6, 1.4, 0.06, '#2e3a52', 0.02); fr.position.set(0.85, 1.15, ZF - 0.01); g.add(fr);
+  const sw = new THREE.Mesh(new THREE.PlaneGeometry(1.45, 1.25), new THREE.MeshBasicMaterial({ color: glass })); sw.position.set(0.85, 1.15, ZF + 0.03); g.add(sw);
+  hs.shopGlass = sw.material; hs.shopBase = new THREE.Color(glass);
+  if (awning) {
+    const st = canvasTex(256, 32, (x) => { for (let i = 0; i < 8; i++) { x.fillStyle = i % 2 ? '#f4ead6' : awning; x.fillRect(i * 32, 0, 32, 32); } });
+    const awn = box(1.8, 0.06, 0.9, '#ffffff', 0, { map: st }); awn.position.set(0.85, 2.05, 1.9); awn.rotation.x = 0.35; g.add(awn);
+  }
+  const s = sign(label, 2.5, 0.4, { bg, fg, radius: 0.05, font: 'Special Elite', weight: 400 }); s.position.set(0.1, 2.58, ZF + 0.02); g.add(s);
+  shade(g);
+}
+shopfront(bakery, { glass: '#ffd58a', awning: '#b2513f', label: 'BOULANGERIE', bg: '#2e3a52', fg: '#f3e6c8' });
+shopfront(agency, { glass: '#dfe9f0', awning: null, label: 'VALBERNE HABITAT', bg: '#1f4f9a', fg: '#ffffff' });
+const entraideSign = sign('LE LOCAL · ENTRAIDE', 1.95, 0.36, { bg: '#f4ead6', fg: '#7a3b2c', radius: 0.05 }); entraideSign.position.set(0.5, 2.35, ZF + 0.02); local.g.add(entraideSign);
+const policeSign = sign('POLICE MUNICIPALE', 2.2, 0.42, { bg: '#1f3f8a', fg: '#ffffff', border: '#ffffff', radius: 0.04 }); policeSign.position.set(0.5, 2.35, ZF + 0.05); policeSign.visible = false; local.g.add(policeSign);
+const familySign = sign('OFFICE MUNICIPAL\nDE LA FAMILLE', 4.3, 0.62, { bg: '#e9e1cf', fg: '#1f3f8a', radius: 0.03, font: 'Special Elite', weight: 400 }); familySign.position.set(0, 2.55, ZF + 0.16); familySign.visible = false; H.media.g.add(familySign);
+
+const boards = new THREE.Group();
+[0.6, -0.6].forEach((r) => { const b = box(1.9, 0.18, 0.06, '#9a7650', 0); b.rotation.z = r; boards.add(b); });
+{ const cs = sign('FERMÉ PAR ARRÊTÉ', 1.5, 0.32, { bg: '#f1ece2', fg: '#1d1d1d', radius: 0.02 }); cs.position.set(0, -0.62, 0.05); boards.add(cs); }
+boards.position.set(0, 1.1, ZF + 0.12); boards.visible = false; H.bourse.g.add(boards); shade(boards);
+const slate = sign('CANTINE\nLundi : rôti de porc\nMenu unique', 0.95, 0.75, { bg: '#2c3a2f', fg: '#f2f0e6', border: '#8a6a4a', radius: 0.03, font: 'Caveat', weight: 700 });
+slate.position.set(1.15, 1.35, ZF + 0.12); H.ecole.g.add(slate);
+{ const gate = new THREE.Group(); for (let i = 0; i < 9; i++) { const b = cyl(0.025, 0.025, 1.2, '#2f3a4a', 6); b.position.set(-0.7 + i * 0.175, 0.65, 0); gate.add(b); } const t = box(1.5, 0.05, 0.05, '#2f3a4a', 0); t.position.set(0, 1.25, 0); gate.add(t); gate.position.set(X.ecole - 1.8, 0.06, ZH + ZF + 0.5); shade(gate); scene.add(gate); }
+const marquee = box(5.0, 0.9, 0.5, '#7a2f2f', 0.08); marquee.position.set(0, 2.55, 1.75); cine.g.add(marquee); shade(marquee);
+{ const s = sign('CINÉMA', 1.6, 0.36, { fg: '#3a2020', font: 'Special Elite', weight: 400 }); s.position.set(0, 4.3, ZF + 0.02); cine.g.add(s); }
+const letters = [];
+'RENÉ-VAUTIER'.split('').forEach((ch, i, arr) => {
+  const m = sign(ch, 0.36, 0.56, { fg: '#ffe3a3', weight: 700 });
+  m.userData = { home: new THREE.Vector3(X.cine + (i - (arr.length - 1) / 2) * 0.38, 2.55, ZH + 2.12), v: new THREE.Vector3(), av: new THREE.Vector3(), falling: false, landed: false, delay: 0 };
+  m.position.copy(m.userData.home); scene.add(m); letters.push(m);
+});
+const newName = sign('MARÉCHAL-PÉTAIN', 4.4, 0.55, { fg: '#ffe3a3', weight: 700 });
+setOpacity(newName, 0); newName.visible = false; newName.position.set(X.cine, 2.55, ZH + 2.14); newName.renderOrder = 2; scene.add(newName);
+const playPoster = sign('TRAVERSÉES\nthéâtre\n12 février', 0.9, 1.25, { bg: '#24345c', fg: '#f4e9cf', radius: 0.02, font: 'Special Elite', weight: 400 });
+playPoster.position.set(-1.66, 1.25, ZF + 0.06); cine.g.add(playPoster);
+const cancelled = sign('ANNULÉ', 1.1, 0.26, { bg: '#151515', fg: '#f4f0e6', radius: 0.01 }); cancelled.position.set(-1.66, 1.3, ZF + 0.09); cancelled.rotation.z = 0.3; cancelled.visible = false; cine.g.add(cancelled);
+const pool = new THREE.Group();
+{ const p = cyl(0.05, 0.06, 2.4, '#5c6168', 8); p.position.y = 1.2; pool.add(p);
+  const s = sign('PISCINE\nMUNICIPALE →', 1.3, 0.62, { bg: '#2f7fb8', fg: '#ffffff', border: '#ffffff', radius: 0.05 }); s.position.set(0, 2.15, 0.06); pool.add(s);
+  const r = sign('Sortie scolaire\naccompagnateurs :\naucun signe religieux', 1.0, 0.62, { bg: '#f4f1e8', fg: '#1d1d1d', border: '#1d1d1d', radius: 0.03 }); r.position.set(0, 1.35, 0.06); r.visible = false; pool.add(r); pool.userData.rule = r;
+  pool.position.set(-27.6, 0.08, -3.2); shade(pool); scene.add(pool); }
+const cartons = new THREE.Group();
+[[0, 0], [0.6, 0.1], [0.3, -0.45], [1.1, -0.2]].forEach(([dx, dz], i) => { const b = box(0.55, 0.38, 0.4, '#a77e52', 0.02); b.position.set(dx, 0.33, dz); cartons.add(b); for (let k = 0; k < 4; k++) { const bk = box(0.1, 0.32, 0.26, ['#7a2f2f', '#2f4a6e', '#d6b25b', '#3f6b4a'][(k + i) % 4], 0.01); bk.position.set(dx - 0.18 + k * 0.12, 0.62, dz); bk.rotation.z = rnd(-0.15, 0.15); cartons.add(bk); } });
+cartons.position.set(X.media + 1.2, 0.08, -4.3); cartons.visible = false; shade(cartons); scene.add(cartons);
+
+/* ===== STREET FURNITURE ===== */
+const lamps = [];
+[-19, -13, -5.4, 2, 9.4, 19].forEach((x) => {
+  const g = new THREE.Group(); g.position.set(x, 0, 3.55);
+  const pole = cyl(0.06, 0.09, 3.6, '#2e3440', 8); pole.position.y = 1.8; g.add(pole);
+  const arm = cyl(0.04, 0.04, 0.7, '#2e3440', 6); arm.rotation.x = Math.PI / 2; arm.position.set(0, 3.55, -0.32); g.add(arm);
+  const hood = cyl(0.08, 0.26, 0.2, '#2e3440', 12); hood.position.set(0, 3.55, -0.65); g.add(hood);
+  const headMat = new THREE.MeshBasicMaterial({ color: '#ffd28a' });
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.14, 12, 8), headMat); head.position.set(0, 3.42, -0.65); g.add(head);
+  const L = new THREE.PointLight('#ffc477', 16, 10, 1.6); L.position.set(0, 3.2, -0.65); g.add(L);
+  shade(g); scene.add(g); lamps.push({ L, headMat });
+});
+{ const s = sign('RUE DES\nTILLEULS', 1.1, 0.55, { bg: '#1f4f9a', fg: '#ffffff', border: '#e8eef6', radius: 0.04 }); s.position.set(-13, 2.45, 3.62); scene.add(s); }
+const leafMat = mat('#3f5a3a'); const leafSpec = leafMat.userData.spec; const trees = [];
+[-25.5, -9, 5.7, 13.2, 25.5].forEach((x) => {
+  const g = new THREE.Group(); g.position.set(x, 0, 4.4);
+  const t = cyl(0.12, 0.18, 2.2, '#5a4636', 8); t.position.y = 1.1; g.add(t);
+  [[0, 2.9, 0, 1.0], [0.55, 2.55, 0.2, 0.7], [-0.5, 2.6, -0.1, 0.75], [0.1, 3.5, -0.1, 0.65]].forEach(([a, b, c, r]) => { const s = new THREE.Mesh(new THREE.IcosahedronGeometry(r, 1), leafMat); s.position.set(a, b, c); g.add(s); });
+  const grid = box(1.0, 0.03, 1.0, '#3a3a3a', 0); grid.position.y = 0.14; g.add(grid);
+  shade(g); scene.add(g); trees.push(g);
+});
+{ const b = new THREE.Group(); const seat = box(1.5, 0.08, 0.42, '#7a5a3c', 0.02); seat.position.y = 0.48; b.add(seat); const back = box(1.5, 0.35, 0.06, '#7a5a3c', 0.02); back.position.set(0, 0.75, -0.2); b.add(back); [-0.65, 0.65].forEach((x) => { const l = box(0.06, 0.48, 0.4, '#2a2d30', 0); l.position.set(x, 0.24, 0); b.add(l); }); b.position.set(7.8, 0.13, 4.5); b.rotation.y = Math.PI; shade(b); scene.add(b); }
+[['#3d6b45', 0], ['#c7a43a', 0.6]].forEach(([c, dx]) => { const bn = box(0.5, 0.9, 0.5, c, 0.05); bn.position.set(X.local + 2.0 + dx, 0.58, -4.6); shade(bn); scene.add(bn); });
+const car = new THREE.Group();
+{ const b = box(3.0, 0.65, 1.45, '#8fb0c9', 0.2); b.position.y = 0.6; car.add(b); const cab = box(1.7, 0.55, 1.3, '#8fb0c9', 0.18); cab.position.set(-0.15, 1.15, 0); car.add(cab);
+  const gl = box(1.5, 0.4, 1.34, '#2a3442', 0.12, { rough: 0.2 }); gl.position.set(-0.15, 1.17, 0); car.add(gl);
+  [-1, 1].forEach((sx) => [-0.72, 0.72].forEach((z) => { const w = cyl(0.3, 0.3, 0.2, '#161616', 16); w.rotation.x = Math.PI / 2; w.position.set(sx * 0.95, 0.3, z); car.add(w); }));
+  car.position.set(13.5, 0, 2.05); shade(car); scene.add(car); }
+const cat = new THREE.Group();
+{ const body = new THREE.Mesh(new THREE.SphereGeometry(0.17, 12, 8), mat('#232323')); body.scale.set(1.4, 0.9, 0.8); body.position.y = 0.17; cat.add(body);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.11, 12, 8), mat('#232323')); head.position.set(0.2, 0.32, 0); cat.add(head);
+  [-0.05, 0.05].forEach((z) => { const e = new THREE.Mesh(new THREE.ConeGeometry(0.04, 0.09, 4), mat('#232323')); e.position.set(0.22, 0.43, z); cat.add(e); });
+  const tail = cyl(0.025, 0.02, 0.4, '#232323', 6); tail.position.set(-0.27, 0.3, 0); tail.rotation.z = 0.5; cat.add(tail);
+  cat.position.set(X.delmas + 0.84, 0.72, ZH + ZF + 0.16); shade(cat); scene.add(cat); }
+const posters = new THREE.Group(); posters.position.set(-3.4, 0, 4.25); scene.add(posters);
+['#d9714f', '#3f6fb0', '#e2c14b', '#6aa06e', '#8a5aa0', '#2f4a6e'].forEach((c, i) => {
+  const x = (i - 2.5) * 0.92;
+  const panel = box(0.86, 1.2, 0.05, '#9aa1a8', 0, { metal: 0.4, rough: 0.5 }); panel.position.set(x, 1.35, 0); posters.add(panel);
+  const pt = canvasTex(128, 176, (px) => { px.fillStyle = c; px.fillRect(0, 0, 128, 176); px.fillStyle = 'rgba(255,255,255,.85)'; px.beginPath(); px.arc(64, 64, 26, 0, 7); px.fill(); px.fillRect(28, 92, 72, 40); px.fillStyle = 'rgba(0,0,0,.25)'; px.fillRect(14, 144, 100, 8); px.fillRect(24, 158, 80, 6); });
+  const poster = new THREE.Mesh(new THREE.PlaneGeometry(0.74, 1.02), mat('#ffffff', { map: pt })); poster.position.set(x, 1.33, 0.03); posters.add(poster);
+  const n = sign(String(i + 1), 0.26, 0.2, { bg: '#ffffff', fg: '#1d1d1d', radius: 0.02 }); n.position.set(x, 2.08, 0.03); posters.add(n);
+});
+[-2.85, 2.85].forEach((x) => { const p = cyl(0.05, 0.05, 2.2, '#6b7178', 6); p.position.set(x, 1.1, -0.03); posters.add(p); });
+const banned = sign('DISSOUS PAR DÉCRET', 1.25, 0.26, { bg: '#151515', fg: '#f4f0e6', radius: 0.01 });
+banned.position.set(-0.46, 1.4, 0.07); banned.rotation.z = 0.32; banned.scale.set(0.001, 1, 1); banned.visible = false; posters.add(banned);
+shade(posters);
+const onlyOne = sign('PRÉSIDENTIELLE\nUN SEUL CANDIDAT', 5.4, 1.25, { bg: '#e9e6df', fg: '#1d1d1d', border: '#1d1d1d', radius: 0.02 }); onlyOne.position.set(0, 1.35, 0.08); onlyOne.visible = false; posters.add(onlyOne);
+const extraCams = [];
+function camPole(x, z, era) { const g = new THREE.Group(); const p = cyl(0.05, 0.07, 3.4, '#5c6168', 8); p.position.y = 1.7; g.add(p); const c = box(0.42, 0.18, 0.18, '#e8e8e8', 0.04); c.position.set(0.2, 3.35, 0.12); c.rotation.y = -0.5; g.add(c);
+  const l = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 6), new THREE.MeshBasicMaterial({ color: '#ff3b3b' })); l.position.set(0.38, 3.35, 0.25); g.add(l); g.position.set(x, 0.08, z); g.visible = false; shade(g); scene.add(g); extraCams.push({ g, era }); }
+[[-19.5, -2.95, 4], [7.5, -2.95, 4], [17.8, 3.25, 4], [-11.5, 3.25, 6], [2.5, -2.95, 6], [12.5, -2.95, 6], [24.5, 3.25, 6]].forEach(([x, z, e]) => camPole(x, z, e));
+const ERA = [[3, 8], [4, 10], [6, 12], [9, 15], [27, 40], [33, 48], [45, 62], [52, 70], [64, 85]].map(([cams, cops]) => ({ cams, cops }));
+function setEra(e) {
+  extraCams.forEach((c) => (c.g.visible = e >= c.era));
+  $('#clkCount').innerHTML = `Valberne · <b>${ERA[e].cams}</b> caméras · <b>${ERA[e].cops}</b> policiers municipaux`;
+}
+const cctv = new THREE.Group(); cctv.position.set(-1.5, 0, -3.25); cctv.visible = false; scene.add(cctv);
+{ const p = cyl(0.07, 0.09, 4.6, '#5c6168', 8); p.position.y = 2.3; cctv.add(p);
+  const cm = box(0.55, 0.22, 0.22, '#e8e8e8', 0.05); cm.position.set(0.25, 4.45, 0.15); cm.rotation.y = -0.6; cctv.add(cm);
+  const lens = new THREE.Mesh(new THREE.CircleGeometry(0.06, 12), new THREE.MeshBasicMaterial({ color: '#ff3b3b' })); lens.position.set(0.47, 4.45, 0.31); lens.rotation.y = -0.6; cctv.add(lens);
+  const s = sign('ZONE SOUS\nVIDÉOPROTECTION\nreconnaissance faciale', 1.0, 0.75, { bg: '#f4f4f0', fg: '#1d3f8a', border: '#1d3f8a', radius: 0.04 }); s.position.set(0, 2.6, 0.1); cctv.add(s);
+  shade(cctv); }
+const localNotice = sign('LOCAL REPRIS\nPAR LA VILLE', 0.86, 0.6, { bg: '#f7f3ea', fg: '#202020', border: '#202020', radius: 0.02 });
+localNotice.position.set(local.doorX - local.x, 1.2, ZF + 0.1); localNotice.visible = false; local.g.add(localNotice);
+const queueSigns = new THREE.Group(); queueSigns.visible = false; scene.add(queueSigns);
+[['PRIORITÉ\nNATIONALE', 2.6, '#1f4f9a'], ['AUTRES\nDEMANDEURS', 4.7, '#6b6f75']].forEach(([t, x, c]) => { const p = cyl(0.04, 0.04, 1.6, '#555', 6); p.position.set(x, 0.86, -3.15); queueSigns.add(p); const s = sign(t, 0.9, 0.5, { bg: c, fg: '#fff', radius: 0.04 }); s.position.set(x, 1.8, -3.12); queueSigns.add(s); });
+shade(queueSigns);
+const banner = sign('SOLIDARITÉ AVEC LE LOCAL', 2.4, 0.42, { bg: '#f4ead6', fg: '#7a3b2c', radius: 0.02 }); banner.position.set(X.local - 0.3, 1.45, -2.95); banner.visible = false; scene.add(banner);
+
+/* ===== PEOPLE ===== */
+const people = [];
+function person(body, head = '#d8a882', scale = 1, legs = '#2f3440') {
+  const g = new THREE.Group();
+  [-0.09, 0.09].forEach((z) => { const l = cyl(0.07 * scale, 0.07 * scale, 0.45 * scale, legs, 8); l.position.set(0, 0.22 * scale, z); g.add(l); });
+  const b = new THREE.Mesh(new THREE.CapsuleGeometry(0.22 * scale, 0.36 * scale, 4, 12), mat(body)); b.position.y = 0.66 * scale; g.add(b);
+  const h = new THREE.Mesh(new THREE.SphereGeometry(0.18 * scale, 16, 12), mat(head)); h.position.y = 1.16 * scale; g.add(h);
+  shade(g); scene.add(g); g.userData = { target: null, speed: 2.2, t: Math.random() * 10, done: null };
+  people.push(g); return g;
+}
+const hair = (p, c, s = 1) => { const hm = new THREE.Mesh(new THREE.SphereGeometry(0.19 * s, 14, 10, 0, Math.PI * 2, 0, Math.PI / 2), mat(c)); hm.position.y = 1.18 * s; p.add(hm); shade(hm); };
+const claire = person('#f0c12e', '#e2b48e', 1, '#28344d');
+{ const capT = cyl(0.17, 0.19, 0.12, '#1f2c4a', 14); capT.position.y = 1.32; claire.add(capT); const brim = box(0.2, 0.03, 0.18, '#1f2c4a', 0.01); brim.position.set(0, 1.27, 0.2); claire.add(brim);
+  const stripe = new THREE.Mesh(new THREE.CylinderGeometry(0.228, 0.228, 0.06, 14, 1, true), mat('#1f3f8a')); stripe.position.y = 0.72; claire.add(stripe);
+  const bag = box(0.34, 0.32, 0.16, '#6a4a36', 0.04); bag.position.set(0.25, 0.55, 0.12); claire.add(bag); shade(claire); }
+const bike = new THREE.Group();
+{ const yel = '#f0c12e';
+  [-0.55, 0.55].forEach((x) => { const w = new THREE.Mesh(new THREE.TorusGeometry(0.32, 0.035, 8, 24), mat('#1a1a1a')); w.position.set(x, 0.34, 0); bike.add(w); });
+  const tube = (x1, y1, x2, y2) => { const len = Math.hypot(x2 - x1, y2 - y1); const t = cyl(0.03, 0.03, len, yel, 6); t.position.set((x1 + x2) / 2, (y1 + y2) / 2, 0); t.rotation.z = Math.atan2(y2 - y1, x2 - x1) - Math.PI / 2; bike.add(t); };
+  tube(-0.55, 0.34, -0.1, 0.72); tube(-0.1, 0.72, 0.45, 0.75); tube(-0.1, 0.72, 0.1, 0.34); tube(-0.55, 0.34, 0.1, 0.34); tube(0.45, 0.75, 0.55, 0.34); tube(0.45, 0.75, 0.42, 0.98);
+  const hb = cyl(0.025, 0.025, 0.5, '#222', 6); hb.rotation.x = Math.PI / 2; hb.position.set(0.42, 0.98, 0); bike.add(hb);
+  const seat = box(0.22, 0.05, 0.12, '#222', 0.02); seat.position.set(-0.12, 0.8, 0); bike.add(seat);
+  const basket = box(0.36, 0.24, 0.34, '#b08a52', 0.03); basket.position.set(0.66, 0.86, 0); bike.add(basket);
+  const rack = box(0.4, 0.03, 0.3, '#333', 0); rack.position.set(-0.5, 0.72, 0); bike.add(rack);
+  [-0.2, 0.2].forEach((z) => { const pn = box(0.38, 0.34, 0.14, yel, 0.04); pn.position.set(-0.5, 0.52, z); bike.add(pn); const st = box(0.39, 0.06, 0.15, '#1f3f8a', 0); st.position.set(-0.5, 0.56, z); bike.add(st); });
+  const mail = box(0.3, 0.06, 0.22, '#f6f2e6', 0.01); mail.position.set(0.66, 1.0, 0); bike.add(mail);
+  shade(bike); scene.add(bike); }
+const moussa = person('#f4f1ea', '#5c3a26', 1, '#3a3a3a'); hair(moussa, '#1a1a1a');
+const bernadette = person('#7b5a92', '#e6c2a0', 0.95, '#3a2f3f'); hair(bernadette, '#c9c4c0', 0.95);
+const samia = person('#3f8f8a', '#9a6b4f'); hair(samia, '#2a1a12');
+const michel = person('#e9e4da', '#e0b090', 1.05, '#2f3440'); hair(michel, '#6b5a4a', 1.05);
+const leo = person('#3f74c9', '#e2b48e', 0.62, '#2f3440'); hair(leo, '#7a5230', 0.62);
+const kids = [person('#d96c5a', '#9a6b4f', 0.6), person('#6aa06e', '#e6c2a0', 0.6)];
+const SKIN = ['#e2b48e', '#9a6b4f', '#5c3a26', '#e6c2a0'];
+const crowd = ['#5f7f9e', '#b07a5a', '#6b8f6a', '#9a6a8a', '#c9a24a', '#4f5f7a'].map((c, i) => person(c, SKIN[i % 4]));
+const queue = ['#8a8f96', '#a07050', '#55708a', '#7a6a5a', '#6a7a5a'].map((c, i) => person(c, SKIN[(i + 1) % 4]));
+const cops = [0, 1].map(() => { const c = person('#24304a', '#d6aa86', 1, '#1b2233'); const cp = cyl(0.17, 0.2, 0.12, '#141b2b', 12); cp.position.y = 1.32; c.add(cp); shade(c); c.visible = false; return c; });
+const walk = (p, x, z, speed = 2.2) => new Promise((res) => { p.userData.target = new THREE.Vector3(x, 0.13, z); p.userData.speed = FAST ? 60 : speed; p.userData.done = res; });
+const at = (p, x, z, vis = true) => { p.position.set(x, 0.13, z); p.userData.target = null; p.visible = vis; };
+
+/* ===== VAN, RAIN, ENVELOPE ===== */
+const van = new THREE.Group(); van.visible = false; scene.add(van);
+{ const body = box(3.4, 1.5, 1.7, '#26324e', 0.25); body.position.y = 1.0; van.add(body);
+  const stripe = sign('POLICE', 1.6, 0.36, { bg: '#f2f2f2', fg: '#26324e', radius: 0.03 }); stripe.position.set(-0.2, 1.05, 0.86); van.add(stripe);
+  const win = box(0.7, 0.45, 0.02, '#121826', 0); win.position.set(-1.25, 1.45, 0.86); van.add(win);
+  [-1.1, 1.1].forEach((x) => [-0.86, 0.86].forEach((z) => { const w = cyl(0.32, 0.32, 0.22, '#151515', 16); w.rotation.x = Math.PI / 2; w.position.set(x, 0.32, z); van.add(w); }));
+  shade(van); }
+const barA = new THREE.MeshBasicMaterial({ color: '#1b2a6b' }), barB = new THREE.MeshBasicMaterial({ color: '#1b2a6b' });
+[[-0.25, barA], [0.25, barB]].forEach(([x, m]) => { const b = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.14, 0.4), m); b.position.set(x, 1.82, 0); van.add(b); });
+const blue = new THREE.PointLight('#3d6bff', 0, 16, 1.4); blue.position.set(0, 2.4, 0.4); van.add(blue);
+let vanFlash = false;
+const RN = 1500, rainPos = new Float32Array(RN * 3);
+for (let i = 0; i < RN; i++) { rainPos[i * 3] = (Math.random() - 0.5) * 64; rainPos[i * 3 + 1] = Math.random() * 14; rainPos[i * 3 + 2] = -6 + Math.random() * 14; }
+const rainGeo = new THREE.BufferGeometry(); rainGeo.setAttribute('position', new THREE.BufferAttribute(rainPos, 3));
+const rainMat = new THREE.PointsMaterial({ color: '#c9d4e4', size: 0.07, transparent: true, opacity: 0, depthWrite: false });
+scene.add(new THREE.Points(rainGeo, rainMat));
+const envelope = box(0.28, 0.19, 0.02, '#f6f2e6', 0.01); envelope.visible = false; scene.add(envelope);
+function tween(ms, fn) { if (FAST) ms *= 0.2; return new Promise((r) => { const t0 = performance.now(); const f = () => { const p = Math.min(1, (performance.now() - t0) / ms); fn(p); p < 1 ? requestAnimationFrame(f) : r(); }; f(); }); }
+async function deliver(target) {
+  // camera closes in so the gesture reads, then a beat before the letter UI opens
+  focus((claire.position.x + target.x) / 2, 0.62); await wait(450);
+  const from = claire.position.clone().add(new THREE.Vector3(0.2, 1.0, 0.2));
+  envelope.position.copy(from); envelope.scale.setScalar(1.6); envelope.rotation.set(0, 0, 0); envelope.visible = true;
+  await tween(260, (p) => { envelope.position.y = from.y + p * 0.35; envelope.rotation.y = p * 0.5; });
+  const top = envelope.position.clone();
+  await tween(1100, (p) => { const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2; envelope.position.lerpVectors(top, target, e); envelope.position.y += Math.sin(e * Math.PI) * 0.55; envelope.rotation.z = e * 0.5; envelope.rotation.y = 0.5 - e * 0.5; });
+  sfx('lettre');
+  await tween(380, (p) => { envelope.scale.setScalar(1.6 * (1 - p * 0.85)); envelope.position.y = target.y - p * 0.12; });
+  envelope.visible = false; envelope.scale.setScalar(1);
+  await wait(800);
+}
+
+/* ===== ATMOSPHERE ===== */
+const MODES = {
+  night: { bg: '#0d1424', near: 24, far: 70, sky: '#4a5f96', gnd: '#1a1612', hemi: 0.75, sun: '#9db0e8', sunI: 0.75, sunP: [-12, 18, 8], lamp: 1, glow: 1, leaf: '#3c5638', rain: 0, envI: 0.08 , grade: { sat: 0.9, contrast: 1.15, shadow: [0.86, 0.92, 1.1], high: [1.08, 1.0, 0.86], lift: [0.015, 0.02, 0.04] } },
+  day: { bg: '#cfe0e9', near: 34, far: 100, sky: '#fff3dc', gnd: '#b49a72', hemi: 1.25, sun: '#ffe1b0', sunI: 2.6, sunP: [14, 16, 12], lamp: 0, glow: 0, leaf: '#6f9a52', rain: 0, envI: 0.22 , grade: { sat: 1.0, contrast: 1.12, shadow: [0.92, 0.98, 1.05], high: [1.05, 1.01, 0.94], lift: [0.03, 0.03, 0.04] } },
+  summer: { bg: '#f0c58f', near: 30, far: 95, sky: '#ffd9a8', gnd: '#a0805a', hemi: 1.1, sun: '#ffb06a', sunI: 2.4, sunP: [-18, 9, 12], lamp: 0.2, glow: 0.35, leaf: '#7a9a4a', rain: 0, envI: 0.18 , grade: { sat: 0.88, contrast: 1.16, shadow: [0.95, 0.94, 1.0], high: [1.08, 1.0, 0.86], lift: [0.035, 0.03, 0.03] } },
+  grey: { bg: '#8d939b', near: 22, far: 66, sky: '#b9bfc8', gnd: '#3a3a3a', hemi: 1.0, sun: '#d6dbe2', sunI: 0.8, sunP: [-14, 12, 10], lamp: 0.1, glow: 0.05, leaf: '#6b6a50', rain: 0, envI: 0.12 , grade: { sat: 0.42, contrast: 1.1, shadow: [0.95, 0.98, 1.03], high: [1.0, 1.0, 1.0], lift: [0.06, 0.06, 0.065] } },
+  dusk: { bg: '#b98a72', near: 26, far: 80, sky: '#e7b48e', gnd: '#5a4636', hemi: 1.0, sun: '#ff9a62', sunI: 1.6, sunP: [-20, 7, 12], lamp: 0.5, glow: 0.45, leaf: '#6d7a42', rain: 0, envI: 0.14, grade: { sat: 0.62, contrast: 1.15, shadow: [0.9, 0.93, 1.06], high: [1.06, 0.98, 0.9], lift: [0.04, 0.035, 0.04] } },
+  rain: { bg: '#4f5867', near: 20, far: 62, sky: '#8f9bb0', gnd: '#34322f', hemi: 1.0, sun: '#c4cfdd', sunI: 0.55, sunP: [-8, 20, 6], lamp: 0.85, glow: 0.8, leaf: '#a8733a', rain: 1, envI: 0.12 , grade: { sat: 0.68, contrast: 1.2, shadow: [0.88, 0.94, 1.08], high: [1.02, 1.0, 0.97], lift: [0.03, 0.035, 0.045] } },
+};
+const env = { bg: new THREE.Color(), sky: new THREE.Color(), gnd: new THREE.Color(), sun: new THREE.Color(), leaf: new THREE.Color(), sunP: new THREE.Vector3() };
+let mode = MODES.night;
+const NUMK = ['near', 'far', 'hemi', 'sunI', 'lamp', 'glow', 'rain', 'envI'], COLK = ['bg', 'sky', 'gnd', 'sun', 'leaf'];
+function setMode(name, instant = false) { mode = MODES[name]; if (instant) { COLK.forEach((k) => env[k].set(mode[k])); env.sunP.set(...mode.sunP); NUMK.forEach((k) => (env[k] = mode[k])); } }
+const warm = new THREE.Color('#ffc96b'), dayGlass = new THREE.Color('#cfe2ea'), tvBlue = new THREE.Color('#7f9df0'), tmpC = new THREE.Color(), tmpC2 = new THREE.Color(), tmpV = new THREE.Vector3();
+const cam = { x: X.claire, zoom: 1, cx: X.claire, cz: 1, drop: 0, dr: 0 };
+function applyEnv(dt) {
+  const k = 1 - Math.exp(-dt * 1.3);
+  COLK.forEach((key) => env[key].lerp(tmpC.set(mode[key]), k));
+  env.sunP.lerp(tmpV.set(...mode.sunP), k);
+  NUMK.forEach((key) => (env[key] += (mode[key] - env[key]) * k));
+  const fs = Math.max(1, 1.35 / (innerWidth / innerHeight));
+  scene.background.copy(env.bg).lerp(env.sky, 0.25).multiplyScalar(env.lamp > 0.9 ? 0.5 : 0.85); scene.fog.color.copy(scene.background); scene.fog.near = 9; scene.fog.far = 46;
+  backdrop.material.color.copy(env.bg).lerp(env.sky, 0.25);
+  hemi.color.copy(env.sky); hemi.groundColor.copy(env.gnd); hemi.intensity = env.hemi * (STYLE === 'gouache' ? 1.15 : 0.9);
+  sun.color.copy(env.sun); sun.intensity = env.sunI; sun.position.copy(env.sunP).add(tmpV.set(cam.cx, 0, 0)); sun.target.position.set(cam.cx, 0, -2);
+  leafSpec.color.copy(env.leaf); Object.values(leafSpec.cache).forEach((m) => m.color.copy(env.leaf));
+  rainMat.opacity = env.rain * 0.55;
+  { const g = mode.grade, u = grade.uniforms, k2 = k; u.sat.value += (g.sat - u.sat.value) * k2; u.contrast.value += (g.contrast - u.contrast.value) * k2; u.shadow.value.lerp(tmpC2.setRGB(...g.shadow), k2); u.high.value.lerp(tmpC2.setRGB(...g.high), k2); u.lift.value.lerp(tmpC2.setRGB(...g.lift), k2); }
+  lamps.forEach(({ L, headMat }) => { L.intensity = env.lamp * 16; headMat.color.set(env.lamp > 0.5 ? '#ffd28a' : '#c9c2b0'); if (env.lamp > 0.5) headMat.color.multiplyScalar(2.2); });
+  tmpC.copy(dayGlass).lerp(warm, env.glow).multiplyScalar(1 + env.glow * 0.9);
+  windows.forEach((w) => { if (w.tv) w.glassMat.color.copy(tvBlue).multiplyScalar(1.1 + Math.random() * 0.6); else w.glassMat.color.copy(tmpC); });
+  [bakery, agency].forEach((s) => s.shopGlass.color.copy(tmpC2.copy(s.shopBase).lerp(warm, env.glow * 0.6).multiplyScalar(1 + env.glow * 0.6)));
+  if (STYLE !== 'gouache') specs.forEach((s) => { const m = s.cache[STYLE]; if (m) m.envMapIntensity = env.envI; });
+}
+
+/* ===== CAMERA & STYLE ===== */
+const focus = (x, zoom = 1) => { cam.x = x; cam.zoom = zoom; };
+const fp = { cur: new THREE.Vector3(-20, 1.6, -3.2), tgt: new THREE.Vector3(-20, 1.6, -3.2), yaw: 0, pitch: 0, drag: null, tagOpen: false };
+{ const c = document.getElementById('c'); c.style.touchAction = 'none';
+  addEventListener('pointerdown', (e) => { if (e.target === c || e.target.classList.contains('veil')) fp.drag = { x: e.clientX, y: e.clientY, yaw: fp.yaw, pitch: fp.pitch }; });
+  addEventListener('pointermove', (e) => { if (!fp.drag) return; fp.yaw = fp.drag.yaw - (e.clientX - fp.drag.x) * 0.005; fp.pitch = Math.max(-0.6, Math.min(0.6, fp.drag.pitch - (e.clientY - fp.drag.y) * 0.004)); });
+  addEventListener('pointerup', () => { fp.drag = null; }); }
+const fpV = new THREE.Vector3(), fpD = new THREE.Vector3();
+function placeCamera(dt, t) {
+  const kk = FAST ? 1 : 1 - Math.exp(-dt * 2.2);
+  if (!fp.drag) { fp.yaw *= 1 - Math.min(1, dt * 1.2); fp.pitch *= 1 - Math.min(1, dt * 1.2); }
+  fpV.copy(fp.tgt); if (fp.tagOpen) { if (innerWidth > innerHeight) fpV.x += 1.1; else fpV.y -= 0.55; }
+  fp.cur.lerp(fpV, kk);
+  const walking = !!claire.userData.target, bob = walking && !reduce ? Math.abs(Math.sin(t * 7)) * 0.045 : 0;
+  camera.position.set(claire.position.x, 1.62 + bob, claire.position.z);
+  fpD.copy(fp.cur).sub(camera.position); const r = Math.hypot(fpD.x, fpD.z), a = Math.atan2(fpD.z, fpD.x) + fp.yaw, el = Math.atan2(fpD.y, r) + fp.pitch;
+  camera.lookAt(camera.position.x + Math.cos(a) * Math.cos(el), camera.position.y + Math.sin(el), camera.position.z + Math.sin(a) * Math.cos(el));
+  camera.fov = innerHeight > innerWidth ? 78 : 60; camera.near = 0.1; camera.updateProjectionMatrix();
+  tiltH.enabled = tiltV.enabled = false;
+  return;
+  const k = 1;
+  cam.cx += (cam.x - cam.cx) * k; cam.cz += (cam.zoom - cam.cz) * k; cam.dr += (cam.drop - cam.dr) * k;
+  { const b = Math.min(1, Math.max(0.25, (cam.cz - 0.35) / 0.55)); tiltH.uniforms.h.value = 3.0 * b / innerWidth; tiltV.uniforms.v.value = 3.0 * b / innerHeight; } // sharper when close
+  const narrow = Math.max(1, 1.35 / (innerWidth / innerHeight));
+  const sway = reduce ? 0 : Math.sin(t * 0.25) * 0.25;
+  if (STYLE === 'film') {
+    const dist = 12.5 * cam.cz * narrow;
+    camera.fov = 40; camera.position.set(cam.cx + sway, 1.7 + dist * 0.16, -4 + dist); camera.lookAt(cam.cx, 2.7, -5.2);
+  } else {
+    const dist = 20 * cam.cz * narrow;
+    camera.fov = 30; camera.position.set(cam.cx + sway, 3 + dist * 0.45 - cam.dr, -4 + dist); camera.lookAt(cam.cx, 2.9 - cam.dr, -4.6);
+  }
+  camera.updateProjectionMatrix();
+}
+function applyStyle(style) {
+  STYLE = style;
+  scene.traverse((o) => { if (o.isMesh && o.material && o.material.userData && o.material.userData.spec) o.material = build(o.material.userData.spec, style); });
+  tiltH.enabled = tiltV.enabled = style === 'maquette';
+  bloom.strength = style === 'gouache' ? 0.3 : 0.5;
+  renderer.toneMappingExposure = style === 'gouache' ? 1.0 : 0.78;
+  trees.forEach((tr) => (tr.visible = style !== 'film'));
+  document.body.classList.toggle('film', style === 'film'); document.body.classList.toggle('gouache', style === 'gouache');
+  document.querySelectorAll('#styles button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.style === style)));
+}
+document.querySelectorAll('#styles button').forEach((b) => (b.onclick = () => applyStyle(b.dataset.style)));
+
+/* ===== CLOCK: date, hour and place in the eight years ===== */
+const clk = { min: 0 };
+function showTime() { const h = Math.floor(clk.min / 60) % 24, m = clk.min % 60; $('#clkH').textContent = String(h); $('#clkM').textContent = String(m).padStart(2, '0'); }
+function setDay(day, era) { $('#clkDay').textContent = day; document.querySelectorAll('#clkLine li').forEach((li, i) => { li.className = i < era ? 'done' : i === era ? 'now' : ''; }); }
+function setTime(h, m = 0) { clk.min = h * 60 + m; showTime(); }
+function advance(mins) { clk.min += mins; showTime(); }
+/* ===== UI ===== */
+const capEl = $('#cap'), capWho = $('#capWho'), capText = $('#capText'), capNext = $('#capNext'), capLegend = $('#capLegend');
+function say(text, who = '') {
+  return new Promise((res) => {
+    capWho.textContent = who; capText.textContent = text; capNext.hidden = false; capLegend.hidden = true; capEl.hidden = false;
+    const go = () => { capEl.removeEventListener('click', go); capEl.hidden = true; res(); };
+    capEl.addEventListener('click', go); capNext.focus({ preventScroll: true });
+  });
+}
+function note(text, who = '', legend = false) { capWho.textContent = who; capText.textContent = text; capNext.hidden = true; capLegend.hidden = !legend; capEl.hidden = false; }
+const hideNote = () => { capEl.hidden = true; };
+async function card(sub, title, during) {
+  const el = $('#card'); $('#cardSub').textContent = sub; $('#cardTitle').textContent = title;
+  el.classList.remove('off'); await wait(1100); if (during) await during(); await wait(1500); el.classList.add('off'); await wait(700);
+}
+const STAMP = { real: 'Déjà arrivé', prog: 'Au programme du RN', prop: 'Déjà proposé', fic: 'Pas encore arrivé' };
+function paper({ kind, from, body, stamps = [], scene: isScene = false }) {
+  return new Promise((res) => {
+    $('#paper').className = 'paper' + (isScene ? ' scene' : '');
+    $('#lKind').textContent = kind || ''; $('#lFrom').textContent = from; $('#lBody').textContent = body;
+    const box = $('#lStamps'); box.textContent = '';
+    stamps.forEach((st, i) => {
+      const d = document.createElement('div'); d.className = 'stamp ' + st.t; d.style.rotate = (i % 2 ? 1.5 : -2.5) + 'deg';
+      const b = document.createElement('b'); b.textContent = STAMP[st.t]; d.append(b, st.text);
+      const links = [...(st.src ? [['Lire la source', st.src]] : []), ...(st.more || []).map(([n, u]) => ['En savoir plus : ' + n, u])];
+      if (links.length) { const l = document.createElement('span'); l.className = 'links'; links.forEach(([n, u]) => { const a = document.createElement('a'); a.href = u; a.target = '_blank'; a.rel = 'noopener'; a.textContent = n; l.append(a); }); d.append(l); }
+      box.append(d);
+    });
+    const L = $('#letter'); L.hidden = false; L.scrollTop = 0; $('#lClose').focus({ preventScroll: true });
+    if (stamps.some((st) => st.t === 'real')) sfx('tampon');
+    $('#lClose').onclick = () => { L.hidden = true; res(); };
+  });
+}
+const hots = [];
+function hotspots(list) {
+  return new Promise((res) => {
+    let left = list.length;
+    list.forEach((h) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'hot' + (h.kind === 'cit' ? ' cit' : '');
+      b.innerHTML = '<span class="ring" aria-hidden="true"></span><span class="lbl"><span class="kind"></span><span class="t"></span></span>';
+      b.querySelector('.ring').textContent = h.kind === 'cit' ? '' : '✉';
+      b.querySelector('.kind').textContent = h.kind === 'cit' ? 'Citoyenne' : 'Tournée';
+      b.querySelector('.t').textContent = h.label;
+      $('#hots').appendChild(b);
+      const entry = { el: b, pos: h.pos }; hots.push(entry);
+      b.onclick = async () => {
+        hots.forEach((o) => { o.el.disabled = true; o.el.style.opacity = '0'; });
+        b.remove(); hots.splice(hots.indexOf(entry), 1); hideNote();
+        if (h.at) setTime(...h.at); else advance(20);
+        focus(h.walkX, h.zoom || 0.85); await walk(claire, h.walkX, h.walkZ ?? -3.75, 6);
+        if (h.mail) await deliver(h.mail); else await wait(700);
+        await h.run();
+        hots.forEach((o) => { o.el.disabled = false; o.el.style.opacity = ''; });
+        if (--left === 0) res(); else focus(claire.position.x, 1.15);
+      };
+    });
+  });
+}
+const v3 = new THREE.Vector3();
+function placeHots() {
+  const sides = { l: 0, r: 0 };
+  hots.map((h) => { v3.copy(h.pos).project(camera); return { h, x: v3.x, y: v3.y, z: v3.z }; }).sort((a, b) => Math.abs(a.x) - Math.abs(b.x)).forEach(({ h, x, y, z }) => {
+    const el = h.el; let sx = ((x + 1) / 2) * innerWidth, sy = ((1 - y) / 2) * innerHeight;
+    if (z > 1) sx = innerWidth - sx;
+    const maxX = innerWidth - el.offsetWidth + 10; const edge = sx > maxX ? 'r' : sx < 28 ? 'l' : '';
+    el.dataset.edge = edge;
+    if (edge) { sy = 170 + sides[edge] * 60; sides[edge]++; }
+    sx = Math.min(Math.max(sx, 28), maxX); sy = Math.min(Math.max(sy, 160), innerHeight - 200);
+    el.style.transform = `translate(${sx}px, ${sy}px)`;
+  });
+}
+
+/* ===== WORLD STATE ===== */
+const closeHouse = (key, n) => H[key].wins.slice(0, n).forEach((w) => (w.closed = true));
+async function dropLetters() {
+  letters.forEach((m, i) => { const u = m.userData; u.delay = 0.15 + i * 0.13; u.falling = true; u.v.set(rnd(-0.4, 0.4), 0.6, rnd(1.2, 2.2)); u.av.set(rnd(-3, 3), rnd(-2, 2), rnd(-3, 3)); });
+  await wait(2700);
+  newName.visible = true; await tween(1500, (p) => setOpacity(newName, p));
+}
+function parkBike(x) { bike.userData.parked = true; bike.position.set(x, 0.13, -3.4); bike.visible = true; }
+const EXTRAS = [moussa, bernadette, samia, michel, leo, ...kids, ...crowd, ...queue, ...cops];
+function setStage(stage) {
+  EXTRAS.forEach((p) => { p.visible = false; p.userData.target = null; });
+  queueSigns.visible = false; banner.visible = false;
+  if (stage === 'an1') {
+    at(michel, X.bakery + 0.9, -4.1); at(moussa, X.bakery - 0.85, -4.5);
+    at(samia, X.samia + 1.3, -4.35); at(bernadette, X.local + 0.4, -4.35);
+    at(leo, X.ecole + 0.6, -3.9); at(kids[0], X.ecole - 0.9, -4.1); at(kids[1], X.ecole - 0.3, -3.6);
+  }
+  if (stage === 'an2') {
+    pool.userData.rule.visible = true; at(kids[0], -26.9, -3.7); at(kids[1], -26.4, -3.9); at(samia, X.samia + 1.3, -4.35);
+    at(michel, X.bakery + 0.9, -4.1); at(moussa, X.bakery - 0.85, -4.5);
+    queueSigns.visible = true;
+    queue.slice(0, 3).forEach((p, i) => at(p, 2.6, -3.55 - i * 0.48));
+    queue.slice(3).forEach((p, i) => at(p, 4.7, -3.55 - i * 0.48));
+    at(samia, 4.7, -4.5);
+    at(bernadette, X.local - 1.6, -3.35);
+    crowd.forEach((p, i) => at(p, X.local - 1.0 + (i % 3) * 0.8, -3.5 - Math.floor(i / 3) * 0.6)); banner.visible = true;
+  }
+  if (stage === 'an6') { at(michel, X.bakery + 0.9, -4.1); at(samia, X.samia + 1.3, -4.35); }
+  if (stage === 'an4') { at(michel, X.bakery + 0.9, -4.1); at(moussa, X.bakery - 0.85, -4.5); at(bernadette, X.local + 1.2, -3.9); }
+}
+function resetWorld() {
+  windows.forEach((w) => { w.closed = false; w.tv = false; w.shutters.forEach((p) => (p.rotation.y = 0)); });
+  letters.forEach((m) => { m.visible = true; m.position.copy(m.userData.home); m.rotation.set(0, 0, 0); Object.assign(m.userData, { falling: false, landed: false }); });
+  setOpacity(newName, 0); newName.visible = false;
+  [localNotice, boards, banned, cctv, cartons, cancelled, van, onlyOne].forEach((o) => (o.visible = false));
+  banned.scale.x = 0.001; vanFlash = false; cat.visible = true;
+  pool.userData.rule.visible = false; setStage('none'); claire.visible = false; claire.userData.target = null; parkBike(X.claire + 1.0); setMode('night', true);
+}
+
+/* ===== LA RUE: the same street, one walk a year ===== */
+let follow = 0;
+const PATHZ = -2.6, START = -29.5, FINISH = 29.5, SPEED = 2.6;
+function retext(m, text, w, h, opts) { const t = textTex(text, { w, h, ...opts }); const s = m.material.userData.spec; s.map = t; Object.values(s.cache).forEach((mm) => { mm.map = t; mm.needsUpdate = true; }); }
+const backOut = (p) => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2); };
+async function pop(o) {
+  o.visible = true;
+  if (o.isMesh) { await tween(700, (p) => o.scale.setScalar(Math.max(0.001, backOut(p)))); o.scale.setScalar(1); return; }
+  const y0 = o.userData.y0 ?? (o.userData.y0 = o.position.y); o.position.y = y0 + 2.2;
+  await tween(800, (p) => { const b = p < 1 / 2.75 ? 7.5625 * p * p : p < 2 / 2.75 ? 7.5625 * (p -= 1.5 / 2.75) * p + 0.75 : p < 2.5 / 2.75 ? 7.5625 * (p -= 2.25 / 2.75) * p + 0.9375 : 7.5625 * (p -= 2.625 / 2.75) * p + 0.984375; o.position.y = y0 + 2.2 * (1 - b); });
+  o.position.y = y0;
+}
+
+// --- new street objects
+const flagMat = canvasTex(96, 64, (x) => { ['#1f3f8a', '#f4f1e8', '#c42a2f'].forEach((c, i) => { x.fillStyle = c; x.fillRect(i * 32, 0, 32, 64); }); });
+const flags = [];
+function flagOn(key, lx, ly, from) {
+  const g = new THREE.Group(); const pole = cyl(0.025, 0.025, 1.1, '#cfcfcf', 6); pole.rotation.z = 0.9; g.add(pole);
+  const f = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 0.42), mat('#ffffff', { map: flagMat })); f.material.side = THREE.DoubleSide; f.position.set(0.55, 0.25, 0); f.rotation.z = -0.15; g.add(f);
+  g.position.set(lx, ly, ZF + 0.25); g.rotation.y = 0.2; shade(g); H[key].g.add(g); g.visible = false; flags.push({ g, from, f });
+}
+[['ecole', 2.6, 3.9, 2], ['cine', 2.3, 3.9, 3], ['local', 1.3, 2.9, 4], ['media', 2.6, 3.9, 4], ['camille', 1.5, 5.0, 5], ['bakery', -1.2, 5.0, 6], ['delmas', 1.3, 3.0, 6], ['bourse', 2.2, 3.9, 4]].forEach(([k, x, y, f]) => flagOn(k, x, y, f));
+const flagPole = new THREE.Group();
+{ const p = cyl(0.05, 0.06, 5.2, '#d9d9d9', 8); p.position.y = 2.6; flagPole.add(p); const f = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.8), mat('#ffffff', { map: flagMat })); f.material.side = THREE.DoubleSide; f.position.set(0.62, 4.7, 0); flagPole.add(f); flagPole.userData.f = f;
+  flagPole.position.set(X.ecole + 3.3, 0.08, -4.75); shade(flagPole); scene.add(flagPole); flagPole.visible = false; }
+const salute = sign('SALUT AU DRAPEAU\nchaque matin · 8 h 15', 1.7, 0.55, { bg: '#1f3f8a', fg: '#ffffff', border: '#ffffff', radius: 0.04 });
+salute.position.set(X.ecole - 1.8, 1.55, ZH + ZF + 0.56); salute.visible = false; scene.add(salute);
+const prenoms = sign('ÉTAT CIVIL\nPrénoms d\'usage\nrecommandés :\nLouis · Jean · Marie', 0.78, 0.82, { bg: '#f7f3ea', fg: '#1f3f8a', border: '#1f3f8a', radius: 0.02 });
+prenoms.position.set(-1.12, 1.6, ZF + 0.12); prenoms.visible = false; H.ecole.g.add(prenoms);
+const habitat = sign('FRANÇAIS D\'ABORD', 1.9, 0.4, { bg: '#c42a2f', fg: '#ffffff', radius: 0.03 });
+habitat.position.set(0.85, 2.0, ZF + 0.08); habitat.visible = false; agency.g.add(habitat);
+const liquid = sign('LIQUIDATION\nJUDICIAIRE', 1.2, 0.56, { bg: '#f4f1e8', fg: '#1d1d1d', border: '#1d1d1d', radius: 0.02 });
+liquid.position.set(0.85, 1.2, ZF + 0.07); liquid.rotation.z = -0.05; liquid.visible = false; bakery.g.add(liquid);
+const forSale = sign('À VENDRE', 1.0, 0.36, { bg: '#c42a2f', fg: '#ffffff', radius: 0.03 });
+forSale.position.set(0.84, 2.35, ZF + 0.12); forSale.visible = false; H.ferreira.g.add(forSale);
+const missing = sign('DISPARU\nJulien M., 41 ans\nvu le 15 juin\n06 ·· ·· ·· ··', 0.62, 0.78, { bg: '#f7f3ea', fg: '#1d1d1d', border: '#c42a2f', radius: 0.01 });
+missing.position.set(0.84, 2.38, ZF + 0.1); missing.visible = false; H.samia.g.add(missing);
+const forbidden = sign('AFFICHAGE\nINTERDIT', 0.72, 0.3, { bg: '#151515', fg: '#f4f0e6', radius: 0.01 });
+forbidden.position.set(0.84, 2.4, ZF + 0.13); forbidden.rotation.z = 0.35; forbidden.visible = false; H.samia.g.add(forbidden);
+const news = new THREE.Group();
+{ [-1, 1].forEach((s) => { const b = box(0.78, 1.15, 0.05, '#2b2b2b', 0.02); b.position.set(0, 0.62, s * 0.18); b.rotation.x = s * -0.16; news.add(b); });
+  const head = sign('LE COURRIER\nDE VALBERNE', 0.7, 0.24, { bg: '#f4f1e8', fg: '#1d1d1d', radius: 0.01, font: 'Special Elite', weight: 400 }); head.position.set(0, 1.03, 0.24); head.rotation.x = -0.16; news.add(head);
+  const face = sign('…', 0.7, 0.66, { bg: '#f4f1e8', fg: '#1d1d1d', radius: 0.01 }); face.position.set(0, 0.6, 0.27); face.rotation.x = -0.16; news.add(face); news.userData.face = face;
+  news.position.set(-2.15, 0.08, -4.55); shade(news); scene.add(news); }
+const HEAD = ['ÉLECTION :\nLE RN\nL\'EMPORTE', 'ALLOCATIONS :\nLES FAMILLES\nÉTRANGÈRES\nEXCLUES', 'LE CINÉMA\nCHANGE\nDE NOM', '1 200 LIVRES\nRETIRÉS\nDES RAYONS', 'LES SYNDICATS\nPRIÉS DE\nPARTIR', 'LE MAIRE :\n« SÉCURITÉ\nD\'ABORD »', 'BOULANGERIE\nMICHEL :\nC\'EST FINI', 'BOULANGERIE\nMICHEL :\nC\'EST FINI', ''];
+const setHead = (t) => retext(news.userData.face, t, 0.7, 0.66, { bg: '#f4f1e8', fg: '#1d1d1d', radius: 0.01 });
+const SLATE0 = 'CANTINE\nLundi : lasagnes\nou menu sans viande', SLATE1 = 'CANTINE\nLundi : rôti de porc\nMenu unique';
+const setSlate = (t) => retext(slate, t, 0.95, 0.75, { bg: '#2c3a2f', fg: '#f2f0e6', border: '#8a6a4a', radius: 0.03, font: 'Caveat', weight: 700 });
+const brigade = [0, 1].map(() => { const c = person('#3a3f47', '#d6aa86', 1, '#1b1d22'); const band = new THREE.Mesh(new THREE.CylinderGeometry(0.232, 0.232, 0.08, 12, 1, true), mat('#c42a2f')); band.position.y = 0.8; c.add(band); c.visible = false; return c; });
+
+// --- what changes, year by year
+const R = (text, src, more) => ({ t: 'real', text, src, more });
+const P = (text, src) => ({ t: 'prog', text, src });
+const Q = (text, src) => ({ t: 'prop', text, src });
+const F = (text) => ({ t: 'fic', text });
+const YEARS = [
+  { date: 'Dimanche 2 mai 2027', sub: 'Le soir de l\'élection', title: 'Rien de grave', mode: 'night', music: 'nuit', time: [20, 5],
+    intro: 'Dimanche 2 mai 2027, 20 h. Claire rentre du bureau de vote. Chaque année, ce jour-là, elle descendra la rue des Tilleuls. Aujourd\'hui, elle est comme d\'habitude.',
+    stops: [
+      { x: X.bourse, look: [X.bourse, 1.6, -5.1], title: 'La Bourse du travail', body: 'Les syndicats s\'y réunissent depuis cent ans. Le jeudi soir, il y a de la lumière jusqu\'à minuit.' },
+      { x: -3.4, at: -3.4, zoom: 0.7, look: [-3.4, 1.4, 4.2], title: 'Les panneaux électoraux', body: 'Six affiches, six candidats. Ce soir, à 20 h, le Rassemblement national a gagné.' },
+      { x: X.local, look: [X.local - 0.4, 1.6, -5.05], title: 'Le Local', body: 'Une association d\'entraide : soutien scolaire, colis alimentaires, café le samedi. Bernadette, 71 ans, en a les clés.' },
+      { x: X.cine, look: [X.cine, 2.5, -4.5], title: 'Le cinéma René-Vautier', body: 'René Vautier : résistant à 15 ans, puis cinéaste. Le cinéma porte son nom depuis 1998.' },
+    ],
+    end: [['C\'est grave, maman ?', 'Léo, 8 ans'], ['Non. Pour nous, ça ne changera rien.', 'Claire']] },
+
+  { date: 'Mardi 2 mai 2028', sub: 'An 1', title: 'Deux files', mode: 'day', music: 'jour', time: [9, 0],
+    intro: 'Un an plus tard. Presque rien n\'a changé. Presque.',
+    stops: [
+      { x: X.ecole + 1.15, zoom: 0.38, look: [X.ecole + 1.15, 1.35, -5.05], title: 'Le menu de la cantine', body: 'Le lundi, il n\'y a plus qu\'un seul menu. Ceux qui ne mangent pas de porc mangent du pain.', set: () => setSlate(SLATE1), anim: async () => { await tween(300, (p) => slate.scale.setScalar(1 - p * 0.9)); setSlate(SLATE1); await tween(500, (p) => slate.scale.setScalar(0.1 + backOut(p) * 0.9)); },
+        stamps: [R('Beaucaire (RN), depuis 2018 : plus de repas de remplacement, du porc chaque lundi. Le maire maintient la mesure malgré le Conseil d\'État.', 'https://www.objectifgard.com/politique/expresso-repas-sans-porc-a-beaucaire-la-mairie-deboutee-par-le-conseil-detat-116948.php')] },
+      { x: X.camille + 0.6, back: 5.5, look: [X.camille + 0.9, 1.9, -4.4], title: 'L\'agence HLM', body: 'Devant Valberne Habitat, deux files. Samia est dans la seconde : elle travaille et cotise en France depuis quatorze ans.', objs: [queueSigns, habitat],
+        stamps: [P('La « priorité nationale » pour l\'accès au logement social et aux aides, à inscrire dans la Constitution par référendum.', 'https://lcp.fr/actualites/legislatives-2024-le-programme-du-rassemblement-national-en-matiere-d-immigration-a-l'),
+          R('Vitrolles (FN), 1998 : une prime de naissance réservée aux familles françaises ou européennes. Annulée par la justice ; la maire est condamnée.', 'https://www.universalis.fr/evenement/8-novembre-2000-condamnation-a-deux-ans-d-ineligibilite-de-catherine-megret/')] },
+    ],
+    end: [['Deux files. On s\'habitue vite à une file de plus.', 'Claire']] },
+
+  { date: 'Mercredi 2 mai 2029', sub: 'An 2', title: 'Un nouveau nom', mode: 'summer', music: 'ete', time: [9, 10],
+    intro: 'Deux ans. Il fait beau. Les drapeaux ont fleuri sur l\'école.',
+    stops: [
+      { x: X.local, look: [X.local - 0.4, 1.6, -5.05], title: 'Le Local', body: 'Bernadette a trouvé la serrure changée. Les colis alimentaires sont restés à l\'intérieur.', objs: [localNotice], set: () => { entraideSign.visible = false; },
+        stamps: [R('Hénin-Beaumont (FN), 2014 : la Ligue des droits de l\'homme chassée de son local municipal. Hayange (FN), 2016 : l\'eau, le gaz et l\'électricité coupés au Secours populaire.', 'https://www.politis.fr/articles/2014/04/henin-beaumont-la-ldh-expulsee-26515/')] },
+      { x: X.cine - 2.6, at: X.cine - 2.4, zoom: 0.6, look: [X.cine - 0.6, 2.3, -4.5], title: 'Cinéma Maréchal-Pétain', body: 'Philippe Pétain : chef de l\'État français de 1940 à 1944. Il collabore avec l\'Allemagne nazie ; près de 76 000 Juifs sont déportés depuis la France, 3 % reviennent. Condamné à mort en 1945, gracié à cause de son âge.\n\nSur l\'affiche du théâtre, juste à côté : « Annulé ».',
+        set: () => { letters.forEach((m) => (m.visible = false)); newName.visible = true; setOpacity(newName, 1); cancelled.visible = true; },
+        anim: async () => { await dropLetters(); await pop(cancelled); },
+        stamps: [R('Pétain, pas encore. Mais en septembre 2026, à Elne, le cinéma René-Vautier a été rebaptisé : le nom du résistant était jugé trop « politique ».', 'https://lesmutins.org/extreme-droite-le-nom-de-rene', [['Philippe Pétain', 'https://fr.wikipedia.org/wiki/Philippe_P%C3%A9tain']]),
+          R('Castres (RN), juin 2026 : « Passeport », une pièce sur des parcours d\'exilés, déprogrammée par un maire qui dit ne pas l\'avoir vue.', 'https://www.lagazettefrance.fr/article/deprogrammations-coupes-budgetaires-dans-des-villes-rn-la-culture-sur-la-sellette')] },
+    ],
+    end: [['Le cinéma, c\'est juste un nom.', 'Claire']] },
+
+  { date: 'Jeudi 2 mai 2030', sub: 'An 3', title: 'Les cartons', mode: 'day', music: 'jour', time: [9, 0],
+    intro: 'Trois ans. La rue est propre. On a installé des caméras.',
+    stops: [
+      { x: -27.6, at: -26.4, zoom: 0.6, look: [-27.6, 1.7, -3.2], title: 'La sortie piscine', body: 'Les mères voilées n\'ont plus le droit d\'accompagner les sorties scolaires. Il manque des accompagnateurs : la sortie est annulée pour la classe de Léo.', objs: [pool.userData.rule],
+        stamps: [R('Sénat, 15 mai 2019 : un amendement LR interdisant les signes religieux aux accompagnateurs de sorties scolaires est adopté.', 'https://www.publicsenat.fr/actualites/politique/sorties-scolaires-le-senat-vote-pour-l-interdiction-du-port-du-voile-pour-les')] },
+      { x: -1.5, look: [-1.5, 2.9, -3.25], title: 'La caméra du carrefour', body: 'Reconnaissance faciale. Le panneau dit que c\'est pour la sécurité de tous.', objs: [cctv],
+        stamps: [R('Hongrie, 2025 : une marche interdite, et la reconnaissance faciale autorisée pour identifier ceux qui y participent.', 'https://www.pbs.org/newshour/world/hungary-passes-anti-lgbtq-law-banning-pride-events')] },
+      { x: X.media + 1.2, look: [X.media + 1.2, 0.7, -4.3], title: 'La médiathèque', body: 'Des cartons sur le trottoir. Une liste de livres « contraires aux valeurs de la commune ». Des albums pour enfants, surtout.', objs: [cartons],
+        stamps: [R('Orange (FN), 1996 : des livres pour enfants retirés de la bibliothèque municipale, dont « Momo de Palestine ».', 'https://www.livreshebdo.fr/article/lordre-regne-dans-les-bibliotheques'),
+          R('États-Unis, janvier 2022 : « Maus », la bande dessinée sur la Shoah, retirée du programme d\'un district scolaire du Tennessee.', 'https://www.livreshebdo.fr/article/lalbum-maus-interdit-dans-un-college-du-tennessee')] },
+    ],
+    end: [['Je n\'empruntais plus beaucoup de livres, de toute façon.', 'Claire']] },
+
+  { date: 'Vendredi 2 mai 2031', sub: 'An 4', title: 'Fermé par arrêté', mode: 'grey', music: 'pluie', time: [9, 0],
+    intro: 'Quatre ans. Moussa, le boulanger, a été expulsé l\'an dernier. Michel pétrit seul.',
+    stops: [
+      { x: X.bourse, look: [X.bourse, 1.6, -5.1], title: 'La Bourse du travail', body: 'Des planches clouées sur la porte. Les syndicats ont reçu une lettre recommandée : le bâtiment « change d\'affectation ».', objs: [boards],
+        stamps: [R('Carcassonne (RN), 2026 : les syndicats sommés de rendre leurs locaux municipaux.', 'https://www.lagazettefrance.fr/article/deloges-de-locaux-municipaux-les-syndicats-protestent-contre-le-maire-rn-de-carcassonne'),
+          R('Régime de Vichy, 9 novembre 1940 : les confédérations syndicales dissoutes par décret.', 'https://fr.wikipedia.org/wiki/R%C3%A9gime_de_Vichy')] },
+      { x: X.local + 0.5, look: [X.local + 0.5, 2.3, -5.05], title: 'Police municipale', body: 'L\'ancien Local est devenu un poste de police. Valberne a doublé ses effectifs en un an.', objs: [policeSign], set: () => { localNotice.visible = false; entraideSign.visible = false; },
+        stamps: [P('Une « présomption de légitime défense » pour les forces de l\'ordre (programme des législatives, juin 2024).', 'https://tnova.fr/site/assets/files/63488/terra_nova_-_les_non-dits_de_la_securite_selon_le_rn_-_27_06_2024.pdf')] },
+      { x: X.media, look: [X.media, 2.5, -5.05], title: 'Office municipal de la famille', body: 'À la place de la médiathèque. Prime au troisième enfant, pour les familles françaises. Ateliers « préparer son foyer ».', objs: [familySign], set: () => { cartons.visible = false; },
+        stamps: [R('Hongrie, 2019 : les mères de quatre enfants exonérées d\'impôt sur le revenu à vie ; un prêt aux couples mariés effacé au troisième enfant.', 'https://www.lalibre.be/international/2019/02/14/pourquoi-la-hongrie-met-en-place-des-mesures-natalistes-KGAI3BDHWBAIHJM7PC6W3D5ELE/'),
+          R('Régime de Vichy, 1942 : l\'avortement devient un « crime contre la sûreté de l\'État ». Marie-Louise Giraud est guillotinée le 30 juillet 1943.', 'https://www.pariszigzag.fr/insolite/histoire-insolite-paris/lhistoire-de-marie-louise-giraud-la-seule-faiseuse-danges-guillotinee-en-france/')] },
+    ],
+    end: [['Il y a plus de policiers. On se sent plus en sécurité, non ?', 'Claire']] },
+
+  { date: 'Dimanche 2 mai 2032', sub: 'An 5', title: 'Le salut au drapeau', mode: 'grey', music: 'pluie', time: [9, 0],
+    intro: 'Cinq ans. Des drapeaux à presque toutes les fenêtres officielles.',
+    stops: [
+      { x: X.ecole - 0.6, at: X.ecole + 1.4, look: [X.ecole - 1.8, 1.7, -4.5], title: 'L\'école publique', body: 'Chaque matin, les élèves chantent La Marseillaise devant le drapeau. Un nouveau manuel d\'histoire : « Notre France, une fierté ». Vichy y tient une demi-page.', objs: [flagPole, salute],
+        stamps: [R('Italie fasciste, 1929 : un manuel scolaire unique, écrit par l\'État, imposé aux écoles primaires. « Tous les enfants d\'Italie sont de petits fascistes. »', 'https://www.focus.it/cultura/storia/cosa-si-imparava-a-scuola-durante-il-fascismo-oltre-al-saluto-romano'),
+          P('L\'uniforme à l\'école, et la « priorité absolue » à l\'histoire de France et au roman national.', 'https://lcp.fr/actualites/presidentielle-la-bataille-de-l-enseignement-109272')] },
+      { x: X.ecole - 1.1, at: X.ecole + 1.4, zoom: 0.4, look: [X.ecole - 1.12, 1.6, -5.05], title: 'À l\'état civil', body: 'Dans la classe de Léo, Yanis s\'appelle maintenant « Yann ». Ses parents ont changé son prénom pour qu\'il trouve un stage.', objs: [prenoms],
+        stamps: [Q('Septembre 2021 : Éric Zemmour, candidat à la présidentielle, veut interdire les prénoms « non français ».', 'https://fr.le360.ma/monde/video-sil-etait-president-eric-zemmour-interdirait-les-prenoms-musulmans-en-france-245761'),
+          R('France, 2019–2021 : à CV égal, les candidats au nom d\'origine maghrébine sont rappelés 31,5 % moins souvent.', 'https://www.insee.fr/fr/statistiques/6793310')] },
+      { x: X.ferreira + 0.8, look: [X.ferreira + 0.84, 2.3, -5.05], title: 'Chez les Ferreira', body: 'Luis Ferreira est franco-portugais. Son poste à la préfecture est désormais « réservé ». Ils sont repartis à Porto.', objs: [forSale],
+        stamps: [P('Une centaine de postes « sensibles » interdits aux binationaux, liste fixée par décret et « évolutive ».', 'https://acteurspublics.fr/articles/postes-interdits-aux-binationaux-concours/')] },
+    ],
+    end: [['Léo connaît La Marseillaise par cœur. Il ne sait plus qui était René Vautier.', 'Claire']] },
+
+  { date: 'Lundi 2 mai 2033', sub: 'An 6', title: 'Le prix', mode: 'dusk', music: 'tension', time: [18, 10],
+    intro: 'Six ans. Ceux qui ont voté pour eux commencent à payer aussi.',
+    stops: [
+      { x: X.bakery + 0.9, look: [X.bakery + 0.85, 1.4, -5.05], title: 'La boulangerie de Michel', body: 'Michel a voté pour eux, deux fois. Depuis l\'expulsion de Moussa, il n\'a trouvé personne pour pétrir à 4 h du matin. La farine a pris 40 %. Il disait : « On ne pouvait pas savoir. »', objs: [liquid], set: () => { bakery.shopBase.set('#3a3a3a'); },
+        stamps: [R('Royaume-Uni, octobre 2021 : après le Brexit, il manque environ 100 000 chauffeurs routiers ; des stations-service sont à sec et l\'armée livre l\'essence.', 'https://fr.le360.ma/monde/penurie-de-carburants-au-royaume-uni-larmee-deployee-des-lundi-246712/'),
+          R('France, 2021 : environ un emploi sur dix est occupé par une personne immigrée, bien plus chez les aides à domicile, dans le bâtiment et la restauration (Dares).', 'https://www.legisocial.fr/actualites-sociales/4691-sont-metiers-immigres.html')] },
+      { x: -1.5, look: [-1.5, 1.2, -4.45], title: 'Brigade de tranquillité', body: 'Deux hommes en civil, un brassard, pas de matricule. « Votre téléphone, madame. » Ils lisent ses messages et s\'arrêtent sur ceux de son frère.', set: () => { at(brigade[0], -2.2, -4.5); at(brigade[1], -0.9, -4.4); },
+        stamps: [R('Portugal de Salazar, 1933–1974 : la police politique (PIDE) arrête et détient sans jugement, et paie des informateurs parmi les voisins.', 'https://en.wikipedia.org/wiki/PIDE'), F('Une police sans matricule et sans contrôle : la fiction de ce qui vient après.')] },
+      { x: X.samia + 0.84, look: [X.samia + 0.84, 2.35, -5.05], title: 'Avis de recherche', body: 'Julien, le frère de Claire, cheminot, syndiqué, militant de gauche. Une voiture sans plaque devant chez lui, à 5 h du matin. Au commissariat : « Aucune interpellation à ce nom. » Claire a collé l\'affiche elle-même.', objs: [missing],
+        stamps: [R('Chili, 1973–1990 : sous Pinochet, plus de 3 000 opposants tués ou « disparus », souvent militants de gauche ou syndicalistes, enlevés chez eux à l\'aube.', 'https://fr.wikipedia.org/wiki/Dictature_militaire_d%27Augusto_Pinochet')] },
+    ],
+    end: [['Je me dis que ceux qui ont voté pour eux pensaient être à l\'abri. Moi aussi.', 'Claire']] },
+
+  { date: 'Mardi 2 mai 2034', sub: 'An 7', title: 'Parution suspendue', mode: 'rain', music: 'pluie', time: [8, 40],
+    intro: 'Sept ans. Il pleut. Il n\'y a presque plus personne dans la rue.',
+    stops: [
+      { x: -3.4, at: -3.4, zoom: 0.7, look: [-3.4, 1.4, 4.2], title: 'Les panneaux électoraux', body: 'Un parti d\'opposition est dissous pour « atteinte à l\'ordre public ». Ses élus perdent leur mandat. Claire avait voté pour lui, une fois.', set: () => { banned.visible = true; banned.scale.x = 1; }, anim: async () => { banned.visible = true; await tween(500, (p) => (banned.scale.x = Math.max(0.001, p))); },
+        stamps: [Q('Le 1er octobre 2026, sur BFMTV-RMC, un candidat à la présidentielle veut « lancer dans le débat public » l\'interdiction de La France insoumise.', 'https://www.publicsenat.fr/actualites/politique/colere-lyceenne-bruno-retailleau-suggere-de-dissoudre-lfi-est-ce-possible'), F('La dissolution elle-même.')] },
+      { x: -2.15, zoom: 0.4, look: [-2.15, 0.8, -4.55], title: 'Le Courrier de Valberne', body: 'Le journal local ne paraît plus : « publication suspendue par décision administrative ». Le site d\'information que lisait Claire n\'est plus accessible depuis la France.', set: () => setHead('PARUTION\nSUSPENDUE'), anim: async () => { await tween(300, (p) => news.userData.face.scale.setScalar(1 - p * 0.9)); setHead('PARUTION\nSUSPENDUE'); await tween(500, (p) => news.userData.face.scale.setScalar(0.1 + backOut(p) * 0.9)); },
+        stamps: [R('Hongrie, octobre 2016 : Népszabadság, premier quotidien d\'opposition, fermé du jour au lendemain.', 'https://www.hrw.org/news/2016/10/10/hungarys-biggest-oppositional-daily-shut-down'),
+          R('Espagne de Franco, 1938 : la loi sur la presse interdit de critiquer le régime, ses lois et sa version de l\'histoire. Elle reste en vigueur près de trente ans.', 'https://www.briefhistory.co.uk/1939/scw-post-war-censorship')] },
+      { x: X.samia + 0.84, look: [X.samia + 0.84, 2.35, -5.05], title: 'L\'affiche de Julien', body: 'Quelqu\'un a collé un bandeau par-dessus. Julien n\'est jamais revenu.', objs: [forbidden] },
+    ],
+    end: [['Je ne lis plus le journal. Il n\'y en a plus.', 'Claire']] },
+
+  { date: 'Mercredi 2 mai 2035', sub: 'An 8', title: 'Un seul candidat', mode: 'night', music: 'fin', time: [20, 0],
+    intro: 'Huit ans. Dimanche, c\'est l\'élection présidentielle.',
+    stops: [
+      { x: -3.4, at: -3.4, zoom: 0.7, look: [-3.4, 1.4, 4.2], title: 'Les panneaux électoraux', body: 'Six emplacements, une seule affiche. Les autres candidatures ont été « déclarées irrecevables ».', objs: [onlyOne],
+        stamps: [R('Portugal de Salazar, 1958 : Humberto Delgado, seul opposant autorisé à se présenter, obtient officiellement 23 % dans une élection dénoncée comme truquée. En 1965, il est assassiné par la police politique.', 'https://fr.wikipedia.org/wiki/Humberto_Delgado'),
+          R('Russie, février 2024 : Boris Nadejdine, seul candidat opposé à la guerre, écarté de la présidentielle.', 'https://www.dhnet.be/actu/monde/2024/02/08/presidentielle-russe-le-seul-candidat-anti-poutine-annonce-que-sa-candidature-a-ete-rejetee-64CLXDYUXZHV5GUUGZZED7TGBE/')] },
+    ],
+    end: [['C\'est grave, maman ?', 'Léo, 16 ans'], ['Oui. C\'est grave.', 'Claire']] },
+];
+const ERAS = ['2027', '2028', '2029', '2030', '2031', '2032', '2033', '2034', '2035'];
+
+// --- the tag: a small sheet that explains a change, with its stamps
+function tag({ kind, title, body, stamps = [] }) {
+  return new Promise((res) => {
+    $('#tKind').textContent = kind; $('#tTitle').textContent = title; $('#tBody').textContent = body;
+    const box = $('#tStamps'); box.textContent = '';
+    stamps.forEach((st, i) => {
+      const d = document.createElement('div'); d.className = 'stamp ' + st.t; d.style.rotate = (i % 2 ? 1.2 : -1.8) + 'deg';
+      const b = document.createElement('b'); b.textContent = STAMP[st.t]; d.append(b, st.text);
+      const links = [...(st.src ? [['Lire la source', st.src]] : []), ...(st.more || []).map(([n, u]) => ['En savoir plus : ' + n, u])];
+      if (links.length) { const l = document.createElement('span'); l.className = 'links'; links.forEach(([n, u]) => { const a = document.createElement('a'); a.href = u; a.target = '_blank'; a.rel = 'noopener'; a.textContent = n; l.append(a); }); d.append(l); }
+      box.append(d);
+    });
+    fp.tagOpen = true;
+    const T = $('#tag'); T.hidden = false; T.scrollTop = 0; $('#tNext').focus({ preventScroll: true });
+    if (stamps.some((st) => st.t === 'real')) sfx('tampon');
+    $('#tNext').onclick = () => { T.hidden = true; fp.tagOpen = false; res(); };
+  });
+}
+
+// --- building the street of a given year: everything earlier is already there
+function baseRue() {
+  resetWorld(); setStage('none'); bike.visible = false; bike.userData.parked = true; bike.position.y = -50;
+  entraideSign.visible = true; policeSign.visible = false; familySign.visible = false; queueSigns.visible = false;
+  [flagPole, salute, prenoms, habitat, liquid, forSale, missing, forbidden].forEach((o) => (o.visible = false));
+  brigade.forEach((b) => (b.visible = false)); bakery.shopBase.set('#ffd58a'); setSlate(SLATE0); news.visible = true;
+}
+function placePeople(i) {
+  const keep = (p, x, z) => at(p, x, z);
+  if (i === 0) { [H.claire.wins[1], H.ferreira.wins[1], H.samia.wins[2], H.delmas.wins[1], H.camille.wins[1]].forEach((w) => w && (w.tv = true)); return; }
+  if (i <= 6) keep(michel, X.bakery + 0.9, -4.55);
+  if (i <= 3) keep(moussa, X.bakery - 0.85, -4.6);
+  if (i <= 4) keep(samia, X.samia + 1.3, -4.55);
+  if (i <= 2) keep(bernadette, X.local + 1.1, -4.5);
+  if (i <= 3) { keep(kids[0], X.ecole - 0.9, -4.5); keep(kids[1], X.ecole - 0.3, -4.4); }
+  if (i === 1) { queue.slice(0, 3).forEach((p, k) => at(p, 2.6, -3.55 - k * 0.48)); queue.slice(3).forEach((p, k) => at(p, 4.7, -3.55 - k * 0.48)); at(samia, 4.7, -4.5); }
+  const n = [0, 6, 6, 5, 4, 3, 2, 1, 0][i];
+  crowd.slice(0, n).forEach((p, k) => { at(p, -24 + k * 9, 3.9 + (k % 2) * 0.5); wander(p); });
+  const c = [0, 0, 0, 0, 2, 2, 2, 2, 2][i]; cops.slice(0, c).forEach((p, k) => at(p, X.local - 0.6 + k * 1.1, -4.5));
+  if (i >= 7) brigade.forEach((b, k) => at(b, -2.2 + k * 1.3, -4.5));
+}
+function wander(p) { if (!p.visible) return; walk(p, rnd(-26, 26), 3.9 + rnd(0, 0.6), 0.9).then(() => setTimeout(() => wander(p), 800 + Math.random() * 2500)); }
+function buildYear(i) {
+  baseRue();
+  for (let k = 0; k < i; k++) YEARS[k].stops.forEach((s) => { (s.objs || []).forEach((o) => (o.visible = true)); s.set?.(); });
+  flags.forEach((f) => (f.g.visible = i >= f.from));
+  if (i >= 8) news.visible = false; else setHead(HEAD[i]);
+  placePeople(i);
+}
+
+async function play() {
+  const Y0 = Math.min(8, Math.max(0, +(new URLSearchParams(location.search).get('an') || 0))); // test only
+  for (let i = Y0; i < YEARS.length; i++) {
+    const Y = YEARS[i];
+    await card(`${Y.sub} · ${Y.date}`, Y.title, async () => {
+      buildYear(i); setDay(Y.date, i); setTime(...Y.time); setEra(i); setMode(Y.mode, true); music(Y.music);
+      at(claire, START, PATHZ); claire.children.forEach((c) => (c.visible = false)); follow = 0; fp.tgt.set(START + 10, 1.6, -3.2); fp.cur.copy(fp.tgt);
+    });
+    note(Y.intro, Y.sub);
+    follow = 0;
+    const stops = [...Y.stops].sort((a, b) => a.look[0] - b.look[0]);
+    await wait(1200); hideNote();
+    for (const s of stops) {
+      fp.tgt.set(claire.position.x + 10, 1.6, -3.2); const ahead = setInterval(() => fp.tgt.set(claire.position.x + 10, 1.6, -3.2), 100);
+      await walk(claire, Math.max(START + 0.5, s.look[0] - (s.back ?? (s.look[2] > 0 ? 4.5 : 3.2))), PATHZ, SPEED); clearInterval(ahead); advance(4);
+      fp.tgt.set(...s.look); await wait(900);
+      if (s.anim) await s.anim(); else for (const o of s.objs || []) await pop(o);
+      s.set?.(); (s.objs || []).forEach((o) => (o.visible = true));
+      await wait(500);
+      await tag({ kind: `${ERAS[i]} · ${i ? 'Ce qui a changé' : 'Avant'}`, title: s.title, body: s.body, stamps: s.stamps });
+    }
+    { const ahead = setInterval(() => fp.tgt.set(claire.position.x + 10, 1.6, -3.2), 100); await walk(claire, FINISH - 6, PATHZ, SPEED); clearInterval(ahead); }
+    if (i === 0 || i === 8) { at(leo, claire.position.x + 1.6, PATHZ - 0.9); fp.tgt.set(claire.position.x + 1.6, 0.85, PATHZ - 0.9); await wait(800); }
+    for (const [t, who] of Y.end) await say(t, who);
+  }
+  music('fin'); $('#bar').hidden = true; $('#end').hidden = false; $('#end').scrollTop = 0;
+}
+
+/* ===== LOOP ===== */
+function resize() {
+  renderer.setSize(innerWidth, innerHeight, false); composer.setPixelRatio(PR); composer.setSize(innerWidth, innerHeight);
+  camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
+  tiltH.uniforms.h.value = 3.0 / innerWidth; tiltV.uniforms.v.value = 3.0 / innerHeight;
+}
+addEventListener('resize', resize); resize();
+const clock = new THREE.Clock();
+function frame() {
+  const dt = Math.min(clock.getDelta(), 0.05), t = clock.elapsedTime;
+  if (follow) focus(claire.position.x + 1.6, follow);
+  applyEnv(dt); placeCamera(dt, t);
+  windows.forEach((w) => w.shutters.forEach((p) => { const target = w.closed ? -p.userData.side * Math.PI * 0.99 : 0; p.rotation.y += (target - p.rotation.y) * (1 - Math.exp(-dt * 3)); }));
+  people.forEach((p) => {
+    const u = p.userData; if (!u.target || !p.visible) return;
+    const d = v3.copy(u.target).sub(p.position); d.y = 0; const len = d.length();
+    if (len < 0.05) { p.position.x = u.target.x; p.position.z = u.target.z; p.position.y = 0.13; u.target = null; const r = u.done; u.done = null; if (r) r(); return; }
+    p.position.addScaledVector(d.normalize(), Math.min(len, u.speed * dt));
+    u.t += dt * 9; p.position.y = 0.13 + Math.abs(Math.sin(u.t)) * 0.05;
+  });
+  if (!bike.userData.parked) { bike.position.set(claire.position.x - 0.95, 0.13, claire.position.z + 0.25); bike.visible = claire.visible; }
+  letters.forEach((m) => {
+    const u = m.userData; if (!u.falling || u.landed) return;
+    if (u.delay > 0) { u.delay -= dt; return; }
+    u.v.y -= 9.8 * dt; m.position.addScaledVector(u.v, dt); m.rotation.x += u.av.x * dt; m.rotation.y += u.av.y * dt; m.rotation.z += u.av.z * dt;
+    if (m.position.y < 0.16) { m.position.y = 0.16; m.rotation.set(-Math.PI / 2, 0, rnd(-1, 1)); u.landed = true; }
+  });
+  if (env.rain > 0.01) { const a = rainGeo.attributes.position.array; for (let i = 1; i < a.length; i += 3) { a[i] -= 14 * dt; if (a[i] < 0) a[i] += 14; } rainGeo.attributes.position.needsUpdate = true; }
+  if (vanFlash) { const on = Math.floor(t * 6) % 2 === 0; barA.color.set(on ? '#5d8bff' : '#1b2a6b').multiplyScalar(on ? 2.5 : 1); barB.color.set(on ? '#1b2a6b' : '#5d8bff').multiplyScalar(on ? 1 : 2.5); blue.intensity = on ? 40 : 8; } else blue.intensity = 0;
+  placeHots(); grade.uniforms.time.value = (t * 7.3) % 100;
+  composer.render();
+  requestAnimationFrame(frame);
+}
+applyStyle(STYLE); resetWorld(); frame();
+$('#start').onclick = async () => { loadAudio(); $('#title').hidden = true; $('#bar').hidden = false; await play(); };
+$('#again').onclick = async () => { $('#end').hidden = true; $('#bar').hidden = false; await play(); };
+</script>

@@ -1,0 +1,46 @@
+RIEN DE GRAVE — texte pour la page itch.io
+
+Titre : Rien de grave
+Accroche (short description) : Huit ans de tournée. Une rue. Une élection.
+Type de projet : HTML (jouable dans le navigateur)
+Genre : Interactive Fiction
+Tags : narrative, short, politics, france, french, 3D, walking simulator, documentary, dystopia, miniature
+Prix : gratuit (« No payments ») ou « Pay what you want » à 0 € minimum
+Fichier : rien-de-grave-itch.zip → cocher « This file will be played in the browser »
+Intégration (Embed options) :
+  - Viewport : 1280 × 720
+  - Cocher « Mobile friendly » (orientation : Default) et « Automatically start on page load » NON
+  - Cocher « Fullscreen button »
+  - « Click to launch in fullscreen » : décoché sur ordinateur (le jeu a son propre bouton plein écran dans le menu)
+Langue : French
+Accessibilité : Subtitles / Textless? → cocher « Subtitles » (tout le jeu est en texte), « Interactive tutorial » non
+Contenu sensible : cocher « Contains violence » (arrestations, une personne tuée par la police, hors champ)
+
+--- Description ---
+
+Dimanche 2 mai 2027, 20 h. Le Rassemblement national remporte l'élection présidentielle.
+« C'est grave, maman ? — Non. Pour nous, ça ne changera rien. »
+
+Tu es Claire, factrice à Valberne, une petite ville comme il y en a des milliers. Chaque matin, tu portes le courrier rue des Tilleuls. Une lettre de la caisse d'allocations. Un arrêté du maire. Le menu de la cantine. Un nom qui change sur le fronton du cinéma. Rien de grave.
+
+Huit ans, sept chapitres, jusqu'à l'élection suivante. Environ 25 minutes, sur ordinateur ou téléphone.
+
+Que tu aies voté RN ou non, ce jeu ne te juge pas. Chaque scène porte des tampons :
+  • « Déjà arrivé » : un fait réel et sourcé (mairies FN et RN depuis 1995, la France de Vichy, la Hongrie, les États-Unis, le Chili, l'Argentine…)
+  • « Au programme du RN » : une mesure annoncée, avec sa source
+  • « Déjà proposé » : une mesure proposée par d'autres responsables politiques
+  • « Pas encore arrivé » : la fiction, toujours inspirée de faits réels
+À la fin, la liste complète des faits, avec un lien vers chaque source, et de quoi vérifier ton inscription sur les listes électorales.
+
+Claire, Valberne et leurs habitants sont inventés. Aucune parole inventée n'est prêtée à une personne réelle.
+
+Gratuit. Sans publicité. Sans collecte de données.
+
+Avertissement : arrestations, rafle, disparitions, une personne tuée par la police (décrite, pas montrée).
+
+--- Crédits ---
+Conception : Hadrien Basch
+Moteur 3D : three.js (MIT)
+Modèles et textures : Poly Haven (CC0)
+Sons : ElevenLabs
+Polices : Atkinson Hyperlegible, Caveat, Special Elite (SIL OFL)
