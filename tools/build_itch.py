@@ -25,6 +25,13 @@ body = body.replace('<style>', '<style>\n' + '\n'.join(ff) + '\n', 1)
 head = '<!doctype html>\n<html lang="fr">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n<meta name="description" content="Rien de grave : un jeu narratif court. Tu es Claire, factrice. Huit ans de tournée dans une petite rue française, après une élection.">\n'
 body = re.sub(r'^\s*<title>', head + '<title>', body, count=1)
 body = body.replace('</title>', '</title>\n</head>\n<body>', 1) + '\n</body>\n</html>\n'
+def ascii_only(h):
+    # itch.io peut servir index.html sans charset utf-8 : on rend le fichier 100 % ASCII
+    # (entites HTML dans le texte, echappements CSS dans <style>) pour que les accents s'affichent partout.
+    css = lambda m: m.group(1) + ''.join('\\%x ' % ord(c) if ord(c) > 127 else c for c in m.group(2)) + m.group(3)
+    h = re.sub(r'(<style[^>]*>)(.*?)(</style>)', css, h, flags=re.S)
+    return ''.join('&#%d;' % ord(c) if ord(c) > 127 else c for c in h)
+body = ascii_only(body)
 open(os.path.join(D, 'index.html'), 'w', encoding='utf-8').write(body)
 for d in ['sons', 'tex', 'props']:
     os.makedirs(os.path.join(D, d))

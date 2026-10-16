@@ -54,6 +54,23 @@ Chapitres :
 
 Affiche du cinéma lisible ; pastilles relisibles ; candidats condamnés ; Herrou détaillé ; fiche de paie moins fictive ; Office de la famille expliqué + Planning familial ; budget sécurité dans l'horloge ; Perpignan au Carrefour ; ICE / RIO / CECOT ; loi 2017 / Nahel ; tampon fiction du voile retiré ; crédits ; volets qui ne se chevauchent plus ; Morris retirée ; nuages et pluie ; caméra basse avec gros plans ; objets du premier plan qui disparaissent quand la caméra est proche ; rue « plus française » (persiennes, garde-corps, tabac, pharmacie, café, boîte La Poste, potelets, ardoise).
 
+## 5 bis. v25–v26 (14 octobre 2026)
+
+- **Accents cassés sur itch** (« Ã© ») : itch sert `index.html` sans charset UTF-8. `build_itch.py` rend désormais `index.html` 100 % ASCII (entités HTML, échappements CSS). `game.js` l'était déjà.
+- **Écran titre** : tient sans scroller en 1280×720 et 960×540 ; bouton « Plein écran » à côté de « Commencer » ; sur téléphone, « Commencer » reste collé en bas.
+- **Plein écran** : bouton icône à côté de « Menu » + menu. Masqué là où le navigateur ne le permet pas (iPhone Safari).
+- **Lettres** : sur écran large, texte à gauche et tampons à droite (deux colonnes de tampons à partir de 3) ; version compacte sous 640 px de haut ; sur téléphone, bouton « ↓ La suite » quand la lettre dépasse. Bug corrigé : le haut d'une lettre trop longue était coupé (centrage en grille).
+- **Pastilles** : anti-chevauchement (cherche la place libre la plus proche, sinon décale vers l'intérieur), bornées entre l'horloge et la légende.
+- `?fast` expose aussi `showPaper` dans `window.__dbg` (tests de mise en page des 37 lettres).
+
+## 5 ter. v27–v28 (15 octobre 2026)
+
+- Écran titre : phrase « ce jeu ne te juge pas » retirée (jeu et page itch).
+- **Huit ans expliqués** : au début de l'An 2, référendum du 1er juillet 2029 (septennat non renouvelable, mandat en cours prolongé jusqu'en 2035, compteur remis à zéro). Tampons : Le Pen 12/04/2022 (septennat + article 11), de Gaulle 1962, plébiscite de Pinochet 1980. Note de l'An 8 mise à jour.
+- **LGBT** : An 2, pastille « La marche des fiertés » (Hongrie 2025, Vichy 6 août 1942, Bardella PMA 2019) ; An 7, lettre « Tribunal · n° 2 » (Laure, mère non biologique de Lina, effacée de l'acte de naissance : Padoue 2023). Personnages : Sophie, Laure, Lina (n° 2, au-dessus de la pharmacie). Faits ajoutés à l'écran de fin.
+- **Reprise** : `play()` découpé en chapitres (`CH`), le chapitre en cours est sauvé (localStorage `rien-de-grave-chapitre`) ; bouton « Reprendre : An X » sur l'écran titre si la page a été rechargée (téléphone mis en veille).
+- **Téléphone** : 30 images/s, résolution ×1,25 max, ombres 1024 px, pas de flou de maquette, MSAA 2 ; `webglcontextlost` géré.
+
 ## 6. Prochaines étapes
 
 1. **Son (bruitages, pas de musique)** : l'auteur hésite entre Soundly (sa bibliothèque), ElevenLabs, ou banques gratuites (Sonniss GDC bundle, Freesound CC0). Proposition : ~20 sons (lettre dans la boîte, tampon, volets, sonnette de vélo, pigeons, pas sur pavés, portières, sirène, terrasse de café, cour d'école, pluie sur zinc, télé) déposés dans `sons\`, puis découpe, normalisation et branchement ; fonds continus (pluie, rumeur) générables en WebAudio. Silence pendant la rafle et la veillée.

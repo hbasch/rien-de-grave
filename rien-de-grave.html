@@ -61,10 +61,36 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
 #cardSub { margin: 0; font: 400 0.95rem var(--f-type); letter-spacing: .14em; text-transform: uppercase; color: #ff8a7f; border: 2px solid currentColor; padding: 0.35rem 0.7rem; rotate: -2deg; }
 #cardTitle { margin: 0; font: 700 clamp(3rem, 10vw, 6rem)/1 var(--f-hand); color: var(--ink); text-wrap: balance; text-shadow: 0 0.3rem 2rem rgba(0,0,0,.6); }
 
-#letter { z-index: 12; position: fixed; inset: 0; display: grid; place-items: center; padding: 1rem; background: rgba(8,11,20,.55); overflow-y: auto; animation: dim .6s ease-out; }
+#letter { z-index: 12; position: fixed; inset: 0; display: flex; flex-direction: column; padding: 1rem; box-sizing: border-box; overscroll-behavior: contain; background: rgba(8,11,20,.55); overflow-y: auto; animation: dim .6s ease-out; }
 @keyframes dim { from { background: rgba(8,11,20,0); } }
-.paper { position: relative; width: min(30rem, 100%); box-sizing: border-box; background: var(--paper); color: var(--paper-ink); padding: 1.5rem 1.4rem 1.2rem;
+.paper { position: relative; margin: auto; flex: none; width: min(30rem, 100%); box-sizing: border-box; background: var(--paper); color: var(--paper-ink); padding: 1.5rem 1.4rem 1.2rem;
   border-radius: 0.15rem; box-shadow: 0 1.5rem 3rem rgba(0,0,0,.45); rotate: -0.6deg; animation: arrive .7s cubic-bezier(.2,.8,.3,1) .15s backwards; }
+/* ecran large : le texte a gauche, les tampons (les explications) a droite, tout visible sans scroller */
+@media (min-width: 820px) and (min-aspect-ratio: 4/3) {
+  .paper.duo { width: min(62rem, 100%); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto auto 1fr auto; column-gap: 2.2rem; }
+  .paper.duo > :not(#lStamps) { grid-column: 1; }
+  .paper.duo #lBody { margin-bottom: 0.4rem; }
+  .paper.duo #lClose { justify-self: start; align-self: end; }
+  .paper.duo #lStamps { grid-column: 2; grid-row: 1 / -1; align-self: center; }
+  /* 3 tampons ou plus : ils prennent deux tiers de la largeur, sur deux colonnes */
+  .paper.duo.many { width: min(72rem, 100%); grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  .paper.duo.many #lStamps { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; justify-items: stretch; }
+}
+/* fenetres basses (itch en petit, telephone a l'horizontale) : lettre plus compacte */
+@media (max-height: 640px) {
+  #letter { padding: 0.5rem; }
+  .paper { padding: 1rem 1.2rem 0.9rem; }
+  #lKind { margin-bottom: 0.3rem; }
+  #lFrom { font-size: 0.92rem; margin-bottom: 0.6rem; padding-bottom: 0.45rem; }
+  #lBody, .paper.scene #lBody { font-size: 0.93rem; line-height: 1.42; margin-bottom: 0.8rem; }
+  #lStamps { gap: 0.5rem; }
+  .stamp { font-size: 0.8rem; line-height: 1.3; padding: 0.35rem 0.55rem; }
+  .stamp b { font-size: 0.9rem; }
+  .stamp .links { font-size: 0.75rem; margin-top: 0.2rem; }
+  #lClose { margin-top: 0.6rem; padding: 0.5rem 0.9rem; }
+  .paper.duo { width: min(66rem, 100%); column-gap: 1.6rem; }
+}
+#lMore { white-space: nowrap; position: fixed; z-index: 13; left: 50%; bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); translate: -50% 0; font: 700 0.95rem var(--f-body); background: var(--post); color: var(--night); border: 0; border-radius: 2rem; padding: 0.6rem 1.1rem; cursor: pointer; box-shadow: 0 0.4rem 1.2rem rgba(0,0,0,.5); animation: arrive .4s ease-out; }
 .paper.scene { background: #1a2236; color: var(--ink); rotate: 0deg; border-radius: 0.5rem; }
 @keyframes arrive { from { transform: translateY(2rem); opacity: 0; } }
 #lKind { margin: 0 0 0.5rem; font: 700 0.72rem var(--f-body); letter-spacing: .1em; text-transform: uppercase; color: #8a6a14; }
@@ -96,6 +122,36 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
 #title p { margin: 0; font-size: 1.15rem; line-height: 1.5; }
 #title .warn { font-size: 0.92rem; color: var(--muted); }
 #title .lead { font-size: 1.2rem; }
+.start-row { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
+/* le bouton Commencer reste toujours visible, meme si l'ecran titre deborde (petites fenetres, telephones) */
+#title .start-row { position: sticky; bottom: 0; z-index: 1; padding-block: 0.6rem calc(0.6rem + env(safe-area-inset-bottom, 0px)); margin-block: -0.6rem; background: linear-gradient(180deg, rgba(8,11,20,0) 0, rgba(8,11,20,.95) 1.1rem); }
+/* ordinateur et itch (1280 x 720) : tout l'ecran titre tient sans scroller */
+@media (min-width: 900px) {
+  #title { background: linear-gradient(90deg, rgba(8,11,20,.95) 0%, rgba(8,11,20,.88) 48%, rgba(8,11,20,.25) 76%, rgba(8,11,20,0) 100%); }
+  #title .screen-in { width: min(50rem, 100%); padding-block: 1.4rem; gap: 0.75rem; }
+  #title p { font-size: 1.02rem; line-height: 1.45; }
+  #title .lead { font-size: 1.12rem; }
+  #title .legend { gap: 0.35rem 1.1rem; }
+  #title .legend p { font-size: 0.86rem; }
+  #title .warn { font-size: 0.86rem; }
+  #title .start-row { background: none; }
+}
+@media (min-width: 900px) and (max-height: 820px) {
+  #title h1 { font-size: clamp(3rem, 10.5vh, 5.8rem); }
+  #title .screen-in { gap: 0.6rem; padding-block: 1rem; }
+  #title .years span { font-size: 0.85rem; }
+}
+@media (min-width: 900px) and (max-height: 600px) {
+  #title .screen-in { gap: 0.45rem; padding-block: 0.7rem; }
+  #title h1 { font-size: clamp(2.6rem, 10vh, 4rem); }
+  #title p { font-size: 0.95rem; line-height: 1.38; }
+  #title .lead { font-size: 1rem; }
+  #title .legend { flex-direction: row; }
+  #title .legend p { font-size: 0.8rem; }
+  #title .years { gap: 0.4rem; padding-top: 0.7rem; }
+  #title .years li::before { top: -1.08rem; }
+  #title .big { padding: 0.7rem 1.3rem; }
+}
 .years { list-style: none; margin: 0.2rem 0; padding: 0 0 0 1.1rem; display: grid; gap: 0.45rem; border-left: 2px dashed rgba(244,238,227,.35); }
 .years li { position: relative; display: flex; flex-wrap: wrap; gap: 0.2rem 0.8rem; align-items: baseline; }
 .years li::before { content: ""; position: absolute; left: -1.5rem; top: 0.45rem; width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--post); }
@@ -159,6 +215,8 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
 #styles button { font: 700 0.8rem var(--f-body); color: var(--ink); background: none; border: 0; border-radius: 0.25rem; padding: 0.35rem 0.55rem; cursor: pointer; }
 #styles button[aria-pressed="true"] { background: var(--ink); color: var(--night); }
 .tools { display: flex; gap: 0.4rem; }
+#fsBtn { display: grid; place-items: center; background: rgba(10,14,26,.78); color: var(--ink); border: 1px solid rgba(244,238,227,.2); border-radius: 0.3rem; padding: 0.35rem 0.5rem; cursor: pointer; }
+#fsBtn[hidden] { display: none; }
 #menuBtn { font: 700 0.8rem var(--f-body); background: var(--paper); color: var(--paper-ink); border: 0; border-radius: 0.3rem; padding: 0.4rem 0.75rem; cursor: pointer; box-shadow: 0 0.3rem 1rem rgba(0,0,0,.35); }
 #menu { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 1rem; background: rgba(5,8,16,.78); backdrop-filter: blur(3px); }
 .menu-in { width: min(26rem, 100%); background: #141c30; border: 1px solid rgba(244,238,227,.15); border-radius: 0.6rem; padding: 1.5rem 1.4rem; display: grid; gap: 0.9rem; box-shadow: 0 1.5rem 3rem rgba(0,0,0,.5); }
@@ -192,6 +250,7 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
     <div id="lStamps"></div>
     <button id="lClose" type="button">Continuer</button>
   </div>
+  <button id="lMore" type="button" hidden>↓ La suite</button>
 </div>
 
 <div id="bar" hidden>
@@ -201,7 +260,7 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
     <p id="clkCount"></p>
     <ol id="clkLine" aria-label="Chronologie"><li>Élection<br>2027</li><li>An 1<br>2028</li><li>An 2<br>2029</li><li>An 4<br>2031</li><li>An 6<br>2033</li><li>An 7<br>2034</li><li>An 8<br>2035</li></ol>
   </div>
-  <div class="tools"><button id="mute" type="button" hidden aria-pressed="false">Couper le son</button><button id="menuBtn" type="button" aria-haspopup="dialog">Menu</button></div>
+  <div class="tools"><button id="mute" type="button" hidden aria-pressed="false">Couper le son</button><button id="fsBtn" type="button" hidden aria-label="Plein écran" title="Plein écran"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button><button id="menuBtn" type="button" aria-haspopup="dialog">Menu</button></div>
 </div>
 
 <div id="menu" hidden role="dialog" aria-modal="true" aria-labelledby="menuTitle">
@@ -234,13 +293,13 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
       <li><b>Mars 2034</b><span>An 7</span></li>
       <li><b>Avril 2035</b><span>An 8 · l'élection suivante</span></li>
     </ol>
-    <p>Que tu aies voté RN ou non, ce jeu ne te juge pas. Il te montre ce que leurs mairies ont déjà fait, ce que leur programme annonce, et ce qui s'est passé ailleurs quand l'extrême droite a eu les mains libres. Le reste est une fiction, toujours tirée de faits réels.</p>
+    <p>Ce jeu montre ce que les mairies RN ont déjà fait, ce que le programme du RN annonce, et ce qui s'est passé ailleurs quand l'extrême droite a eu les mains libres. Le reste est une fiction, toujours tirée de faits réels.</p>
     <div class="legend">
       <p><span class="mini real">Déjà arrivé</span> un fait réel, avec sa source</p>
       <p><span class="mini prog">Au programme du RN</span> une mesure annoncée, avec sa source</p>
       <p><span class="mini fic">Pas encore arrivé</span> la fiction, toujours inspirée de faits réels</p>
     </div>
-    <button id="start" class="big" type="button" disabled>Chargement…</button>
+    <div class="start-row"><button id="start" class="big" type="button" disabled>Chargement…</button><button id="resume" class="ghost" type="button" hidden>Reprendre</button><button id="tFull" class="ghost" type="button" hidden>Plein écran</button></div>
     <p class="warn">Touche les points jaunes pour ta tournée de factrice, les bleus pour ta vie de citoyenne. Avec le son, sur ordinateur ou téléphone. Contient des scènes d'arrestation.</p>
   </div>
 </section>
@@ -251,6 +310,8 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
     <h2>Tout ce qui portait un tampon rouge a déjà eu lieu.</h2>
     <h3 class="real">Déjà arrivé en France</h3>
     <ul>
+      <li>La Constitution changée par un référendum de l'article 11, sans vote du Parlement ; le Conseil constitutionnel se déclare incompétent. <small>De Gaulle, 28 octobre 1962.</small> <a href="https://www.publicsenat.fr/actualites/politique/aux-origines-de-l-election-du-president-par-les-francais-un-coup-de-poker" target="_blank" rel="noopener">Source</a></li>
+      <li>« Évidemment opposé » à l'ouverture de la PMA aux couples de femmes, le RN demande un référendum. <small>Jordan Bardella, juillet 2019.</small> <a href="https://www.publicsenat.fr/actualites/politique/le-rn-hostile-a-la-pma-pour-toutes-reclame-un-referendum-144625" target="_blank" rel="noopener">Source</a></li>
       <li>Condamnée en appel pour détournement de fonds publics (un an ferme sous bracelet, 45 mois d'inéligibilité dont 30 avec sursis), elle peut juridiquement se présenter en 2027. <small>Marine Le Pen, cour d'appel de Paris, 7 juillet 2026.</small> <a href="https://www.publicsenat.fr/actualites/politique/direct-suivez-le-delibere-du-proces-en-appel-de-marine-le-pen" target="_blank" rel="noopener">Source</a></li>
       <li>Condamné définitivement deux fois pour provocation à la haine, il a pu se présenter à la présidentielle. <small>Éric Zemmour, 2011 et 2018 ; candidat en 2022.</small> <a href="https://www.dhnet.be/actu/monde/eric-zemmour-un-habitue-des-controverses-retour-sur-ces-autres-affaires-dans-lesquelles-il-a-ete-juge-61941a367b50a648b2d15b6f" target="_blank" rel="noopener">Source</a></li>
       <li>La subvention du Planning familial supprimée par la majorité municipale. <small>Carpentras, mairie RN, 5 juin 2026.</small> <a href="https://www.parlons-politique.fr/politique-locale/a-carpentras-la-coupe-dune-subvention-au-planning-familial-transforme-un-arbitrage-budgetaire-en-bras-de-fer-politique_20875/" target="_blank" rel="noopener">Source</a></li>
@@ -284,6 +345,8 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
     </ul>
     <h3 class="real">Sous les dictatures d'extrême droite</h3>
     <ul>
+      <li>Majorité sexuelle fixée à 21 ans pour les relations homosexuelles, contre 13 ans pour les autres ; en vigueur jusqu'en 1982, au moins 10 000 condamnations après la guerre. <small>Régime de Vichy, loi du 6 août 1942.</small> <a href="https://www.assemblee-nationale.fr/dyn/media/16/organes/commissions-permanentes-legislatives/lois/eat-2024/eat-ppl-1915-reparation-des-personnes-condamnees-pour-homosexualite" target="_blank" rel="noopener">Source</a></li>
+      <li>Une Constitution adoptée par plébiscite sans listes électorales, qui donne au dictateur un mandat de huit ans. <small>Chili, Pinochet, 11 septembre 1980.</small> <a href="https://en.wikipedia.org/wiki/1980_Chilean_constitutional_referendum" target="_blank" rel="noopener">Source</a></li>
       <li>13 152 Juifs arrêtés à l'aube par la police française, dont plus de 4 000 enfants. <small>Rafle du Vél' d'Hiv, Paris, juillet 1942.</small> <a href="https://en.wikipedia.org/wiki/Vel%27_d%27Hiv_Roundup" target="_blank" rel="noopener">Source</a></li>
       <li>Environ 15 000 personnes déchues de la nationalité française, dont plus de 7 000 Juifs. <small>Régime de Vichy, 1940–1944.</small> <a href="https://laviedesidees.fr/La-decheance-de-nationalite-sous-Petain.html" target="_blank" rel="noopener">Source</a></li>
       <li>Entre 13 000 et 30 000 disparus, des opposants jetés à la mer depuis des avions, environ 500 bébés volés. <small>Argentine, dictature militaire, 1976–1983.</small> <a href="https://en.wikipedia.org/wiki/Dirty_War" target="_blank" rel="noopener">Source</a></li>
@@ -296,6 +359,8 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
     </ul>
     <h3 class="real">Déjà arrivé ailleurs</h3>
     <ul>
+      <li>Les marches des fiertés interdites « pour protéger les enfants » ; jusqu'à 490 € d'amende pour les participants. <small>Hongrie, mars 2025.</small> <a href="https://www.amnesty.fr/discriminations/actualites/interdiction-marches-fiertes-hongrie" target="_blank" rel="noopener">Source</a></li>
+      <li>Le parquet conteste les actes de naissance de 33 enfants de couples de femmes et demande d'effacer la mère qui n'a pas accouché. <small>Italie, Padoue, juin 2023.</small> <a href="https://www.open.online/2023/06/19/padova-procura-illegittimo-atto-nascita-due-madri/" target="_blank" rel="noopener">Source</a></li>
       <li>252 Vénézuéliens expulsés sans procès vers la prison CECOT ; les familles ne savent pas où ils sont. Human Rights Watch parle de disparitions forcées. <small>États-Unis et Salvador, mars–avril 2025.</small> <a href="https://www.hrw.org/fr/news/2025/11/12/etats-unis/salvador-des-venezueliens-expulses-vers-le-salvador-y-ont-ete-tortures" target="_blank" rel="noopener">Source</a></li>
       <li>Des agents de l'immigration masqués et en civil arrêtent des gens dans la rue. <small>États-Unis, 2025.</small> <a href="https://www.kunc.org/npr-news/2025-07-09/masked-immigration-agents-are-spurring-fear-and-confusion-across-the-u-s" target="_blank" rel="noopener">Source</a></li>
       <li>Une femme abattue au volant de sa voiture par un agent de la police de l'immigration ; le gouvernement invoque la légitime défense. <small>Minneapolis, États-Unis, 7 janvier 2026.</small> <a href="https://universityobserver.ie/renee-nicole-good-woman-shot-and-killed-by-ice-agent-in-minneapolis/" target="_blank" rel="noopener">Source</a></li>
@@ -313,6 +378,7 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
     </ul>
     <h3 class="prog">Au programme du RN</h3>
     <ul>
+      <li>Un septennat non renouvelable, et une révision de la Constitution par référendum de l'article 11, sans passer par le Parlement. <small>Marine Le Pen, 12 avril 2022.</small> <a href="https://www.publicsenat.fr/actualites/politique/la-reforme-des-institutions-au-coeur-du-duel-macron-le-pen-202480" target="_blank" rel="noopener">Source</a></li>
       <li>Supprimer le droit du sol par une loi d'urgence sur l'immigration. <small>Législatives 2024.</small> <a href="https://www.publicsenat.fr/actualites/politique/elections-legislatives-les-propositions-du-rassemblement-national-sur-limmigration" target="_blank" rel="noopener">Source</a></li>
       <li>Supprimer l'aide médicale d'État (AME), qui soigne les étrangers sans titre de séjour. <small>Programme santé du RN, juin 2024.</small> <a href="https://www.lequotidiendupharmacien.fr/exercice-pro/politique-de-sante/dispensation-lunite-et-suppression-de-lame-le-programme-sante-du-rn" target="_blank" rel="noopener">Source</a></li>
       <li>La « priorité nationale » pour le logement social, l'emploi et les aides, inscrite dans la Constitution par référendum. <small>Programme du RN, 2022 et 2024.</small> <a href="https://lcp.fr/actualites/legislatives-2024-le-programme-du-rassemblement-national-en-matiere-d-immigration-a-l" target="_blank" rel="noopener">Source</a></li>
@@ -329,13 +395,13 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
     </ul>
     <h3 class="fic">Pas encore arrivé</h3>
     <ul>
-      <li>Le cinéma Maréchal-Pétain, le manuel « Notre France, une fierté », les deux files à l'agence HLM, l'amende de Samia. <small>La fiction de ce que ces mesures donneraient dans une rue.</small> </li>
+      <li>Le cinéma Maréchal-Pétain, le manuel « Notre France, une fierté », les deux files à l'agence HLM, l'amende de Samia, la marche des fiertés annulée, Lina effacée de l'acte de naissance, le mandat prolongé jusqu'en 2035. <small>La fiction de ce que ces mesures donneraient dans une rue.</small> </li>
       <li>Dissoudre les syndicats, suspendre des journaux, faire disparaître des opposants, une élection à candidat unique. <small>Aucun programme ne le propose. C'est ce que d'autres pays ont connu quand plus rien ne les en empêchait.</small> </li>
     </ul>
     <h3 class="more">Pour aller plus loin</h3>
     <ul>
       <li>Comparer les programmes des candidats, mesure par mesure, avec leur coût. <small>Institut Montaigne.</small> <a href="https://www.institutmontaigne.org/presidentielle-2022" target="_blank" rel="noopener">Ouvrir</a></li>
-      <li>Voir ce que chaque député a voté à l'Assemblée nationale. <small>Datan, NosDéputés.fr.</small> <a href="https://datan.fr" target="_blank" rel="noopener">Datan</a> · <a href="https://www.nosdeputes.fr" target="_blank" rel="noopener">NosDéputés.fr</a></li>
+      <li>Voir ce que chaque député a voté à l'Assemblée nationale. <small>Datan ; site de l'Assemblée nationale.</small> <a href="https://datan.fr" target="_blank" rel="noopener">Datan</a> · <a href="https://www.assemblee-nationale.fr/dyn/vos-deputes" target="_blank" rel="noopener">Trouver son député</a></li>
     </ul>
     <p>Claire, Léo, Moussa, Bernadette, Michel, Samia et la ville de Valberne sont inventés. Aucune parole inventée n'est prêtée à une personne réelle. Les tampons « Pas encore arrivé » décrivent une fiction d'anticipation, toujours inspirée de faits réels.</p>
     <div class="vote">
@@ -419,8 +485,18 @@ const closeMenu = () => { $('#menu').hidden = true; };
 $('#menuBtn').onclick = openMenu;
 const setMaqLabel = () => ($('#mMaq').textContent = 'Vue : ' + (MAQ ? 'maquette (test)' : 'rue'));
 $('#mMaq').onclick = () => { MAQ = !MAQ; bokeh.enabled = MAQ; setMaqLabel(); }; $('#mResume').onclick = closeMenu; $('#mSound').onclick = toggleSound;
-$('#mFull').onclick = () => { const d = document; if (d.fullscreenElement) d.exitFullscreen?.(); else d.documentElement.requestFullscreen?.().catch(() => {}); closeMenu(); };
-$('#mRestart').onclick = () => { location.reload(); };
+const FS_OK = !!(document.fullscreenEnabled || document.webkitFullscreenEnabled); // false on iPhone Safari: buttons stay hidden
+const isFull = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+function toggleFull() {
+  const d = document, r = d.documentElement;
+  try { if (isFull()) (d.exitFullscreen || d.webkitExitFullscreen).call(d); else { const pr = (r.requestFullscreen || r.webkitRequestFullscreen).call(r); if (pr && pr.catch) pr.catch(() => {}); } } catch (e) {}
+}
+const fsLabel = () => { const t = isFull() ? 'Quitter le plein écran' : 'Plein écran'; $('#mFull').textContent = t; $('#tFull').textContent = t; $('#fsBtn').setAttribute('aria-label', t); $('#fsBtn').title = t; };
+['fullscreenchange', 'webkitfullscreenchange'].forEach((ev) => document.addEventListener(ev, fsLabel));
+['#mFull', '#tFull', '#fsBtn'].forEach((id) => { $(id).hidden = !FS_OK; });
+$('#tFull').onclick = toggleFull; $('#fsBtn').onclick = toggleFull;
+$('#mFull').onclick = () => { toggleFull(); closeMenu(); };
+$('#mRestart').onclick = () => { save(0); location.reload(); };
 $('#mFacts').onclick = () => { closeMenu(); $('#endBack').hidden = false; $('#again').hidden = true; $('#end').hidden = false; $('#end').scrollTop = 0; };
 $('#endBack').onclick = () => { $('#end').hidden = true; $('#endBack').hidden = true; $('#again').hidden = false; };
 addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#bar').hidden) { if ($('#menu').hidden && $('#end').hidden) openMenu(); else if (!$('#menu').hidden) closeMenu(); } });
@@ -428,10 +504,13 @@ addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#bar').hidden
 /* ===== RENDERER ===== */
 const canvas = $('#c');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-const PHONE = Math.min(innerWidth, innerHeight) < 600 || /Mobi|Android/i.test(navigator.userAgent);
-const PR = Math.min(devicePixelRatio, PHONE ? 1.5 : 2);
+canvas.addEventListener('webglcontextlost', (e) => e.preventDefault()); // sinon l'ecran reste noir au retour de veille
+// vrai telephone ou tablette : on regarde l'appareil (ecran tactile, taille de l'ecran), pas la taille de la fenetre,
+// sinon un ordinateur qui joue dans le petit cadre d'itch est pris pour un telephone
+const PHONE = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || (matchMedia('(pointer: coarse)').matches && Math.min(screen.width, screen.height) < 900);
+const PR = Math.min(devicePixelRatio, PHONE ? 1.25 : 2); // telephone : moins de pixels a calculer
 renderer.setPixelRatio(PR);
-renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = PHONE ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 const scene = new THREE.Scene();
 scene.background = new THREE.Color('#0d1424');
@@ -439,7 +518,7 @@ scene.fog = new THREE.Fog('#0d1424', 22, 62);
 const camera = new THREE.PerspectiveCamera(30, 1, 0.6, 220);
 const pmrem = new THREE.PMREMGenerator(renderer);
 const envTex = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
-const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(1, 1, { samples: 4, type: THREE.HalfFloatType }));
+const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(1, 1, { samples: PHONE ? 2 : 4, type: THREE.HalfFloatType }));
 composer.addPass(new RenderPass(scene, camera));
 // "maquette" test: a steeper look-down and a real depth-of-field, like a photo of a model railway
 let MAQ = new URLSearchParams(location.search).has('maquette');
@@ -449,7 +528,7 @@ composer.addPass(bokeh);
 const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.5, 0.55, 1.0); composer.addPass(bloom);
 const tiltH = new ShaderPass(HorizontalTiltShiftShader), tiltV = new ShaderPass(VerticalTiltShiftShader);
 tiltH.uniforms.r.value = tiltV.uniforms.r.value = 0.45;
-composer.addPass(tiltH); composer.addPass(tiltV);
+if (!PHONE) { composer.addPass(tiltH); composer.addPass(tiltV); } // le flou de maquette coute deux passes plein ecran
 composer.addPass(new OutputPass());
 // film grade: split toning, saturation that drains year after year, gentle contrast, vignette, grain
 const grade = new ShaderPass({
@@ -546,7 +625,7 @@ function prop(gltf, x, y, z, { s = 0.9, ry = 0, only = null, skip = null } = {})
 /* ===== LIGHTS & GROUND ===== */
 const hemi = new THREE.HemisphereLight('#3a4d80', '#1a1612', 0.55); scene.add(hemi);
 const sun = new THREE.DirectionalLight('#9db0e8', 0.7);
-sun.castShadow = true; sun.shadow.mapSize.set(PHONE ? 2048 : 4096, PHONE ? 2048 : 4096); sun.shadow.radius = 3;
+sun.castShadow = true; sun.shadow.mapSize.set(PHONE ? 1024 : 4096, PHONE ? 1024 : 4096); sun.shadow.radius = 3;
 Object.assign(sun.shadow.camera, { left: -26, right: 26, top: 18, bottom: -14, near: 1, far: 90 });
 sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.02;
 scene.add(sun, sun.target);
@@ -1083,7 +1162,7 @@ function applyEnv(dt) {
 
 /* ===== CAMERA & STYLE ===== */
 const focus = (x, zoom = 1) => { cam.x = x; cam.zoom = zoom; };
-if (FAST) window.__dbg = { focus, cam, setMode: (m) => setMode(m, true) }; // test mode only
+if (FAST) window.__dbg = { focus, cam, setMode: (m) => setMode(m, true), showPaper }; // test mode only
 function placeCamera(dt, t) {
   const k = 1 - Math.exp(-dt * 1.6);
   cam.cx += (cam.x - cam.cx) * k; cam.cz += (cam.zoom - cam.cz) * k;
@@ -1144,10 +1223,14 @@ async function card(sub, title, during) {
 }
 const STAMP = { real: 'Déjà arrivé', prog: 'Au programme du RN', prop: 'Déjà proposé', fic: 'Pas encore arrivé' };
 let paperLog = null; // the letters a hotspot opened, so it can be read again
+// telephone : si la lettre depasse l'ecran, un bouton signale qu'il reste les tampons en bas
+function moreHint() { const L = $('#letter'); $('#lMore').hidden = L.hidden || L.scrollTop + L.clientHeight >= L.scrollHeight - 8; }
+$('#letter').addEventListener('scroll', moreHint, { passive: true }); addEventListener('resize', moreHint);
+$('#lMore').onclick = () => { const L = $('#letter'); L.scrollBy({ top: L.clientHeight * 0.75, behavior: 'smooth' }); };
 function paper(args) { if (paperLog) paperLog.push(args); return showPaper(args); }
 function showPaper({ kind, from, body, stamps = [], scene: isScene = false }) {
   return new Promise((res) => {
-    $('#paper').className = 'paper' + (isScene ? ' scene' : '');
+    $('#paper').className = 'paper' + (isScene ? ' scene' : '') + (stamps.length ? ' duo' : '') + (stamps.length > 2 ? ' many' : '');
     $('#lKind').textContent = kind || ''; $('#lFrom').textContent = from; $('#lBody').textContent = body;
     const box = $('#lStamps'); box.textContent = '';
     stamps.forEach((st, i) => {
@@ -1157,9 +1240,9 @@ function showPaper({ kind, from, body, stamps = [], scene: isScene = false }) {
       if (links.length) { const l = document.createElement('span'); l.className = 'links'; links.forEach(([n, u]) => { const a = document.createElement('a'); a.href = u; a.target = '_blank'; a.rel = 'noopener'; a.textContent = n; l.append(a); }); d.append(l); }
       box.append(d);
     });
-    const L = $('#letter'); L.hidden = false; L.scrollTop = 0; $('#lClose').focus({ preventScroll: true });
+    const L = $('#letter'); L.hidden = false; L.scrollTop = 0; $('#lClose').focus({ preventScroll: true }); requestAnimationFrame(moreHint);
     if (stamps.some((st) => st.t === 'real')) sfx('tampon');
-    $('#lClose').onclick = () => { L.hidden = true; res(); };
+    $('#lClose').onclick = () => { L.hidden = true; $('#lMore').hidden = true; res(); };
   });
 }
 const hots = [];
@@ -1196,15 +1279,33 @@ function hotspots(list) {
 }
 const v3 = new THREE.Vector3();
 function placeHots() {
-  const sides = { l: 0, r: 0 };
-  hots.map((h) => { v3.copy(h.pos).project(camera); return { h, x: v3.x, y: v3.y, z: v3.z }; }).sort((a, b) => Math.abs(a.x) - Math.abs(b.x)).forEach(({ h, x, y, z }) => {
-    const el = h.el; let sx = ((x + 1) / 2) * innerWidth, sy = ((1 - y) / 2) * innerHeight;
-    if (z > 1) sx = innerWidth - sx;
-    const maxX = innerWidth - el.offsetWidth + 10; const edge = sx > maxX ? 'r' : sx < 28 ? 'l' : '';
+  // positions projetees, puis anti-chevauchement : chaque etiquette qui touche une autre descend ou monte d'un cran
+  const bar = $('#bar'), cap = $('#cap');
+  const top = (bar.hidden ? 0 : $('#clock').getBoundingClientRect().bottom) + 8;
+  const bottom = (cap.hidden ? innerHeight : cap.getBoundingClientRect().top) - 8;
+  const placed = [];
+  hots.forEach((h) => {
+    v3.copy(h.pos).project(camera);
+    const el = h.el, w = el.offsetWidth, ht = el.offsetHeight;
+    let sx = ((v3.x + 1) / 2) * innerWidth, sy = ((1 - v3.y) / 2) * innerHeight;
+    if (v3.z > 1) sx = innerWidth - sx;
+    const maxX = innerWidth - w + 10; const edge = sx > maxX ? 'r' : sx < 28 ? 'l' : '';
     el.dataset.edge = edge;
-    if (edge) { sy = 170 + sides[edge] * 60; sides[edge]++; }
-    sx = Math.min(Math.max(sx, 28), maxX); sy = Math.min(Math.max(sy, 160), innerHeight - 200);
-    el.style.transform = `translate(${sx}px, ${sy}px)`;
+    sx = Math.min(Math.max(sx, 28), maxX);
+    const lo = top + ht / 2, hi = Math.max(lo, bottom - ht / 2);
+    const base = Math.min(Math.max(sy, lo), hi), step = ht + 6;
+    const hit = (x, y) => placed.some((r) => x - 18 < r.x + r.w && x - 18 + w > r.x && y - ht / 2 < r.y + r.h && y + ht / 2 > r.y);
+    // cherche la place libre la plus proche : d'abord en hauteur, puis en decalant vers l'interieur de l'ecran
+    let x = sx, y = base;
+    if (hit(x, y)) {
+      const ys = []; for (let v = lo; v <= hi; v += 4) ys.push(v); ys.sort((m, n) => Math.abs(m - base) - Math.abs(n - base));
+      const dir = sx > innerWidth / 2 ? -1 : 1, xs = [sx, sx + dir * (w + 10), sx + dir * 2 * (w + 10)].map((v) => Math.min(Math.max(v, 28), maxX));
+      let found = false;
+      for (const cx of xs) { const cy = ys.find((v) => !hit(cx, v)); if (cy !== undefined) { x = cx; y = cy; found = true; break; } }
+      if (!found) { x = sx; y = base; }
+    }
+    placed.push({ x: x - 18, y: y - ht / 2, w, h: ht });
+    el.style.transform = `translate(${x}px, ${y}px)`;
   });
 }
 
@@ -1248,7 +1349,14 @@ function resetWorld() {
 }
 
 /* ===== STORY ===== */
-async function play() {
+// Le recit, chapitre par chapitre. Chaque chapitre installe lui-meme son decor (dans card), ce qui permet
+// de reprendre a un chapitre donne si le telephone a recharge la page (mise en veille, memoire).
+const CHAPTERS = ['Le soir de l\'élection', 'An 1', 'An 2', 'An 4', 'An 6', 'An 7', 'An 8'];
+const SAVE = 'rien-de-grave-chapitre';
+const saved = () => { try { const v = +localStorage.getItem(SAVE); return v >= 1 && v < CHAPTERS.length ? v : 0; } catch (e) { return 0; } };
+const save = (i) => { try { if (i) localStorage.setItem(SAVE, String(i)); else localStorage.removeItem(SAVE); } catch (e) {} };
+const CH = [
+  async () => {
   resetWorld(); focus(X.claire, 0.75); H.claire.wins[1].tv = true; music('nuit'); setEra(0);
   setDay('Dimanche 2 mai 2027', 0); setTime(19, 58);
   await card('Dimanche 2 mai 2027 · 19 h 58', 'Le soir de l\'élection');
@@ -1268,7 +1376,8 @@ async function play() {
       { t: 'fic', text: 'Les candidats de Valberne sont inventés.' }] });
   focus(X.claire, 0.75);
   H.claire.wins[1].tv = false;
-
+  },
+  async () => {
   // ---------- An 1
   await card('An 1 · mardi 4 avril 2028', 'Rien de grave', async () => {
     setDay('Mardi 4 avril 2028', 1); setTime(6, 40); setEra(1);
@@ -1308,13 +1417,21 @@ async function play() {
   ]);
   newName.visible = true; setOpacity(newName, 1); letters.forEach((m) => (m.visible = false));
   await say('Rien de grave. Une lettre, un menu, un nom sur un fronton.', 'Claire');
-
+  },
+  async () => {
   // ---------- An 2
   await card('An 2 · jeudi 12 juillet 2029', 'Le bon sens', async () => {
     setDay('Jeudi 12 juillet 2029', 2); setTime(7, 0); setEra(2);
     setMode('summer', true); music('ete'); setStage('an2'); cartons.visible = true;
     at(claire, X.claire + 1.2, -3.75); focus(X.claire + 6, 1.2);
   });
+  await paper({ scene: true, kind: 'Ta vie', from: 'Télévision · dimanche 1er juillet 2029 · 20 h',
+    body: 'Référendum. Une seule question : « Approuvez-vous la réforme pour la stabilité de nos institutions ? »\n\nLe mandat du président passe à sept ans, non renouvelable. Mais la règle ne vaut que pour les mandats qui commencent après la réforme : le président en place pourra se représenter. Et son mandat actuel est prolongé jusqu\'en 2035, « le temps de mener les réformes ».\n\nOui : 58 %. Participation : 41 %. Le Conseil constitutionnel se déclare incompétent.\n\nJulien parle de coup d\'État. Michel dit que sept ans, c\'était comme avant.',
+    stamps: [
+      { t: 'prog', text: 'Un septennat non renouvelable, et une révision de la Constitution par référendum, sans passer par le Parlement, grâce à l\'article 11 (Marine Le Pen, 12 avril 2022).', src: 'https://www.publicsenat.fr/actualites/politique/la-reforme-des-institutions-au-coeur-du-duel-macron-le-pen-202480' },
+      { t: 'real', text: 'France, 28 octobre 1962 : de Gaulle change la Constitution par un référendum de l\'article 11, sans vote du Parlement. Saisi, le Conseil constitutionnel se déclare incompétent.', src: 'https://www.publicsenat.fr/actualites/politique/aux-origines-de-l-election-du-president-par-les-francais-un-coup-de-poker' },
+      { t: 'real', text: 'Chili, 11 septembre 1980 : sous Pinochet, une nouvelle Constitution est adoptée par plébiscite, sans listes électorales. Elle lui donne un mandat de huit ans.', src: 'https://en.wikipedia.org/wiki/1980_Chilean_constitutional_referendum' },
+      { t: 'fic', text: 'La prolongation du mandat jusqu\'en 2035 et le compteur remis à zéro.' }] });
   note('L\'été. Les terrasses sont pleines. On parle moins fort qu\'avant.', 'An 2', true);
   await hotspots([
     { kind: 'cit', label: 'Valberne Habitat', at: [9, 30], pos: new THREE.Vector3(X.camille + 0.85, 1.7, ZH + ZF + 0.3), walkX: X.camille - 1.6, run: () => paper({
@@ -1340,6 +1457,14 @@ async function play() {
       scene: true, kind: 'Ta vie', from: 'Devant la piscine municipale · 14 h 30',
       body: 'La classe de Léo devait aller à la piscine. Il faut quatre parents pour accompagner.\n\nSamia s\'était proposée, avec deux autres mamans. Nouvelle règle : « aucun signe religieux pour les accompagnateurs de sorties scolaires ». Elles portent un foulard.\n\nPas assez d\'adultes : la sortie est annulée pour toute la classe. Les enfants rentrent à pied, en plein mois de juillet.',
       stamps: [{ t: 'real', text: 'Sénat, 15 mai 2019 : un amendement LR interdisant les signes religieux aux accompagnateurs de sorties scolaires est adopté. Il est ensuite retiré du texte final.', src: 'https://www.publicsenat.fr/actualites/politique/sorties-scolaires-le-senat-vote-pour-l-interdiction-du-port-du-voile-pour-les' }] }) },
+    { kind: 'cit', label: 'La marche des fiertés', at: [11, 20], pos: H.bourse.door, walkX: X.bourse + 2.0, run: () => paper({
+      scene: true, kind: 'Ta vie', from: 'Bourse du travail · panneau d\'affichage · 11 h 20',
+      body: 'Sur le panneau, l\'affiche du car pour la marche des fiertés de Lyon. Une bande blanche collée en travers : « Annulé ».\n\nUn nouvel arrêté interdit tout rassemblement qui « fait la promotion de l\'homosexualité auprès des mineurs ». Les participants seront identifiés par les caméras.\n\nSophie et Laure, les mamans de Lina, la copine de Léo, ont enlevé le petit drapeau de leur fenêtre.',
+      stamps: [
+        { t: 'real', text: 'Hongrie, mars 2025 : une loi permet d\'interdire les marches des fiertés « pour protéger les enfants ». Les participants peuvent être identifiés par reconnaissance faciale et payer jusqu\'à 200 000 forints (environ 490 €).', src: 'https://www.amnesty.fr/discriminations/actualites/interdiction-marches-fiertes-hongrie' },
+        { t: 'real', text: 'France, 6 août 1942 : Vichy fixe la majorité sexuelle à 21 ans pour les relations homosexuelles, contre 13 ans pour les autres. Cette règle reste en vigueur jusqu\'en 1982 : au moins 10 000 condamnations après la guerre.', src: 'https://www.assemblee-nationale.fr/dyn/media/16/organes/commissions-permanentes-legislatives/lois/eat-2024/eat-ppl-1915-reparation-des-personnes-condamnees-pour-homosexualite' },
+        { t: 'real', text: 'Juillet 2019 : Jordan Bardella (RN) se dit « évidemment opposé » à l\'ouverture de la PMA aux couples de femmes, et demande un référendum.', src: 'https://www.publicsenat.fr/actualites/politique/le-rn-hostile-a-la-pma-pour-toutes-reclame-un-referendum-144625' },
+        { t: 'fic', text: 'L\'arrêté de Valberne. Sophie, Laure et Lina sont inventées.' }] }) },
     { kind: 'cit', label: 'Le rassemblement', at: [18, 0], pos: new THREE.Vector3(X.local - 0.3, 2.0, -2.95), walkX: X.local - 3.2, run: async () => {
       await paper({ scene: true, kind: 'Ta vie', from: 'Devant le Local fermé · 18 h',
         body: 'Depuis un an, le Local n\'a plus de salle. Les colis se font dans le garage de Bernadette, 67 ans, ancienne secrétaire de mairie. L\'aide aux devoirs s\'est arrêtée.\n\nElle a organisé un rassemblement pour récupérer la salle. Il y a le Secours populaire, la chorale, deux parents d\'élèves. Une vingtaine de personnes.\n\nLa veille, la mairie a prévenu : « Les associations qui participeront n\'auront plus de subventions. » Le club de foot de Léo, qui touche 12 000 € de la ville, n\'est pas venu. Julien, ton frère, est venu de Lyon.',
@@ -1351,7 +1476,8 @@ async function play() {
   ]);
   crowd.forEach((p) => (p.visible = false));
   await say('Je ne suis pas restée au rassemblement. Je travaille tôt.', 'Claire');
-
+  },
+  async () => {
   // ---------- An 4
   await card('An 4 · jeudi 16 octobre 2031', 'L\'ordre', async () => {
     setDay('Jeudi 16 octobre 2031', 3); setTime(6, 50); setEra(3);
@@ -1441,7 +1567,8 @@ async function play() {
   await say('Je suis rentrée. J\'ai fermé la fenêtre.', 'Claire');
   closeHouse('samia', 3); closeHouse('delmas', 1); closeHouse('bakery', 2); closeHouse('local', 3);
   await wait(2000);
-
+  },
+  async () => {
   // ---------- An 6
   await card('An 6 · jeudi 16 juin 2033', 'Le prix', async () => {
     setDay('Jeudi 16 juin 2033', 4); setTime(6, 30); setEra(4);
@@ -1496,7 +1623,8 @@ async function play() {
   ]);
   await say('Julien n\'est jamais rentré. Michel a baissé son rideau. Maman pleure au téléphone.', 'Claire');
   await say('Je me dis que ceux qui ont voté pour eux pensaient être à l\'abri. Moi aussi.', 'Claire');
-
+  },
+  async () => {
   // ---------- An 7
   await card('An 7 · mardi 14 mars 2034', 'L\'arbitraire', async () => {
     setDay('Mardi 14 mars 2034', 5); setTime(4, 55); setEra(5);
@@ -1520,6 +1648,12 @@ async function play() {
   bike.userData.parked = false; at(claire, X.claire + 1.2, -3.75); focus(X.claire + 3, 1.15);
   note('Sept ans. Il n\'y a plus besoin de loi pour être puni. Une décision suffit.', 'An 7', true);
   await hotspots([
+    { kind: 'post', label: 'Tribunal · n° 2', at: [10, 15], pos: H.ferreira.box, walkX: H.ferreira.box.x + 0.7, mail: H.ferreira.box, run: () => paper({
+      kind: 'Ta tournée', from: 'Tribunal judiciaire · Rectification d\'état civil',
+      body: 'Madame Laure Garnier,\n\nÀ la demande du procureur de la République, l\'acte de naissance de l\'enfant Lina Morel-Garnier est rectifié.\n\nVotre nom est effacé de l\'acte. Seule la mère qui a accouché est reconnue comme parent. L\'enfant s\'appellera désormais Lina Morel.\n\nVous n\'avez plus aucune autorité parentale sur Lina.',
+      stamps: [
+        { t: 'real', text: 'Italie, juin 2023 : sous le gouvernement Meloni, le parquet de Padoue conteste les actes de naissance de 33 enfants de couples de femmes, enregistrés depuis 2017. Il demande d\'effacer la mère qui n\'a pas accouché, et son nom de famille.', src: 'https://www.open.online/2023/06/19/padova-procura-illegittimo-atto-nascita-due-madri/' },
+        { t: 'fic', text: 'En France, aucun parquet ne l\'a encore fait.' }] }) },
     { kind: 'post', label: 'Préfecture · n° 8', at: [8, 10], pos: H.camille.box, walkX: H.camille.box.x + 0.7, mail: H.camille.box, run: () => paper({
       kind: 'Ta tournée', from: 'Préfecture · Commission de révision des naturalisations',
       body: 'Monsieur Haddad,\n\nVotre naturalisation, accordée en 2009, fait l\'objet d\'un réexamen.\n\nVous êtes convoqué le 2 avril. Faute de présentation, la perte de la nationalité française sera prononcée.\n\nVos enfants, nés en France, sont concernés par la présente décision.',
@@ -1564,7 +1698,8 @@ async function play() {
   ]);
   await say('Karim avait dix-neuf ans. Il livrait des pizzas. Sa mère a dû signer un papier pour récupérer le corps.', 'Claire');
   await say('Je me répète que ça ne peut pas aller plus loin. Je me le répète depuis sept ans.', 'Claire');
-
+  },
+  async () => {
   // ---------- An 8
   await card('An 8 · lundi 16 avril 2035', 'Le choix', async () => {
     setDay('Lundi 16 avril 2035', 6); setTime(8, 0); setEra(6); disparus.visible = true; bakery.shopBase.set('#3a3a3a');
@@ -1572,7 +1707,7 @@ async function play() {
     closeHouse('samia', 3); closeHouse('local', 3); closeHouse('camille', 4); closeHouse('ferreira', 3);
     at(michel, X.bakery + 0.9, -4.1); at(claire, X.claire + 1.2, -3.75); bike.userData.parked = false; focus(X.claire + 3, 1.15);
   });
-  note('Huit ans. Une nouvelle élection présidentielle. Claire distribue la propagande électorale.', 'An 8', true);
+  note('Huit ans. Le mandat prolongé par le référendum de 2029 arrive à son terme. Claire distribue la propagande électorale.', 'An 8', true);
   await hotspots([
     { kind: 'post', label: 'Propagande · n° 1', at: [8, 20], pos: H.claire.box, walkX: H.claire.box.x + 0.7, mail: H.claire.box, run: () => paper({
       kind: 'Ta tournée', from: 'Commission de propagande · Élection présidentielle',
@@ -1603,6 +1738,16 @@ async function play() {
   await card('Valberne n\'existe pas.', 'Rien de grave');
   music(null);
   $('#bar').hidden = true; $('#endBack').hidden = true; $('#again').hidden = false; $('#end').hidden = false; $('#end').scrollTop = 0;
+  },
+];
+function catchUp(from) { // ce que les chapitres sautes ont laisse dans la rue
+  if (from >= 2) { newName.visible = true; setOpacity(newName, 1); letters.forEach((m) => (m.visible = false)); }
+  if (from >= 3) pool.userData.rule.visible = true;
+}
+async function play(from = 0) {
+  resetWorld(); catchUp(from);
+  for (let i = from; i < CH.length; i++) { save(i); await CH[i](); }
+  save(0);
 }
 
 /* ===== CUTAWAY: what stands on the near pavement fades when the camera comes close behind it ===== */
@@ -1628,7 +1773,9 @@ function resize() {
 }
 addEventListener('resize', resize); resize();
 const clock = new THREE.Clock();
+let odd = false;
 function frame() {
+  if (PHONE && (odd = !odd)) { requestAnimationFrame(frame); return; } // telephone : 30 images/s, moins de chauffe
   const dt = Math.min(clock.getDelta(), 0.05), t = clock.elapsedTime;
   applyEnv(dt); placeCamera(dt, t);
   windows.forEach((w) => w.shutters.forEach((p) => { const target = w.closed ? -p.userData.side * Math.PI : p.userData.open; p.rotation.y += (target - p.rotation.y) * (1 - Math.exp(-dt * 2.4)); }));
@@ -1660,6 +1807,8 @@ function frame() {
 }
 applyStyle(STYLE); resetWorld(); frame();
 setMaqLabel(); $('#start').disabled = false; $('#start').textContent = 'Commencer';
-$('#start').onclick = async () => { loadAudio(); $('#title').hidden = true; $('#bar').hidden = false; await play(); };
+const go = async (from) => { loadAudio(); $('#title').hidden = true; $('#bar').hidden = false; await play(from); };
+$('#start').onclick = () => go(0);
+{ const k = saved(); if (k) { $('#resume').hidden = false; $('#resume').textContent = 'Reprendre : ' + CHAPTERS[k]; $('#resume').onclick = () => go(k); } }
 $('#again').onclick = async () => { $('#end').hidden = true; $('#bar').hidden = false; await play(); };
 </script>
