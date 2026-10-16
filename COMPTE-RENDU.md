@@ -71,6 +71,15 @@ Affiche du cinéma lisible ; pastilles relisibles ; candidats condamnés ; Herro
 - **Reprise** : `play()` découpé en chapitres (`CH`), le chapitre en cours est sauvé (localStorage `rien-de-grave-chapitre`) ; bouton « Reprendre : An X » sur l'écran titre si la page a été rechargée (téléphone mis en veille).
 - **Téléphone** : 30 images/s, résolution ×1,25 max, ombres 1024 px, pas de flou de maquette, MSAA 2 ; `webglcontextlost` géré.
 
+## 5 quater. v31 — climat (16 octobre 2026)
+
+- **Éoliennes** : cinq éoliennes 3D sur la colline (`turbines`, `setTurbines(e)` appelé par `setEra`) ; An 2 : une démontée avec grue, An 4 et après : plus rien. `cam.up` fait lever la caméra vers la colline.
+- **An 2** : pastille « Les éoliennes » (programme Le Pen 2022 moratoire + démantèlement ; moratoire voté le 19/06/2025 avec le RN, texte rejeté le 24/06 ; Trump sort de l'accord de Paris le 20/01/2025).
+- **An 6** : ambiance `heat` (canicule, 41 °C). Pastilles « Préfecture · arrêté sécheresse » (loi Duplomb 8/07/2025, Bolsonaro +59,5 % de déforestation) et « La salle rafraîchie » (canicule 2003 : 14 802 morts ; ZFE supprimées le 28/05/2025 avec RN, LR, LFI ; Bardella et le Pacte vert, 23/01/2025).
+- **An 7** : M. Delmas assigné pour une manifestation contre une bassine (Soulèvements de la Terre dissous le 21/06/2023, dissolution annulée le 9/11/2023).
+- Écran de fin mis à jour. Tests automatiques An 2 et An 6 → An 7 : sans erreur.
+- Second projet (Unreal, « L'Agent ») : brief dans `Music\l-agent\BRIEF.md`, à suivre dans une autre conversation.
+
 ## 6. Prochaines étapes
 
 1. **Son (bruitages, pas de musique)** : l'auteur hésite entre Soundly (sa bibliothèque), ElevenLabs, ou banques gratuites (Sonniss GDC bundle, Freesound CC0). Proposition : ~20 sons (lettre dans la boîte, tampon, volets, sonnette de vélo, pigeons, pas sur pavés, portières, sirène, terrasse de café, cour d'école, pluie sur zinc, télé) déposés dans `sons\`, puis découpe, normalisation et branchement ; fonds continus (pluie, rumeur) générables en WebAudio. Silence pendant la rafle et la veillée.
