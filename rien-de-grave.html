@@ -112,6 +112,22 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
 #lSrc a { color: inherit; }
 #lClose { margin-top: 1.1rem; font: 700 1rem var(--f-body); background: var(--paper-ink); color: var(--paper); border: 0; border-radius: 0.3rem; padding: 0.6rem 1rem; cursor: pointer; }
 .paper.scene #lClose { background: var(--ink); color: var(--night); }
+/* les moments ou l'on choisit */
+.paper.choice { border-top: 0.4rem solid var(--post); }
+#lStep { margin: 0 0 0.4rem; font: 700 0.78rem var(--f-body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--post); }
+#lHelp { margin: 0 0 0.9rem; padding: 0.6rem 0.8rem; border-radius: 0.3rem; background: rgba(243,194,58,.14); border-left: 0.25rem solid var(--post); font-size: 0.95rem; line-height: 1.45; }
+#lAsk { margin: 0.4rem 0 0.6rem; font-weight: 700; font-size: 1.08rem; }
+#lChoices { display: grid; gap: 0.55rem; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
+#lChoices button { text-align: left; font: 400 0.95rem/1.4 var(--f-body); color: inherit; background: rgba(255,255,255,.06); border: 2px solid currentColor; border-radius: 0.4rem; padding: 0.65rem 0.85rem; cursor: pointer; }
+#lChoices button:hover, #lChoices button:focus-visible { background: var(--post); color: var(--night); border-color: var(--post); }
+#lChoices button b { display: block; font-size: 1.04rem; margin-bottom: 0.15rem; }
+#lChoices button small { display: block; font-size: 0.86rem; opacity: 0.85; }
+#lTimer { height: 0.35rem; border-radius: 1rem; background: rgba(255,255,255,.15); overflow: hidden; margin: 0 0 0.6rem; }
+#lTimer i { display: block; height: 100%; background: #e5484d; transform-origin: left; }
+#recap { margin: 0 0 1.6rem; padding: 1rem 1.2rem; border: 2px solid var(--post); border-radius: 0.5rem; }
+#recap h3 { margin-top: 0; color: var(--post); }
+#recap li { margin-bottom: 0.45rem; }
+#recap .moral { margin: 0.8rem 0 0; font-weight: 700; }
 
 .screen { position: fixed; inset: 0; overflow-y: auto; background: radial-gradient(ellipse at 50% 30%, #1c2742 0%, var(--night) 70%); }
 .screen-in { width: min(40rem, 100%); margin: 0 auto; padding-inline: 1.25rem; padding-block: max(3rem, 9vh) 3rem; display: grid; gap: 1.1rem; box-sizing: border-box; }
@@ -244,10 +260,13 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
 
 <div id="letter" hidden role="dialog" aria-modal="true" aria-labelledby="lFrom">
   <div class="paper" id="paper">
+    <p id="lStep" hidden></p>
     <p id="lKind"></p>
     <p id="lFrom"></p>
+    <p id="lHelp" hidden></p>
     <p id="lBody"></p>
     <div id="lStamps"></div>
+    <div id="lPick" hidden><p id="lAsk"></p><div id="lTimer" hidden><i></i></div><div id="lChoices"></div></div>
     <button id="lClose" type="button">Continuer</button>
   </div>
   <button id="lMore" type="button" hidden>↓ La suite</button>
@@ -300,13 +319,14 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
       <p><span class="mini fic">Pas encore arrivé</span> la fiction, toujours inspirée de faits réels</p>
     </div>
     <div class="start-row"><button id="start" class="big" type="button" disabled>Chargement…</button><button id="resume" class="ghost" type="button" hidden>Reprendre</button><button id="tFull" class="ghost" type="button" hidden>Plein écran</button></div>
-    <p class="warn">Touche les points jaunes pour ta tournée de factrice, les bleus pour ta vie de citoyenne. Avec le son, sur ordinateur ou téléphone. Contient des scènes d'arrestation.</p>
+    <p class="warn">Touche les points jaunes pour ta tournée de factrice, les bleus pour ta vie de citoyenne. Sept fois, tu devras choisir : ce que tu fais change le sort de quelqu'un. Avec le son, sur ordinateur ou téléphone. Contient des scènes d'arrestation.</p>
   </div>
 </section>
 
 <section id="end" class="screen" hidden>
   <div class="screen-in">
     <p class="tag">Fin · Valberne n'existe pas. Le reste, si.</p>
+    <div id="recap" hidden></div>
     <h2>Tout ce qui portait un tampon rouge a déjà eu lieu.</h2>
     <h3 class="real">Déjà arrivé en France</h3>
     <ul>
@@ -1197,7 +1217,7 @@ function applyEnv(dt) {
 
 /* ===== CAMERA & STYLE ===== */
 const focus = (x, zoom = 1) => { cam.x = x; cam.zoom = zoom; };
-if (FAST) window.__dbg = { focus, cam, setMode: (m) => setMode(m, true), showPaper }; // test mode only
+if (FAST) window.__dbg = { focus, cam, setMode: (m) => setMode(m, true), showPaper, choose: (a) => choose(a) }; // test mode only
 function placeCamera(dt, t) {
   const k = 1 - Math.exp(-dt * 1.6);
   cam.cx += (cam.x - cam.cx) * k; cam.cz += (cam.zoom - cam.cz) * k; cam.cu += (cam.up - cam.cu) * k;
@@ -1259,13 +1279,14 @@ async function card(sub, title, during) {
 const STAMP = { real: 'Déjà arrivé', prog: 'Au programme du RN', prop: 'Déjà proposé', fic: 'Pas encore arrivé' };
 let paperLog = null; // the letters a hotspot opened, so it can be read again
 // telephone : si la lettre depasse l'ecran, un bouton signale qu'il reste les tampons en bas
-function moreHint() { const L = $('#letter'); $('#lMore').hidden = L.hidden || L.scrollTop + L.clientHeight >= L.scrollHeight - 8; }
+function moreHint() { const L = $('#letter'); $('#lMore').hidden = L.hidden || !$('#lPick').hidden || L.scrollTop + L.clientHeight >= L.scrollHeight - 8; }
 $('#letter').addEventListener('scroll', moreHint, { passive: true }); addEventListener('resize', moreHint);
 $('#lMore').onclick = () => { const L = $('#letter'); L.scrollBy({ top: L.clientHeight * 0.75, behavior: 'smooth' }); };
 function paper(args) { if (paperLog) paperLog.push(args); return showPaper(args); }
 function showPaper({ kind, from, body, stamps = [], scene: isScene = false }) {
   return new Promise((res) => {
     $('#paper').className = 'paper' + (isScene ? ' scene' : '') + (stamps.length ? ' duo' : '') + (stamps.length > 2 ? ' many' : '');
+    $('#lStep').hidden = true; $('#lHelp').hidden = true; $('#lPick').hidden = true; $('#lClose').hidden = false;
     $('#lKind').textContent = kind || ''; $('#lFrom').textContent = from; $('#lBody').textContent = body;
     const box = $('#lStamps'); box.textContent = '';
     stamps.forEach((st, i) => {
@@ -1279,6 +1300,50 @@ function showPaper({ kind, from, body, stamps = [], scene: isScene = false }) {
     if (stamps.some((st) => st.t === 'real')) sfx('tampon');
     $('#lClose').onclick = () => { L.hidden = true; $('#lMore').hidden = true; res(); };
   });
+}
+
+/* ===== CHOIX : six moments ou le joueur agit ===== */
+const CKEY = 'rien-de-grave-choix';
+let C = {}; try { C = JSON.parse(localStorage.getItem(CKEY) || '{}') || {}; } catch (e) { C = {}; }
+const keepC = () => { try { localStorage.setItem(CKEY, JSON.stringify(C)); } catch (e) {} };
+const CHOICE_N = 7;
+function choose({ id, n: _n, from, body, ask = 'Que fais-tu ?', options, timer = 0, fallback, scene = true }) {
+  return new Promise((res) => {
+    const n = Object.keys(C).length + 1; // numerotes dans l'ordre ou on les rencontre
+    $('#paper').className = 'paper choice' + (scene ? ' scene' : '');
+    $('#lStep').hidden = false; $('#lStep').textContent = `À toi de choisir · ${n} sur ${CHOICE_N}`;
+    $('#lKind').textContent = ''; $('#lFrom').textContent = from; $('#lBody').textContent = body; $('#lStamps').textContent = '';
+    const help = $('#lHelp');
+    if (n === 1) { help.hidden = false; help.textContent = 'Pour la première fois, tu peux agir. Il y aura sept moments comme celui-ci. Tu ne pourras pas empêcher ce qui arrive à tout le monde, mais tu peux changer le sort de quelqu\'un. Chaque geste a un prix : sous chaque choix, tu vois ce que tu risques.'; }
+    else if (timer) { help.hidden = false; help.textContent = 'Le temps compte. Si tu ne choisis pas, c\'est aussi un choix.'; }
+    else help.hidden = true;
+    $('#lAsk').textContent = ask; $('#lPick').hidden = false; $('#lClose').hidden = true;
+    const box = $('#lChoices'); box.textContent = '';
+    let done = false, tid = 0;
+    const pick = (key) => { if (done) return; done = true; clearTimeout(tid); C[id] = key; keepC(); $('#lTimer').hidden = true; $('#lPick').hidden = true; $('#lClose').hidden = false; $('#letter').hidden = true; $('#lMore').hidden = true; res(key); };
+    options.forEach((o) => { const b = document.createElement('button'); b.type = 'button'; b.dataset.key = o.key; const t = document.createElement('b'); t.textContent = o.label; const h = document.createElement('small'); h.textContent = o.hint; b.append(t, h); b.onclick = () => pick(o.key); box.append(b); });
+    const tb = $('#lTimer');
+    if (timer) { const ms = timer * (PHONE ? 1.4 : 1) * 1000; tb.hidden = false; const bar = tb.firstElementChild; bar.style.transition = 'none'; bar.style.transform = 'scaleX(1)'; requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.transition = `transform ${ms}ms linear`; bar.style.transform = 'scaleX(0)'; })); tid = setTimeout(() => pick(fallback), ms); }
+    else tb.hidden = true;
+    const L = $('#letter'); L.hidden = false; L.scrollTop = 0; box.firstElementChild.focus({ preventScroll: true }); requestAnimationFrame(moreHint);
+  });
+}
+const RECAP = {
+  benali: { mot: 'Tu as glissé un mot dans la lettre des Benali : leur recours leur a fait gagner un an d\'allocations.', rien: 'Tu as déposé la lettre de la CAF des Benali, sans rien ajouter.' },
+  rassemblement: { rester: 'Tu es restée au rassemblement : un blâme dans ton dossier, pour toujours. Julien t\'a reparlé.', rentrer: 'Tu es rentrée avant le rassemblement. Personne ne t\'a rien reproché.' },
+  moussa: { prevenir: 'Tu as prévenu Moussa : il a échappé à l\'arrestation. Bernadette, non.', garder: 'Tu as gardé la lettre de Moussa dans ta sacoche : la police n\'en avait pas besoin, il a été arrêté.', distribuer: 'Tu as fait signer son recommandé à Moussa. Il a été arrêté le soir même.' },
+  leo: { signer: 'Tu as signé pour que Léo sorte, et la vidéo a été effacée. Léo a mis un an à te reparler.', refuser: 'Tu as refusé d\'effacer la vidéo de Léo : elle a fait libérer Adam. Ton employeur a reçu un signalement.' },
+  rafle: { cacher: 'Tu as caché Rayan et Nour dans ta cave. Ils vivent, sous d\'autres prénoms.', fermer: 'Tu n\'as pas ouvert ta porte à Rayan et Nour. On les a fait monter dans le car avec leur mère.' },
+  tract: { tract: 'Tu as glissé les tracts de Julien dans les boîtes. D\'autres ont fait pareil.', rien: 'Tu as distribué la propagande du candidat unique, et rien d\'autre.' },
+  depart: { partir: 'Avec Léo, vous partez au Portugal.', rester: 'Avec Léo, vous restez à Valberne.' },
+};
+function recap() {
+  const el = $('#recap'), items = Object.keys(RECAP).filter((k) => C[k] && RECAP[k][C[k]]);
+  if (!items.length) { el.hidden = true; return; }
+  el.textContent = ''; const h = document.createElement('h3'); h.textContent = 'Ce que tu as fait'; const ul = document.createElement('ul');
+  items.forEach((k) => { const li = document.createElement('li'); li.textContent = RECAP[k][C[k]]; ul.append(li); });
+  const m = document.createElement('p'); m.className = 'moral'; m.textContent = 'Tu as pu sauver quelqu\'un, ou pas. Tu n\'as pas pu empêcher ce qui est arrivé à tous les autres : une fois le pouvoir installé, chaque geste coûte cher et ne sauve qu\'une personne à la fois. Le seul jour où chacun pouvait changer le cours des choses pour tout le monde, sans risque, c\'était le jour du vote.';
+  el.append(h, ul, m); el.hidden = false;
 }
 const hots = [];
 function hotspots(list) {
@@ -1421,12 +1486,21 @@ const CH = [
   });
   note('Six heures quarante. Claire charge son vélo. Cette année, tout a l\'air normal. Presque.', 'An 1', true);
   await hotspots([
-    { kind: 'post', label: 'Courrier · n° 6', at: [7, 20], pos: H.samia.box, walkX: H.samia.box.x + 0.7, mail: H.samia.box, run: () => paper({
+    { kind: 'post', label: 'Courrier · n° 6', at: [7, 20], pos: H.samia.box, walkX: H.samia.box.x + 0.7, mail: H.samia.box, run: async () => { await paper({
       kind: 'Ta tournée', from: 'Caisse d\'allocations familiales',
       body: 'Monsieur et Madame Benali,\n\nÀ compter du 1er mai, les allocations familiales sont réservées aux familles dont au moins un parent est français.\n\nVotre droit est supprimé. Vous travaillez et cotisez en France depuis 14 ans : cette information est sans incidence sur la présente décision.',
       stamps: [
         { t: 'real', text: 'Vitrolles (FN), 1998 : une prime de naissance réservée aux familles françaises ou européennes. Annulée par la justice ; la maire est condamnée.', src: 'https://www.universalis.fr/evenement/8-novembre-2000-condamnation-a-deux-ans-d-ineligibilite-de-catherine-megret/' },
-        { t: 'prog', text: 'La « priorité nationale » pour les aides sociales, inscrite dans la Constitution par référendum.', src: 'https://lcp.fr/actualites/legislatives-2024-le-programme-du-rassemblement-national-en-matiere-d-immigration-a-l' }] }) },
+        { t: 'prog', text: 'La « priorité nationale » pour les aides sociales, inscrite dans la Constitution par référendum.', src: 'https://lcp.fr/actualites/legislatives-2024-le-programme-du-rassemblement-national-en-matiere-d-immigration-a-l' }] });
+      const k = await choose({ id: 'benali', n: 1, from: 'Devant le n° 6 · 7 h 20',
+        body: 'La lettre est dans ta main. Samia travaille de nuit à l\'hôpital : à cette heure-ci, elle dort.\n\nTu sais que Bernadette, au Local, aide les familles à faire des recours. Tu as un stylo et le dos d\'un bordereau.',
+        options: [
+          { key: 'mot', label: 'Glisser un mot avec la lettre', hint: '« Bernadette, au Local, peut vous aider à faire un recours. » Une factrice ne doit pas se mêler du courrier. Personne ne le saura… pour l\'instant.' },
+          { key: 'rien', label: 'Déposer la lettre, c\'est tout', hint: 'C\'est ton travail. Ce ne sont pas tes affaires.' }] });
+      if (k === 'mot') await paper({ scene: true, kind: 'Ce que ça change', from: 'Le soir, à ta porte · 19 h',
+        body: 'Samia frappe chez toi avec une boîte de makrouts. Bernadette l\'a aidée à écrire le recours ; le tribunal administratif suspend la décision. Un an d\'allocations de gagné.\n\nUn an, pas plus. Mais maintenant, Samia sait qu\'elle peut compter sur toi.',
+        stamps: [{ t: 'real', text: 'Les recours marchent souvent : à Vitrolles, la prime de naissance réservée aux familles françaises a été annulée par la justice, et la maire condamnée.', src: 'https://www.universalis.fr/evenement/8-novembre-2000-condamnation-a-deux-ans-d-ineligibilite-de-catherine-megret/' }] });
+    } },
     { kind: 'post', label: 'Recommandé · n° 12', at: [8, 5], pos: local.door, walkX: local.doorX + 1.6, mail: local.box, run: async () => {
       localNotice.visible = true; await wait(400);
       await paper({ kind: 'Ta tournée', from: 'Arrêté du maire de Valberne',
@@ -1516,13 +1590,20 @@ const CH = [
       await paper({ scene: true, kind: 'Ta vie', from: 'Devant le Local fermé · 18 h',
         body: 'Depuis un an, le Local n\'a plus de salle. Les colis se font dans le garage de Bernadette, 67 ans, ancienne secrétaire de mairie. L\'aide aux devoirs s\'est arrêtée.\n\nElle a organisé un rassemblement pour récupérer la salle. Il y a le Secours populaire, la chorale, deux parents d\'élèves. Une vingtaine de personnes.\n\nLa veille, la mairie a prévenu : « Les associations qui participeront n\'auront plus de subventions. » Le club de foot de Léo, qui touche 12 000 € de la ville, n\'est pas venu. Julien, ton frère, est venu de Lyon.',
         stamps: [{ t: 'real', text: 'Carcassonne (RN), avril 2026 : « Les associations qui participeront n\'auront plus de subventions de la mairie », prévient le maire la veille d\'une manifestation.', src: 'https://www.lagazettefrance.fr/article/a-carcassonne-conquise-par-le-rn-une-manifestation-contre-l-extreme-droite' }] });
+      const k = await choose({ id: 'rassemblement', n: 2, from: 'Devant le Local fermé · 18 h 05',
+        body: 'Julien te fait signe de venir à côté de lui. Derrière la fenêtre de la mairie, en face, un homme filme les visages avec son téléphone.\n\nDemain, tu commences à 6 h. Tu es fonctionnaire de La Poste.',
+        options: [
+          { key: 'rester', label: 'Rester, à côté de Julien', hint: 'Ton visage sera sur la vidéo. On ne sait pas ce qu\'ils en feront.' },
+          { key: 'rentrer', label: 'Rentrer chez toi', hint: 'Tu travailles tôt. Personne ne te reprochera rien.' }] });
+      if (k === 'rester') await paper({ scene: true, kind: 'Ce que ça change', from: 'Devant le Local fermé · 19 h',
+        body: 'Tu restes une heure. La chorale chante « Le Temps des cerises ». Julien te serre contre lui : « Je savais que tu viendrais. »\n\nEn rentrant, tu passes devant la mairie. La lumière est encore allumée derrière la fenêtre.' });
       banner.visible = false;
       crowd.forEach((p, i) => walk(p, X.local + 16 + i, -1.6, 1.8 + i * 0.2));
       await wait(1800);
     } },
   ]);
   crowd.forEach((p) => (p.visible = false));
-  await say('Je ne suis pas restée au rassemblement. Je travaille tôt.', 'Claire');
+  await say(C.rassemblement === 'rester' ? 'Je suis restée au rassemblement. J\'ai eu peur, et j\'étais fière.' : 'Je ne suis pas restée au rassemblement. Je travaille tôt.', 'Claire');
   },
   async () => {
   // ---------- An 4
@@ -1533,8 +1614,27 @@ const CH = [
     closeHouse('camille', 4); closeHouse('ferreira', 1); closeHouse('local', 3);
     at(claire, X.claire + 1.2, -3.75); focus(X.claire, 1.15);
   });
+  if (C.rassemblement === 'rester') await paper({ kind: 'Ta tournée · pour toi', from: 'La Poste · Direction des ressources humaines',
+    body: 'Madame,\n\nVotre présence a été constatée le 12 juillet 2029 lors d\'un rassemblement non autorisé, devant le Local, grâce aux images transmises par la mairie.\n\nCe comportement est contraire au devoir de réserve. Un blâme est inscrit à votre dossier.',
+    stamps: [{ t: 'real', text: 'Hongrie, 2025 : une loi autorise la reconnaissance faciale pour identifier les participants à une marche interdite.', src: 'https://www.pbs.org/newshour/world/hungary-passes-anti-lgbtq-law-banning-pride-events' }, { t: 'fic', text: 'Le blâme de Claire.' }] });
   note('La pluie. Des caméras à chaque coin de rue. Le Local est devenu un poste de police municipale. La médiathèque, un « office de la famille ».', 'An 4', true);
   await hotspots([
+    { kind: 'post', label: 'Recommandé · Moussa', at: [7, 40], pos: H.bakery.box, walkX: H.bakery.box.x + 0.7, mail: H.bakery.box, run: async () => {
+      await paper({ kind: 'Ta tournée', from: 'Préfecture · Lettre recommandée avec accusé de réception',
+        body: 'Monsieur Moussa Keïta,\n\nVotre titre de séjour n\'est pas renouvelé. Vous faites l\'objet d\'une obligation de quitter le territoire français, sans délai de départ volontaire.\n\nSur ta liste de distribution, à côté de son nom, quelqu\'un a écrit au crayon : « Op. Retour · jeudi 18 h ». Jeudi, c\'est aujourd\'hui.',
+        stamps: [{ t: 'real', text: 'En France, une obligation de quitter le territoire « sans délai de départ volontaire » permet de placer la personne en rétention dès qu\'elle est notifiée.', more: [['Obligation de quitter le territoire français', 'https://fr.wikipedia.org/wiki/Obligation_de_quitter_le_territoire_fran%C3%A7ais']] }] });
+      const k = await choose({ id: 'moussa', n: 3, from: 'Boulangerie · 7 h 40',
+        body: 'Moussa sort les baguettes du four. Il te sourit, comme tous les matins, et te tend un croissant. Il ne sait pas ce que dit le crayon.\n\nMichel est dans l\'arrière-boutique. Personne d\'autre dans la boulangerie.',
+        options: [
+          { key: 'prevenir', label: 'Le prévenir, à voix basse', hint: '« Ils viennent ce soir, à 18 h. Pars. » Si quelqu\'un l\'apprend, c\'est toi qu\'on poursuivra.' },
+          { key: 'garder', label: 'Garder la lettre dans ta sacoche', hint: 'Une lettre perdue, ça arrive. Mais la police n\'a pas besoin de la lettre pour venir.' },
+          { key: 'distribuer', label: 'Lui faire signer l\'accusé de réception', hint: 'C\'est la procédure. Tu fais ton travail.' }] });
+      if (k === 'prevenir') { await paper({ scene: true, kind: 'Ce que ça change', from: 'Boulangerie · 7 h 42',
+        body: 'Moussa ne dit rien. Il finit sa fournée, enlève son tablier et le plie sur le comptoir. À midi, il est parti, avec un sac de sport.\n\nIl n\'a pas eu le temps de prévenir Bernadette, qui l\'hébergeait.',
+        stamps: [{ t: 'real', text: 'Paris, 16 juillet 1942 : des Juifs échappent à la rafle du Vél\' d\'Hiv parce que la Résistance les a prévenus, ou grâce au « manque de zèle de certains policiers ».', src: 'https://fr.wikipedia.org/wiki/Rafle_du_V%C3%A9lodrome_d%27Hiver' }] }); moussa.visible = false; }
+      else if (k === 'garder') await paper({ scene: true, kind: 'Ce que ça change', from: 'Ta sacoche',
+        body: 'La lettre reste au fond de ta sacoche toute la journée. Elle pèse plus lourd que les colis.\n\nMoussa continue à travailler. Il ne sait toujours rien.' });
+    } },
     { kind: 'cit', label: 'Le poste de police', at: [7, 15], pos: new THREE.Vector3(-1.5, 3.6, -3.25), walkX: -0.4, run: () => paper({
       scene: true, kind: 'Ta vie', from: 'Carrefour des Tilleuls',
       body: 'Vingt-sept caméras dans le quartier, avec la reconnaissance faciale. Quarante policiers municipaux, armés. Le budget sécurité de la ville a triplé ; celui de la médiathèque a été divisé par deux.\n\nLe préfet a interdit la marche du samedi. Ceux qui y sont allés ont reçu une amende chez eux. C\'est Claire qui a distribué les enveloppes.',
@@ -1588,6 +1688,17 @@ const CH = [
   const vx = X.bakery + 0.6;
   await tween(3800, (p) => { van.position.x = 34 + (vx - 34) * (1 - Math.pow(1 - p, 3)); });
   cops.forEach((c, i) => at(c, X.bakery + 0.2 + i * 0.8, -2.6));
+  const fled = C.moussa === 'prevenir';
+  if (fled) {
+    moussa.visible = false;
+    note('Les policiers entrent dans la boulangerie. Moussa n\'est pas là. Son tablier est plié sur le comptoir.');
+    await Promise.all([walk(cops[0], X.bakery - 0.45, -4.0, 2.6), walk(cops[1], X.bakery + 0.5, -4.0, 2.6)]);
+    await wait(1800);
+    walk(michel, X.bakery + 0.6, -3.5, 1.5);
+    walk(bernadette, X.bakery + 2.4, -3.4, 2.4);
+    await Promise.all([walk(cops[0], X.bakery, -2.6, 1.8), walk(cops[1], X.bakery + 0.9, -2.6, 1.8)]);
+    note('Ils cherchent qui l\'hébergeait. Michel montre Bernadette du menton.');
+  } else {
   note('Moussa, 23 ans, fait le pain ici depuis quatre ans. Arrivé du Mali à 11 ans. Son titre de séjour n\'a pas été renouvelé ; la préfecture n\'a jamais dit pourquoi.');
   await Promise.all([walk(cops[0], moussa.position.x - 0.45, -4.0, 2.6), walk(cops[1], moussa.position.x + 0.5, -4.0, 2.6)]);
   await wait(1400);
@@ -1596,6 +1707,7 @@ const CH = [
   await Promise.all([walk(cops[0], X.bakery, -2.6, 1.8), walk(moussa, X.bakery + 0.45, -2.6, 1.8), walk(cops[1], X.bakery + 0.9, -2.6, 1.8)]);
   moussa.visible = false;
   note('Bernadette l\'hébergeait chez elle, gratuitement.');
+  }
   await wait(1500);
   await walk(cops[1], bernadette.position.x - 0.4, -3.3, 2.4);
   note('« Aide au séjour irrégulier. » Elle aussi.');
@@ -1605,12 +1717,13 @@ const CH = [
   await wait(600);
   await tween(3000, (p) => { van.position.x = vx - 70 * p * p; });
   van.visible = false; vanFlash = false; hideNote();
-  await paper({ kind: 'Procès-verbal', from: 'Opération « Retour » · Valberne', body: 'Interpellations : 2.\n\n1 personne en situation irrégulière.\n1 personne pour aide au séjour irrégulier, 67 ans.\n\nTémoins : néant.',
+  await paper({ kind: 'Procès-verbal', from: 'Opération « Retour » · Valberne', body: fled ? 'Interpellations : 1.\n\n1 personne pour aide au séjour irrégulier, 67 ans.\n1 personne en situation irrégulière : en fuite. Recherches en cours.\n\nTémoins : néant.' : 'Interpellations : 2.\n\n1 personne en situation irrégulière.\n1 personne pour aide au séjour irrégulier, 67 ans.\n\nTémoins : néant.',
     stamps: [
       { t: 'real', text: 'Vallée de la Roya, 2017 : l\'agriculteur Cédric Herrou est condamné à quatre mois de prison avec sursis pour avoir transporté et hébergé chez lui environ 200 migrants, gratuitement. C\'était le « délit de solidarité » : aider un étranger sans papiers à entrer, circuler ou séjourner était puni, même sans contrepartie.', src: 'https://www.actu-juridique.fr/constitutionnel/laffaire-herrou-la-reconnaissance-de-la-valeur-constitutionnelle-du-principe-de-fraternite-et-ses-limites/', more: [['Cédric Herrou', 'https://fr.wikipedia.org/wiki/C%C3%A9dric_Herrou']] },
       { t: 'real', text: '6 juillet 2018 : le Conseil constitutionnel reconnaît le « principe de fraternité ». Aider gratuitement quelqu\'un à circuler ou à se loger n\'est plus puni. Aider quelqu\'un à entrer en France l\'est toujours. Herrou est définitivement relaxé en 2021.', src: 'https://www.actu-juridique.fr/constitutionnel/laffaire-herrou-la-reconnaissance-de-la-valeur-constitutionnelle-du-principe-de-fraternite-et-ses-limites/', more: [['Délit de solidarité', 'https://fr.wikipedia.org/wiki/D%C3%A9lit_de_solidarit%C3%A9']] },
       { t: 'fic', text: 'Que l\'aide gratuite redevienne un délit, comme avant 2018.' }] });
-  await say('J\'ai tout vu depuis le trottoir. Michel aussi. Personne n\'a rien dit.', 'Claire');
+  await say(fled ? 'Moussa est parti à temps. Bernadette a été arrêtée à sa place. Personne n\'a rien dit.' : 'J\'ai tout vu depuis le trottoir. Michel aussi. Personne n\'a rien dit.', 'Claire');
+  if (C.moussa === 'garder') await say('La lettre est toujours au fond de ma sacoche. Ils n\'en avaient pas eu besoin.', 'Claire');
   await say('Je suis rentrée. J\'ai fermé la fenêtre.', 'Claire');
   closeHouse('samia', 3); closeHouse('delmas', 1); closeHouse('bakery', 2); closeHouse('local', 3);
   await wait(2000);
@@ -1639,7 +1752,7 @@ const CH = [
         { t: 'fic', text: 'Les Glycines sont inventées. Le manque de bras dans les maisons de retraite, lui, est déjà là.' }] }) },
     { kind: 'post', label: 'Ta fiche de paie', at: [12, 30], pos: H.claire.box, walkX: H.claire.box.x + 0.7, mail: H.claire.box, run: () => paper({
       kind: 'Ta tournée', from: 'La Poste · ton bulletin de salaire',
-      body: 'En mars, tu t\'es bloqué le dos. Arrêt maladie de dix jours.\n\nLes indemnités ont encore baissé, et un médecin-contrôleur de la Sécurité sociale est passé chez toi le troisième jour, « pour lutter contre la fraude ». Ton arrêt a été raccourci.\n\nLa retraite à 60 ans, promise en 2027 ? « Plus tard, quand les comptes le permettront. »',
+      body: 'En mars, tu t\'es bloqué le dos. Arrêt maladie de dix jours.\n\nLes indemnités ont encore baissé, et un médecin-contrôleur de la Sécurité sociale est passé chez toi le troisième jour, « pour lutter contre la fraude ». Ton arrêt a été raccourci.\n\nLa retraite à 60 ans, promise en 2027 ? « Plus tard, quand les comptes le permettront. »' + (C.moussa === 'garder' ? '\n\nEn bas, une ligne : « Retenue disciplinaire · recommandé non distribué, octobre 2031 ». Ils l\'ont retrouvée.' : ''),
       stamps: [
         { t: 'real', text: 'France, 1er avril 2025 : les indemnités journalières des arrêts maladie sont plafonnées plus bas (1,4 SMIC au lieu de 1,8). Le maximum passe de 53,31 € à 41,47 € par jour.', src: 'https://formation.lefebvre-dalloz.fr/actualite/indemnisation-des-arrets-maladie-baisse-des-indemnites-journalieres-compter-du-1er-avril-2025' },
         { t: 'real', text: 'Juin 2024 : interrogé sur l\'abrogation de la réforme des retraites, promise pendant la campagne, Jordan Bardella répond : « Nous verrons ».', src: 'https://www.boursorama.com/bourse/actualites/retraites-jordan-bardella-n-est-plus-si-presse-d-abroger-la-reforme-de-macron-101b949b9967c92520b3be1c9ef2c30f' }] }) },
@@ -1677,6 +1790,20 @@ const CH = [
         { t: 'real', text: 'Assemblée nationale, 28 mai 2025 : les zones à faibles émissions (ZFE), qui limitent les voitures les plus polluantes dans les grandes villes, sont supprimées par 98 voix contre 51, avec le RN, LR et LFI. La pollution de l\'air cause environ 40 000 morts par an en France (Santé publique France).', src: 'https://lcp.fr/actualites/zfe-la-suppression-des-zones-a-faibles-emissions-approuvee-par-l-assemblee-nationale' },
         { t: 'real', text: '23 janvier 2025 : Jordan Bardella demande « la suspension immédiate » du Pacte vert européen, le plan de l\'Union pour le climat.', src: 'https://www.linfodurable.fr/face-trump-bardella-appelle-la-suspension-du-pacte-vert-europeen-49044' },
         { t: 'fic', text: 'La carte « Valberne Famille » et la salle réservée : la « priorité nationale » appliquée à la chaleur.' }] }) },
+    { kind: 'cit', label: 'Léo, au commissariat', at: [16, 30], pos: new THREE.Vector3(-1.5, 2.4, -3.25), walkX: -0.4, run: async () => {
+      await paper({ scene: true, kind: 'Ta vie', from: 'Ton téléphone · 16 h 30',
+        body: '« Madame, ici le commissariat de Valberne. Nous avons votre fils. »\n\nDevant le collège, la Brigade a plaqué au sol Adam, un garçon de sa classe, pour un contrôle. Léo, 14 ans, a tout filmé. Il a refusé de donner son téléphone.\n\nQuand tu arrives, il est assis sur un banc, les poings serrés. Un officier pose une feuille devant toi.' });
+      const k = await choose({ id: 'leo', n: 4, from: 'Commissariat de Valberne · 17 h 10',
+        body: '« Vous signez que votre fils a perturbé une opération de police, il efface sa vidéo devant moi, et vous repartez tous les deux. Sinon, il passe la nuit ici. »\n\nLéo te regarde. Adam, lui, est toujours en garde à vue.',
+        options: [
+          { key: 'signer', label: 'Signer, et faire effacer la vidéo', hint: 'Léo rentre ce soir. La vidéo n\'existera plus, et rien ne prouvera ce qui est arrivé à Adam.' },
+          { key: 'refuser', label: 'Refuser : filmer la police n\'est pas un crime', hint: 'Léo passera la nuit au commissariat. Et ton nom sera noté.' }] });
+      if (k === 'signer') await paper({ scene: true, kind: 'Ce que ça change', from: 'Dans la voiture · 18 h',
+        body: 'Léo regarde par la fenêtre. « Tu les as laissés gagner. »\n\nAdam reste deux jours en garde à vue. Il est poursuivi pour « rébellion ». Léo ne te parlera presque plus pendant un an.' });
+      else await paper({ scene: true, kind: 'Ce que ça change', from: 'Le lendemain · 9 h',
+        body: 'Léo a passé la nuit au commissariat. Mais une copie de sa vidéo était déjà partie chez un ami : 40 000 vues au matin. L\'avocate d\'Adam s\'en sert et obtient sa libération.\n\nÀ 10 h, ton chef de centre te convoque : « signalement de la préfecture ».',
+        stamps: [{ t: 'real', text: 'France, 20 mai 2021 : le Conseil constitutionnel censure l\'article de la loi « sécurité globale » qui punissait de cinq ans de prison la diffusion malveillante d\'images de policiers. Filmer la police reste légal.', src: 'https://lcp.fr/actualites/censure-de-l-ex-article-24-de-la-loi-de-securite-globale-nous-ne-lacherons-rien-promet' }] });
+    } },
     { kind: 'cit', label: 'Julien', at: [22, 15], pos: new THREE.Vector3(X.claire - 0.6, 3.4, ZH + ZF + 0.3), walkX: X.claire + 1.2, run: () => paper({
       scene: true, kind: 'Ta vie', from: 'Ton téléphone · 22 h 15',
       body: 'Julien, ton petit frère, 41 ans, cheminot. Syndiqué, militant de gauche depuis toujours. Il continuait d\'aller aux réunions, dans des appartements.\n\nCe soir, il ne répond pas. Sa voisine a vu des hommes masqués, en civil, le faire monter dans une voiture sans plaque, vers 5 h du matin.\n\nAu commissariat : « Aucune interpellation à ce nom. »',
@@ -1698,15 +1825,26 @@ const CH = [
   van.visible = true; van.position.set(X.samia + 1.5, 0, -1.1); vanFlash = true; sfx('sirene');
   cops.forEach((c, i) => at(c, X.samia - 0.6 + i * 1.3, -3.4));
   await say('4 h 55. Des moteurs dans la rue. Des portières. Des lampes torches sur les façades.', 'Claire');
+  const hid = (await choose({ id: 'rafle', n: 5, from: 'Ta porte de derrière · 4 h 57', timer: 15, fallback: 'fermer',
+    body: 'Trois petits coups. Par la fenêtre de la cuisine, tu vois Rayan et sa petite sœur Nour, en pyjama, pieds nus dans ton jardin. Samia les a fait passer par-dessus le muret.' + (C.benali === 'mot' ? ' Elle sait qu\'elle peut compter sur toi.' : ' Elle n\'a personne d\'autre.') + '\n\nDans la rue, les lampes torches se rapprochent. Ils sont à trois maisons.',
+    ask: 'Tu as quelques secondes.',
+    options: [
+      { key: 'cacher', label: 'Ouvrir, et les cacher à la cave', hint: 'Cacher un enfant recherché, c\'est la prison. Pour toi, et peut-être pour Léo.' },
+      { key: 'fermer', label: 'Ne pas ouvrir', hint: 'Personne ne saura que tu étais réveillée.' }] })) === 'cacher';
   focus(X.samia, 0.6);
   await paper({ scene: true, kind: 'Ta vie', from: 'Rue des Tilleuls · 5 h du matin',
-    body: 'Ils ont une liste. Ils frappent au 6, chez les Benali, puis au 14, puis rue Jean-Jaurès.\n\nSamia descend en chaussons, avec les deux petits. Ils ont droit à un sac chacun. Le plus jeune demande s\'il peut prendre son cartable.\n\nOn les fait monter dans un car. On dit aux voisins de rentrer chez eux. Personne ne dit où va le car.',
+    body: hid ? 'Ils ont une liste. Ils frappent au 6, chez les Benali, puis au 14, puis rue Jean-Jaurès.\n\nSamia descend seule, en chaussons. « Les enfants ? » Elle répond qu\'ils sont chez leur père, en Algérie. Elle ne regarde pas ta fenêtre.\n\nOn la fait monter dans un car. On dit aux voisins de rentrer chez eux. Personne ne dit où va le car.' : 'Ils ont une liste. Ils frappent au 6, chez les Benali, puis au 14, puis rue Jean-Jaurès.\n\nSamia descend en chaussons, avec les deux petits. Ils ont droit à un sac chacun. Rayan demande s\'il peut prendre son cartable.\n\nOn les fait monter dans un car. On dit aux voisins de rentrer chez eux. Personne ne dit où va le car.',
     stamps: [
       { t: 'real', text: 'Paris, 16 et 17 juillet 1942 : 13 152 Juifs arrêtés à l\'aube par environ 9 000 policiers et gendarmes français, dont plus de 4 000 enfants. Des enfants déportés, six adolescents seulement sont revenus.', src: 'https://en.wikipedia.org/wiki/Vel%27_d%27Hiv_Roundup' },
       { t: 'real', text: 'Italie, octobre 2024 : ouverture de centres en Albanie où sont envoyés des migrants interceptés en mer, hors du territoire italien, le temps d\'examiner leur demande.', src: 'https://abcnews.go.com/International/wireStory/italy-formally-opens-centers-albania-process-male-migrants-114712678' },
       { t: 'fic', text: 'La rafle de la rue des Tilleuls.' }] });
   van.visible = false; vanFlash = false; cops.forEach((c) => (c.visible = false)); at(samia, 0, 0, false);
-  await say('Je suis restée derrière le rideau. Je n\'ai rien fait. Comme tout le monde.', 'Claire');
+  if (hid) {
+    await say('Rayan et Nour sont dans ma cave, derrière les cartons de Noël. Ils ne pleurent pas. Ils ont appris à se taire.', 'Claire');
+    await paper({ scene: true, kind: 'Ce que ça change', from: 'Deux jours plus tard',
+      body: 'Ta tante vient les chercher en voiture, pour sa ferme du Morvan. Sur le trajet, Nour s\'entraîne à dire son nouveau prénom : Louise.\n\nLe jeudi, des policiers fouillent les caves de la rue. Pas la tienne. Pas cette fois.',
+      stamps: [{ t: 'real', text: 'Sous l\'Occupation, des Français ont caché des Juifs au péril de leur vie. 4 303 d\'entre eux ont été reconnus « Justes parmi les nations » (Yad Vashem, 1er janvier 2023).', src: 'https://www.guichetdusavoir.org/question/voir/139945', more: [['Les Justes parmi les nations', 'https://encyclopedia.ushmm.org/content/fr/article/righteous-among-the-nations']] }] });
+  } else await say('Je suis restée derrière le rideau. Je n\'ai rien fait. Comme tout le monde.', 'Claire');
   bike.userData.parked = false; at(claire, X.claire + 1.2, -3.75); focus(X.claire + 3, 1.15);
   note('Sept ans. Il n\'y a plus besoin de loi pour être puni. Une décision suffit.', 'An 7', true);
   await hotspots([
@@ -1772,22 +1910,38 @@ const CH = [
   });
   note('Huit ans. Le mandat prolongé par le référendum de 2029 arrive à son terme. Claire distribue la propagande électorale.', 'An 8', true);
   await hotspots([
-    { kind: 'post', label: 'Propagande · n° 1', at: [8, 20], pos: H.claire.box, walkX: H.claire.box.x + 0.7, mail: H.claire.box, run: () => paper({
+    { kind: 'post', label: 'Propagande · n° 1', at: [8, 20], pos: H.claire.box, walkX: H.claire.box.x + 0.7, mail: H.claire.box, run: async () => { await paper({
       kind: 'Ta tournée', from: 'Commission de propagande · Élection présidentielle',
       body: 'Madame, Monsieur,\n\nVous trouverez ci-joint la profession de foi du seul candidat.\n\nCette année, un seul candidat a réuni les parrainages. Les autres dossiers ont été « déclarés irrecevables ».',
-      stamps: [{ t: 'real', text: 'Russie, février 2024 : Boris Nadejdine, seul candidat opposé à la guerre, écarté de la présidentielle par la commission électorale.', src: 'https://www.dhnet.be/actu/monde/2024/02/08/presidentielle-russe-le-seul-candidat-anti-poutine-annonce-que-sa-candidature-a-ete-rejetee-64CLXDYUXZHV5GUUGZZED7TGBE/' }, { t: 'real', text: 'Portugal de Salazar, 1958 : Humberto Delgado, seul opposant autorisé à se présenter, obtient officiellement 23 % dans une élection dénoncée comme truquée. En 1965, il est assassiné par la police politique.', src: 'https://fr.wikipedia.org/wiki/Humberto_Delgado' }] }) },
+      stamps: [{ t: 'real', text: 'Russie, février 2024 : Boris Nadejdine, seul candidat opposé à la guerre, écarté de la présidentielle par la commission électorale.', src: 'https://www.dhnet.be/actu/monde/2024/02/08/presidentielle-russe-le-seul-candidat-anti-poutine-annonce-que-sa-candidature-a-ete-rejetee-64CLXDYUXZHV5GUUGZZED7TGBE/' }, { t: 'real', text: 'Portugal de Salazar, 1958 : Humberto Delgado, seul opposant autorisé à se présenter, obtient officiellement 23 % dans une élection dénoncée comme truquée. En 1965, il est assassiné par la police politique.', src: 'https://fr.wikipedia.org/wiki/Humberto_Delgado' }] });
+      const k = await choose({ id: 'tract', n: 6, from: 'Ta sacoche · 8 h 25',
+        body: 'Au fond de ta sacoche, il y a encore la liasse que Julien avait laissée chez toi, il y a deux ans. Une feuille pliée en quatre : « Ils ne sont pas invincibles. Parlez-vous. Votez blanc. »\n\nTa tournée compte 214 boîtes aux lettres. Il y a une caméra au carrefour, une autre devant la mairie.',
+        options: [
+          { key: 'tract', label: 'Glisser aussi un tract de Julien dans chaque boîte', hint: 'Si on te reconnaît sur les images, tu disparais comme lui.' },
+          { key: 'rien', label: 'Distribuer seulement la profession de foi', hint: 'C\'est ton travail. Tout le monde sait déjà qui va gagner.' }] });
+      if (k === 'tract') await paper({ scene: true, kind: 'Ce que ça change', from: 'Le lendemain matin',
+        body: 'Rue Jean-Jaurès, il y a des tracts dans les boîtes. Ce ne sont pas les tiens : quelqu\'un d\'autre a eu la même idée.\n\nTu n\'es pas seule.',
+        stamps: [{ t: 'real', text: 'Munich, 18 février 1943 : Hans et Sophie Scholl, étudiants du groupe de la Rose blanche, sont arrêtés en distribuant des tracts contre le régime nazi. Ils sont exécutés le 22 février.', src: 'https://www.deutschland.de/fr/topic/politique/sophie-scholl-resistante-engagee-contre-le-regime-nazi-allemand' }] });
+    } },
     { kind: 'post', label: 'Abonnement · n° 10', at: [9, 0], pos: H.delmas.box, walkX: H.delmas.box.x + 0.7, mail: H.delmas.box, run: () => paper({
       kind: 'Ta tournée', from: 'La Poste · avis de non-distribution',
       body: 'Monsieur Delmas,\n\nVotre abonnement à votre quotidien ne peut plus être servi : publication suspendue par décision administrative.\n\nLe site d\'information que vous lisiez n\'est plus accessible depuis la France.',
       stamps: [{ t: 'real', text: 'Hongrie, octobre 2016 : Népszabadság, premier quotidien d\'opposition, fermé du jour au lendemain.', src: 'https://www.hrw.org/news/2016/10/10/hungarys-biggest-oppositional-daily-shut-down' }, { t: 'real', text: 'Espagne de Franco, 1938 : la loi sur la presse interdit de critiquer le régime, ses lois et sa version de l\'histoire. Elle restera en vigueur près de trente ans.', src: 'https://www.briefhistory.co.uk/1939/scw-post-war-censorship' }] }) },
     { kind: 'cit', label: 'Chez Bernadette', at: [9, 30], pos: local.door, walkX: local.doorX + 1.6, run: () => paper({
       scene: true, kind: 'Ta vie', from: 'Boîte aux lettres de Bernadette',
-      body: 'Le courrier de Bernadette s\'entasse depuis quatre ans.\n\nAu commissariat, on a dit : « transférée ». À la préfecture : « aucune trace ». Au tribunal : « pas de dossier ».\n\nMoussa a été expulsé. Vers où, personne ne sait. Julien non plus n\'est jamais revenu.',
+      body: 'Le courrier de Bernadette s\'entasse depuis quatre ans.\n\nAu commissariat, on a dit : « transférée ». À la préfecture : « aucune trace ». Au tribunal : « pas de dossier ».\n\n' + (C.moussa === 'prevenir' ? 'Une carte postale de Barcelone est arrivée pour elle l\'an dernier, sans signature. Juste : « Merci. Pardon. »' : 'Moussa a été expulsé. Vers où, personne ne sait.') + ' Julien non plus n\'est jamais revenu.',
       stamps: [{ t: 'real', text: 'États-Unis, mars 2025 : Kilmar Abrego Garcia, père de famille installé dans le Maryland, expulsé vers une méga-prison du Salvador. Le gouvernement lui-même parle d\'une « erreur administrative ».', src: 'https://www.truthdig.com/articles/deportation-of-el-salvador-national-to-mega-prison-deemed-administrative-error/' }] }) },
-    { kind: 'cit', label: 'Le lycée de Léo', at: [17, 10], pos: new THREE.Vector3(X.ecole + 1.15, 1.5, ZH + ZF + 0.3), walkX: X.ecole + 2.1, run: () => paper({
+    { kind: 'cit', label: 'Le lycée de Léo', at: [17, 10], pos: new THREE.Vector3(X.ecole + 1.15, 1.5, ZH + ZF + 0.3), walkX: X.ecole + 2.1, run: async () => { await paper({
       scene: true, kind: 'Ta vie', from: 'Léo, 16 ans',
-      body: 'Léo ne dessine plus. Au lycée, on vérifie les téléphones à l\'entrée.\n\nHier soir, il a demandé si on pouvait partir. Au Portugal, comme Jeanne Duarte. Ou ailleurs.\n\nJ\'ai dit qu\'on verrait.',
-      stamps: [{ t: 'fic', text: 'Léo est inventé. Les départs, eux, sont réels : des centaines de milliers de Russes ont quitté leur pays après 2022.' }] }) },
+      body: (C.leo === 'refuser' ? 'Léo filme tout, maintenant. Il garde ses vidéos sur une carte mémoire cachée dans sa chaussure.' : 'Léo ne dessine plus. Il parle peu.') + ' Au lycée, on vérifie les téléphones à l\'entrée.\n\nHier soir, il a demandé si on pouvait partir. Au Portugal, comme Jeanne Duarte. Ou ailleurs.',
+      stamps: [{ t: 'fic', text: 'Léo est inventé. Les départs, eux, sont réels : des centaines de milliers de Russes ont quitté leur pays après 2022.' }] });
+      await choose({ id: 'depart', n: 7, from: 'Ta cuisine · 22 h',
+        body: 'Ta mère est aux Glycines. Ta maison est payée. Tu as dix-neuf ans d\'ancienneté à La Poste.\n\nLéo a seize ans. Dans deux ans, il aura le droit de voter, si on vote encore.',
+        ask: 'Et maintenant ?',
+        options: [
+          { key: 'partir', label: 'Partir avec Léo', hint: 'Tout recommencer ailleurs, sans retraite, sans ta mère. Tant que les frontières sont ouvertes.' },
+          { key: 'rester', label: 'Rester', hint: 'Quelqu\'un doit encore porter les lettres. Et se souvenir des noms.' }] });
+    } },
   ]);
   focus(X.claire, 0.75); await walk(claire, X.claire + 1.2, -3.75, 4); claire.visible = false; bike.userData.parked = true; parkBike(X.claire + 1.0);
   H.claire.wins[1].closed = false; H.claire.wins[1].tv = true;
@@ -1796,11 +1950,13 @@ const CH = [
   await say('C\'est grave, maman ?', 'Léo, 16 ans');
   await say('Il y a huit ans, je t\'avais dit que ça ne changerait rien pour nous.', 'Claire');
   await say('Oui. C\'est grave.', 'Claire');
+  if (C.depart === 'partir') await say('Dans un mois, on part. Léo a choisi la ville : Porto. Je laisse la clé de la cave à ma voisine.', 'Claire');
+  else if (C.depart === 'rester') await say('On reste. Demain, à 6 h 30, je reprends ma tournée. Je connais tous les noms de la rue. Je ne les oublierai pas.', 'Claire');
   H.claire.wins[1].tv = false; closeHouse('claire', 3);
   await wait(2200);
   await card('Valberne n\'existe pas.', 'Rien de grave');
   music(null);
-  $('#bar').hidden = true; $('#endBack').hidden = true; $('#again').hidden = false; $('#end').hidden = false; $('#end').scrollTop = 0;
+  recap(); $('#bar').hidden = true; $('#endBack').hidden = true; $('#again').hidden = false; $('#end').hidden = false; $('#end').scrollTop = 0;
   },
 ];
 function catchUp(from) { // ce que les chapitres sautes ont laisse dans la rue
@@ -1808,6 +1964,7 @@ function catchUp(from) { // ce que les chapitres sautes ont laisse dans la rue
   if (from >= 3) pool.userData.rule.visible = true;
 }
 async function play(from = 0) {
+  if (from === 0) { C = {}; keepC(); }
   resetWorld(); catchUp(from);
   for (let i = from; i < CH.length; i++) { save(i); await CH[i](); }
   save(0);

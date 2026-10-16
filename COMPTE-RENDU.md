@@ -80,6 +80,20 @@ Affiche du cinéma lisible ; pastilles relisibles ; candidats condamnés ; Herro
 - Écran de fin mis à jour. Tests automatiques An 2 et An 6 → An 7 : sans erreur.
 - Second projet (Unreal, « L'Agent ») : brief dans `Music\l-agent\BRIEF.md`, à suivre dans une autre conversation.
 
+## 5 quinquies. v32 — choix (16 octobre 2026)
+
+Le jeu devient interactif à sept moments. `choose({ id, from, body, ask, options, timer, fallback })` affiche une lettre avec des boutons (titre « À toi de choisir · n sur 7 », risque écrit sous chaque choix, explication au premier choix, compte à rebours facultatif). Les décisions sont dans `C` (localStorage `rien-de-grave-choix`, remis à zéro à chaque nouvelle partie) et changent les scènes suivantes ; l'écran de fin affiche « Ce que tu as fait » (`RECAP`, `recap()`).
+
+1. **An 1 · `benali`** : glisser un mot (recours via Bernadette, un an d'allocations gagné ; Samia te fait confiance) ou non.
+2. **An 2 · `rassemblement`** : rester (blâme de La Poste au début de l'An 4, images de la mairie) ou rentrer.
+3. **An 4 · `moussa`** (nouvelle pastille « Recommandé · Moussa ») : prévenir (Moussa s'enfuit, Bernadette arrêtée seule, PV modifié, carte postale en An 8), garder la lettre (rien ne change, retenue sur la fiche de paie de l'An 6) ou faire signer.
+4. **An 6 · `leo`** (pastille « Léo, au commissariat ») : signer et effacer la vidéo, ou refuser (vidéo virale, Adam libéré, signalement). Tampon : censure de l'article 24 « sécurité globale », 20/05/2021.
+5. **An 7 · `rafle`** (15 s, ×1,4 sur téléphone ; par défaut : ne pas ouvrir) : cacher Rayan et Nour (enfants de Samia) ou non. Tampon : 4 303 Justes en France.
+6. **An 8 · `tract`** : glisser les tracts de Julien (Rose blanche, 1943) ou seulement la propagande.
+7. **An 8 · `depart`** (après « Le lycée de Léo ») : partir à Porto ou rester. Réplique finale différente.
+
+Tests : chapitres 1 à 6, branche « agir » et branche « ne rien faire », sans erreur.
+
 ## 6. Prochaines étapes
 
 1. **Son (bruitages, pas de musique)** : l'auteur hésite entre Soundly (sa bibliothèque), ElevenLabs, ou banques gratuites (Sonniss GDC bundle, Freesound CC0). Proposition : ~20 sons (lettre dans la boîte, tampon, volets, sonnette de vélo, pigeons, pas sur pavés, portières, sirène, terrasse de café, cour d'école, pluie sur zinc, télé) déposés dans `sons\`, puis découpe, normalisation et branchement ; fonds continus (pluie, rumeur) générables en WebAudio. Silence pendant la rafle et la veillée.
