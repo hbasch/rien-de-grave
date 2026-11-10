@@ -80,19 +80,43 @@ Affiche du cinéma lisible ; pastilles relisibles ; candidats condamnés ; Herro
 - Écran de fin mis à jour. Tests automatiques An 2 et An 6 → An 7 : sans erreur.
 - Second projet (Unreal, « L'Agent ») : brief dans `Music\l-agent\BRIEF.md`, à suivre dans une autre conversation.
 
-## 5 quinquies. v32 — choix (16 octobre 2026)
+## 5 quinquies. v32 (16 octobre 2026)
 
-Le jeu devient interactif à sept moments. `choose({ id, from, body, ask, options, timer, fallback })` affiche une lettre avec des boutons (titre « À toi de choisir · n sur 7 », risque écrit sous chaque choix, explication au premier choix, compte à rebours facultatif). Les décisions sont dans `C` (localStorage `rien-de-grave-choix`, remis à zéro à chaque nouvelle partie) et changent les scènes suivantes ; l'écran de fin affiche « Ce que tu as fait » (`RECAP`, `recap()`).
+- **Pastilles** : avec plus de 6 pastilles (An 6 en a 9) ou un écran de moins de 620 px de haut, les étiquettes passent sur une ligne (classe `#hots.compact`, sans « Tournée / Citoyenne ») ; la recherche de place libre balaie toute la largeur. Test An 6 en 960×540, 1280×720 et iPhone : 0 chevauchement sur 9 étiquettes, aucune erreur.
+- Détection téléphone (v30) : d'après l'appareil (`pointer: coarse`, taille d'écran), plus d'après la fenêtre ; un PC dans le cadre itch n'est plus bridé à 30 i/s.
+- Lien NosDéputés (mort) remplacé par la page « Vos députés » de l'Assemblée (v29).
+- **Vidéos réseaux sociaux** : `videos
+ien-de-grave-video-1/2/3.mp4` (1080×1920, 20 à 22 s, ambiance du jeu). 1 : le récit (soir de l'élection → « Oui. C'est grave. ») ; 2 : les tampons rouges (six faits réels) ; 3 : les quatre tampons expliqués.
 
-1. **An 1 · `benali`** : glisser un mot (recours via Bernadette, un an d'allocations gagné ; Samia te fait confiance) ou non.
-2. **An 2 · `rassemblement`** : rester (blâme de La Poste au début de l'An 4, images de la mairie) ou rentrer.
-3. **An 4 · `moussa`** (nouvelle pastille « Recommandé · Moussa ») : prévenir (Moussa s'enfuit, Bernadette arrêtée seule, PV modifié, carte postale en An 8), garder la lettre (rien ne change, retenue sur la fiche de paie de l'An 6) ou faire signer.
-4. **An 6 · `leo`** (pastille « Léo, au commissariat ») : signer et effacer la vidéo, ou refuser (vidéo virale, Adam libéré, signalement). Tampon : censure de l'article 24 « sécurité globale », 20/05/2021.
-5. **An 7 · `rafle`** (15 s, ×1,4 sur téléphone ; par défaut : ne pas ouvrir) : cacher Rayan et Nour (enfants de Samia) ou non. Tampon : 4 303 Justes en France.
-6. **An 8 · `tract`** : glisser les tracts de Julien (Rose blanche, 1943) ou seulement la propagande.
-7. **An 8 · `depart`** (après « Le lycée de Léo ») : partir à Porto ou rester. Réplique finale différente.
+## 5 sexies. v33 : six moments où le joueur décide (16 octobre 2026)
 
-Tests : chapitres 1 à 6, branche « agir » et branche « ne rien faire », sans erreur.
+Demandé dans la conversation « interactivité » : sauver des gens grâce au métier de factrice, jamais arrêter le système.
+- Moteur : `decide(lettre, choix, {timer, fallback})` remplace « Continuer » par 2 ou 3 boutons (aucun pré-sélectionné) ; `outcome()` affiche « Ce que ça change » avec le fait réel ; décisions dans `C`, sauvées avec le chapitre (`rien-de-grave-chapitre-choix`).
+- An 1 : lettre de la CAF des Benali, glisser l'adresse de Bernadette (recours, Vitrolles 1998) ou non. Conditionne l'An 7.
+- An 2 : rester au rassemblement ou rentrer. Si reste : convocation de La Poste à l'An 4 (Hongrie 2025, reconnaissance faciale) et Julien rappelle.
+- An 4 : nouvelle pastille « Recommandé · Moussa » : donner, prévenir (Moussa s'enfuit, Bernadette arrêtée quand même, PV modifié), « perdre » (avertissement). Écho : fuites du Vél' d'Hiv.
+- An 6 : Léo, 14 ans, au commissariat à 23 h : signer (vidéo effacée, il ne te parle plus) ou refuser (nuit au poste, signalement). Écho : article 24 « sécurité globale » censuré le 20/05/2021.
+- An 7 : rafle, compte à rebours de 10 s si Samia te fait confiance (An 1) : cacher les enfants à la cave ou non ; sinon ils ne viennent pas. Écho : plus de 4 300 Justes parmi les nations en France.
+- An 8 : tract de Julien dans les boîtes ou non (Défense de la France, 450 000 ex. en 1944) ; rester ou partir au Portugal (ligne de Claire avant les résultats).
+- Écran de fin : « Ce que tu as fait, ce que ça a changé » + phrase : tu pouvais aider des gens de ta rue, pas arrêter ce qui arrivait au pays, décidé dans l'isoloir. Écran titre : « Six fois, tu devras choisir ».
+- Tests : An 4 (prévenir + rassemblement), An 6 (refuser), An 7 sur iPhone (compte à rebours écoulé), An 8 jusqu'à l'écran de fin : sans erreur. 59 lettres et choix testés sur 7 tailles d'écran.
+
+## 5 septies. v34 : maisons en aplats, ~8 fois moins d'appels de dessin (27 octobre 2026)
+
+Demandé : réduire le coût des bâtiments « au plus simple et moins cher » (lenteur sur téléphone). La proposition « façades photographiées » (Claude Design) a été écartée.
+- Chaque maison est fusionnée au chargement en **un seul objet** (murs, toits, encadrements, balcons, portes) avec des couleurs unies par sommet. Les textures sont remplacées par leur couleur moyenne, et un seul matériau sert à toute la rue.
+- **Volets** : dessinés en série (instanciation), un modèle par type de volet. Ils pivotent toujours (fermeture des volets dans l'histoire).
+- **Vitres** : en série aussi. Leur couleur suit toujours le jour, la nuit, les fenêtres allumées et la télé.
+- Restent à part, comme avant : les objets qui apparaissent dans l'histoire (planches de la Bourse, avis de disparition, affiches, enseignes écrites), les vitrines et ce qui est transparent.
+- Mesures (rue entière, jour) : maisons 2 789 → 57 objets ; matériaux de la scène 2 425 → 630 ; **appels de dessin par image 3 052 → 393**.
+- Rendu quasi identique de jour et de nuit ; on perd surtout le grain des tuiles et des enduits.
+- `?detail` dans l'adresse = ancien rendu, pour comparer.
+- Façades peintes (boulangerie projetée) : désactivées par défaut, `?paint` pour les voir, en attendant les 10 autres façades.
+
+## 5 octies. v35 : plaques de rue (27 octobre 2026)
+
+- Supprimé le panneau « RUE DES TILLEULS » sur poteau au premier plan (en France, le nom de rue est sur les murs).
+- La plaque qui tombait entre la Bourse et la maison n° 1 est remplacée par deux plaques émaillées réalistes (bleu nuit, liseré blanc, petit « VALBERNE » au-dessus, vis, reflet de l'émail, épaisseur), vissées sur le mur, entre le rez-de-chaussée et l'étage : angle gauche du n° 1, angle droit du n° 6 (sous la jardinière). Pas sur le café : son enseigne la cachait.
 
 ## 6. Prochaines étapes
 

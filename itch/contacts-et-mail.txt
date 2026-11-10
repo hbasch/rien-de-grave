@@ -1,20 +1,24 @@
 RIEN DE GRAVE — À QUI L'ENVOYER, ET LE MAIL
 
-=== Le mail (court) ===
+=== Le mail (v2, 27/10/2026) ===
 
-Objet : « Rien de grave » — un récit interactif gratuit sur ce que changerait une victoire du RN
+Objet : Rien de grave, un récit interactif sur une victoire du RN
 
 Bonjour,
 
-Je m'appelle Hadrien Basch. J'ai réalisé « Rien de grave », un récit interactif gratuit, jouable en 25 minutes dans le navigateur, sur ordinateur ou téléphone : [lien itch.io]
+[une phrase propre au destinataire]
 
-On y suit Claire, factrice dans une petite ville, de l'élection de 2027 à la suivante. Chaque scène est fictive, mais porte des tampons qui renvoient à des faits réels et sourcés : décisions de mairies FN et RN, mesures du programme du RN, et ce qu'ont vécu d'autres pays (Vichy, Hongrie, États-Unis, Argentine…). La liste complète des sources est à la fin.
+Je m'appelle Hadrien Basch, je fais des jeux vidéo et des films documentaires. J'ai réalisé « Rien de grave », un récit interactif gratuit qui se joue en une demi-heure dans le navigateur, sur ordinateur ou téléphone : [lien itch.io]
 
-Le projet s'adresse surtout aux gens qui hésitent ou qui votent RN, sans les juger. Si vous pensez qu'il peut être utile à vos adhérents, lecteurs ou publics, n'hésitez pas à le relayer. Je suis aussi preneur de vos remarques, en particulier sur les faits cités.
+On y suit Claire, factrice dans une petite ville, de l'élection de 2027 à la suivante. Chaque matin elle distribue le courrier : une lettre de la CAF, un arrêté du maire, le menu de la cantine. Rien de grave, jusqu'à ce que ça le devienne. Six fois, le joueur doit choisir : prévenir un voisin, cacher des enfants, signer ou non un procès-verbal. Il peut aider des gens de sa rue, pas arrêter ce qui arrive au pays.
 
-Merci pour votre temps,
+Les scènes sont fictives, mais chacune porte des tampons qui renvoient à des faits réels et sourcés : décisions de mairies FN et RN depuis 1995, mesures du programme du RN, ce qu'ont vécu d'autres pays (Vichy, Hongrie, États-Unis, Argentine). Toutes les sources sont listées à la fin du jeu.
+
+Il s'adresse d'abord à ceux qui hésitent, ou qui pensent qu'au fond ça ne changerait pas grand-chose. S'il peut servir à vos adhérents, lecteurs ou publics, vous pouvez le relayer librement. Je suis aussi preneur de vos remarques, notamment sur les faits cités.
+
+Bien à vous,
 Hadrien Basch
-[téléphone / réseau]
+06 29 85 00 50
 
 === Adresses trouvées (vérifiées sur une page publique) ===
 

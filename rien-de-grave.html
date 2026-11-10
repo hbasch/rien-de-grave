@@ -37,6 +37,7 @@ body.gouache .veil { opacity: 1; }
 .hot.cit .ring { background: var(--cit); }
 .hot.done { opacity: .72; } .hot.done .ring { animation: none; background: #d9d2c4; color: #1b1b1b; font-size: 0.85rem; } .hot.done .kind { color: #d9d2c4; }
 .hot .lbl { background: rgba(13,20,36,.85); padding: 0.3rem 0.6rem; border-radius: 0.3rem; white-space: nowrap; }
+#hots.compact .hot .kind { display: none; } #hots.compact .hot { font-size: 0.85rem; padding: 0.25rem; } #hots.compact .hot .lbl { padding: 0.25rem 0.55rem; }
 .hot .kind { display: block; font: 400 0.68rem/1.1 var(--f-type); letter-spacing: .08em; text-transform: uppercase; color: var(--post); }
 .hot.cit .kind { color: var(--cit); }
 .hot[data-edge="r"] .t::after { content: " →"; }
@@ -67,7 +68,7 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
   border-radius: 0.15rem; box-shadow: 0 1.5rem 3rem rgba(0,0,0,.45); rotate: -0.6deg; animation: arrive .7s cubic-bezier(.2,.8,.3,1) .15s backwards; }
 /* ecran large : le texte a gauche, les tampons (les explications) a droite, tout visible sans scroller */
 @media (min-width: 820px) and (min-aspect-ratio: 4/3) {
-  .paper.duo { width: min(62rem, 100%); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto auto 1fr auto; column-gap: 2.2rem; }
+  .paper.duo { width: min(62rem, 100%); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto auto 1fr auto auto auto auto; column-gap: 2.2rem; }
   .paper.duo > :not(#lStamps) { grid-column: 1; }
   .paper.duo #lBody { margin-bottom: 0.4rem; }
   .paper.duo #lClose { justify-self: start; align-self: end; }
@@ -110,24 +111,19 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
 .stamp.prop { color: #5a4a12; }
 #lSrc { margin: 0.9rem 0 0; font-size: 0.85rem; }
 #lSrc a { color: inherit; }
+/* les moments ou le joueur decide */
+#lAsk { margin: 0.9rem 0 0.2rem; font: 700 0.8rem var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: #b3261e; }
+.paper.scene #lAsk { color: var(--post); }
+#lChoices { display: grid; gap: 0.5rem; margin-top: 0.5rem; outline: none; }
+#lChoices button { text-align: left; font: 700 1rem/1.3 var(--f-body); background: var(--paper-ink); color: var(--paper); border: 0; border-radius: 0.35rem; padding: 0.75rem 1rem; cursor: pointer; }
+#lChoices button small { display: block; font-weight: 400; font-size: 0.82rem; opacity: .8; margin-top: 0.15rem; }
+.paper.scene #lChoices button { background: var(--ink); color: var(--night); }
+#lChoices button:hover { outline: 3px solid var(--post); }
+#lTimer { height: 0.45rem; margin-top: 0.6rem; background: rgba(128,128,128,.3); border-radius: 1rem; overflow: hidden; }
+#lTimer i { display: block; height: 100%; width: 100%; background: #e5483d; transform-origin: left; }
+.paper.outcome { border-left: 0.5rem solid var(--post); }
 #lClose { margin-top: 1.1rem; font: 700 1rem var(--f-body); background: var(--paper-ink); color: var(--paper); border: 0; border-radius: 0.3rem; padding: 0.6rem 1rem; cursor: pointer; }
 .paper.scene #lClose { background: var(--ink); color: var(--night); }
-/* les moments ou l'on choisit */
-.paper.choice { border-top: 0.4rem solid var(--post); }
-#lStep { margin: 0 0 0.4rem; font: 700 0.78rem var(--f-body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--post); }
-#lHelp { margin: 0 0 0.9rem; padding: 0.6rem 0.8rem; border-radius: 0.3rem; background: rgba(243,194,58,.14); border-left: 0.25rem solid var(--post); font-size: 0.95rem; line-height: 1.45; }
-#lAsk { margin: 0.4rem 0 0.6rem; font-weight: 700; font-size: 1.08rem; }
-#lChoices { display: grid; gap: 0.55rem; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
-#lChoices button { text-align: left; font: 400 0.95rem/1.4 var(--f-body); color: inherit; background: rgba(255,255,255,.06); border: 2px solid currentColor; border-radius: 0.4rem; padding: 0.65rem 0.85rem; cursor: pointer; }
-#lChoices button:hover, #lChoices button:focus-visible { background: var(--post); color: var(--night); border-color: var(--post); }
-#lChoices button b { display: block; font-size: 1.04rem; margin-bottom: 0.15rem; }
-#lChoices button small { display: block; font-size: 0.86rem; opacity: 0.85; }
-#lTimer { height: 0.35rem; border-radius: 1rem; background: rgba(255,255,255,.15); overflow: hidden; margin: 0 0 0.6rem; }
-#lTimer i { display: block; height: 100%; background: #e5484d; transform-origin: left; }
-#recap { margin: 0 0 1.6rem; padding: 1rem 1.2rem; border: 2px solid var(--post); border-radius: 0.5rem; }
-#recap h3 { margin-top: 0; color: var(--post); }
-#recap li { margin-bottom: 0.45rem; }
-#recap .moral { margin: 0.8rem 0 0; font-weight: 700; }
 
 .screen { position: fixed; inset: 0; overflow-y: auto; background: radial-gradient(ellipse at 50% 30%, #1c2742 0%, var(--night) 70%); }
 .screen-in { width: min(40rem, 100%); margin: 0 auto; padding-inline: 1.25rem; padding-block: max(3rem, 9vh) 3rem; display: grid; gap: 1.1rem; box-sizing: border-box; }
@@ -207,6 +203,7 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
 #end li small { display: block; color: var(--muted); font-size: 0.88rem; margin-top: 0.15rem; }
 #end p { margin: 0; line-height: 1.55; }
 #end .vote { background: rgba(243,194,58,.12); border: 1px solid rgba(243,194,58,.4); border-radius: 0.5rem; padding: 1.1rem; display: grid; gap: 0.7rem; }
+#mineBox { display: grid; gap: 0.8rem; } #end .mine-end { font-weight: 700; }
 #end .credits { font-size: 0.85rem; color: var(--muted); }
 
 #bar { position: fixed; top: calc(0.6rem + env(safe-area-inset-top, 0px)); left: 0.75rem; right: 0.75rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 0.5rem; pointer-events: none; }
@@ -260,13 +257,13 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
 
 <div id="letter" hidden role="dialog" aria-modal="true" aria-labelledby="lFrom">
   <div class="paper" id="paper">
-    <p id="lStep" hidden></p>
     <p id="lKind"></p>
     <p id="lFrom"></p>
-    <p id="lHelp" hidden></p>
     <p id="lBody"></p>
     <div id="lStamps"></div>
-    <div id="lPick" hidden><p id="lAsk"></p><div id="lTimer" hidden><i></i></div><div id="lChoices"></div></div>
+    <p id="lAsk" hidden></p>
+    <div id="lChoices" hidden></div>
+    <div id="lTimer" hidden><i></i></div>
     <button id="lClose" type="button">Continuer</button>
   </div>
   <button id="lMore" type="button" hidden>↓ La suite</button>
@@ -319,15 +316,19 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
       <p><span class="mini fic">Pas encore arrivé</span> la fiction, toujours inspirée de faits réels</p>
     </div>
     <div class="start-row"><button id="start" class="big" type="button" disabled>Chargement…</button><button id="resume" class="ghost" type="button" hidden>Reprendre</button><button id="tFull" class="ghost" type="button" hidden>Plein écran</button></div>
-    <p class="warn">Touche les points jaunes pour ta tournée de factrice, les bleus pour ta vie de citoyenne. Sept fois, tu devras choisir : ce que tu fais change le sort de quelqu'un. Avec le son, sur ordinateur ou téléphone. Contient des scènes d'arrestation.</p>
+    <p class="warn">Touche les points jaunes pour ta tournée de factrice, les bleus pour ta vie de citoyenne. Six fois, tu devras choisir, et tes choix auront des suites. Contient des scènes d'arrestation.</p>
   </div>
 </section>
 
 <section id="end" class="screen" hidden>
   <div class="screen-in">
     <p class="tag">Fin · Valberne n'existe pas. Le reste, si.</p>
-    <div id="recap" hidden></div>
     <h2>Tout ce qui portait un tampon rouge a déjà eu lieu.</h2>
+    <div id="mineBox" hidden>
+      <h3 class="more">Ce que tu as fait, ce que ça a changé</h3>
+      <ul id="mine"></ul>
+      <p class="mine-end">Tu pouvais aider des gens de ta rue. Tu ne pouvais pas arrêter ce qui arrivait au pays : ça s'est décidé un soir de mai, dans l'isoloir.</p>
+    </div>
     <h3 class="real">Déjà arrivé en France</h3>
     <ul>
       <li>La Constitution changée par un référendum de l'article 11, sans vote du Parlement ; le Conseil constitutionnel se déclare incompétent. <small>De Gaulle, 28 octobre 1962.</small> <a href="https://www.publicsenat.fr/actualites/politique/aux-origines-de-l-election-du-president-par-les-francais-un-coup-de-poker" target="_blank" rel="noopener">Source</a></li>
@@ -464,6 +465,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { BokehPass } from 'three/addons/postprocessing/BokehPass.js';
 import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
 const $ = (s) => document.querySelector(s);
 const FAST = new URLSearchParams(location.search).has('fast'); // test mode only
@@ -526,7 +528,7 @@ const fsLabel = () => { const t = isFull() ? 'Quitter le plein écran' : 'Plein 
 $('#tFull').onclick = toggleFull; $('#fsBtn').onclick = toggleFull;
 $('#mFull').onclick = () => { toggleFull(); closeMenu(); };
 $('#mRestart').onclick = () => { save(0); location.reload(); };
-$('#mFacts').onclick = () => { closeMenu(); $('#endBack').hidden = false; $('#again').hidden = true; $('#end').hidden = false; $('#end').scrollTop = 0; };
+$('#mFacts').onclick = () => { closeMenu(); renderMine(); $('#endBack').hidden = false; $('#again').hidden = true; $('#end').hidden = false; $('#end').scrollTop = 0; };
 $('#endBack').onclick = () => { $('#end').hidden = true; $('#endBack').hidden = true; $('#again').hidden = false; };
 addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#bar').hidden) { if ($('#menu').hidden && $('#end').hidden) openMenu(); else if (!$('#menu').hidden) closeMenu(); } });
 
@@ -547,6 +549,7 @@ scene.fog = new THREE.Fog('#0d1424', 22, 62);
 const camera = new THREE.PerspectiveCamera(30, 1, 0.6, 220);
 const pmrem = new THREE.PMREMGenerator(renderer);
 const envTex = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+let flatMat = null; // materiau unique des maisons en aplats (voir MAISONS EN APLATS)
 const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(1, 1, { samples: PHONE ? 2 : 4, type: THREE.HalfFloatType }));
 composer.addPass(new RenderPass(scene, camera));
 // "maquette" test: a steeper look-down and a real depth-of-field, like a photo of a model railway
@@ -846,7 +849,6 @@ const lamps = [];
   const L = new THREE.PointLight('#ffc477', 16, 10, 1.6); L.position.set(0, 3.2, -0.65); g.add(L);
   shade(g); scene.add(g); lamps.push({ L, headMat });
 });
-{ const s = sign('RUE DES\nTILLEULS', 1.1, 0.55, { bg: '#1f4f9a', fg: '#ffffff', border: '#e8eef6', radius: 0.04 }); s.position.set(-13, 2.45, 3.62); s.userData.fade = true; scene.add(s); }
 const leafMat = mat('#3f5a3a'); const leafSpec = leafMat.userData.spec; const trees = [];
 // model-railway trees: a real (decimated) Poly Haven trunk, foliage made of lumpy foam clumps
 const foamTex = canvasTex(256, 256, (x, w, h) => { x.fillStyle = '#b9b9b9'; x.fillRect(0, 0, w, h);
@@ -1004,8 +1006,27 @@ for (let x = -24; x <= 24; x += 1.6) { if (x > -6.6 && x < -0.2) continue; if (M
 { const ab = new THREE.Group(); const board = sign('Baguette\ntradition\n1,30 €\nPain au chocolat', 0.55, 0.78, { bg: '#26302a', fg: '#f2efe6', border: '#8a6a4a', radius: 0.02, font: 'Caveat', weight: 700 });
   board.position.set(0, 0.5, 0.11); board.rotation.x = -0.18; ab.add(board); const back = box(0.6, 0.85, 0.03, '#8a6a4a', 0.01); back.position.set(0, 0.47, -0.08); back.rotation.x = 0.18; ab.add(back);
   ab.position.set(X.bakery + 1.85, 0.13, -4.55); shade(ab); scene.add(ab); }
-{ const pl = sign('RUE DES TILLEULS', 1.2, 0.3, { bg: '#1f3f8a', fg: '#ffffff', border: '#e8eef6', radius: 0.04 }); pl.position.set(X.claire - 1.62, 2.42, ZH + ZF + 0.03); scene.add(pl);
-  const pl2 = sign('VALBERNE', 0.6, 0.14, { bg: '#1f3f8a', fg: '#e8eef6', radius: 0.03 }); pl2.position.set(X.claire - 1.62, 2.2, ZH + ZF + 0.03); scene.add(pl2); }
+// plaques de rue emaillees, comme en France : bleu nuit, liseré blanc, vissées sur le mur de la maison qui fait l'angle, entre le rez-de-chaussée et l'étage
+const plaqueTex = (top, name, w, h) => { const S = 512, cw = Math.round(w * S), ch = Math.round(h * S);
+  return canvasTex(cw, ch, (x) => {
+    const r = ch * 0.1; const gr = x.createLinearGradient(0, 0, 0, ch); gr.addColorStop(0, '#2a4a8c'); gr.addColorStop(0.5, '#1d3a78'); gr.addColorStop(1, '#16306a');
+    x.fillStyle = gr; x.beginPath(); x.roundRect(0, 0, cw, ch, r); x.fill();
+    const m = ch * 0.085; x.strokeStyle = '#f3f1ea'; x.lineWidth = ch * 0.035; x.beginPath(); x.roundRect(m, m, cw - 2 * m, ch - 2 * m, r * 0.6); x.stroke();
+    x.fillStyle = 'rgba(255,255,255,0.10)'; x.beginPath(); x.ellipse(cw * 0.3, ch * 0.22, cw * 0.32, ch * 0.12, -0.05, 0, 7); x.fill(); // reflet de l'email
+    x.fillStyle = '#f3f1ea'; x.textAlign = 'center'; x.textBaseline = 'middle';
+    const cond = (txt, px, y, maxW) => { x.font = `700 ${px}px "Atkinson Hyperlegible", "Arial Narrow", sans-serif`; const tw = x.measureText(txt).width; const k = Math.min(0.78, maxW / tw); x.save(); x.translate(cw / 2, y); x.scale(k, 1); x.fillText(txt, 0, 0); x.restore(); };
+    if (top) { cond(top, ch * 0.17, ch * 0.3, cw * 0.5); cond(name, ch * 0.36, ch * 0.62, cw * 0.78); } else cond(name, ch * 0.42, ch * 0.52, cw * 0.78);
+    for (const sx of [m * 0.5 + 2, cw - m * 0.5 - 2]) { x.fillStyle = '#c9ccd2'; x.beginPath(); x.arc(sx, ch / 2, ch * 0.03, 0, 7); x.fill(); } // vis
+  }); };
+const plaques = [];
+function streetPlate(h, side, y = 2.52) { // side -1 : angle gauche de la maison, +1 : angle droit
+  const W = 1.05, Hh = 0.3, g = new THREE.Group();
+  const back = box(W + 0.02, Hh + 0.02, 0.018, '#14285a', 0.008); g.add(back);
+  const face = new THREE.Mesh(new THREE.PlaneGeometry(W, Hh), mat('#ffffff', { map: plaqueTex('VALBERNE', 'RUE DES TILLEULS', W, Hh), rough: 0.35 }));
+  face.position.z = 0.0105; g.add(face);
+  g.position.set(side * (h.w / 2 - W / 2 - 0.16), y, ZF + 0.012); h.g.add(g); shade(g); plaques.push(g); return g;
+}
+streetPlate(H.claire, -1); streetPlate(H.samia, 1, 2.28); // pas sur le cafe : son enseigne la cacherait ; plus bas, sous la jardiniere
 
 // cotton-wool clouds hung above the model, drifting slowly
 const cloudMat = mat('#ffffff', { rough: 1 }); const cloudSpec = cloudMat.userData.spec; const clouds = [];
@@ -1212,12 +1233,12 @@ function applyEnv(dt) {
   tmpC.copy(dayGlass).lerp(warm, env.glow).multiplyScalar(1 + env.glow * 0.9);
   windows.forEach((w) => { if (w.tv) w.glassMat.color.copy(tvBlue).multiplyScalar(1.1 + Math.random() * 0.6); else w.glassMat.color.copy(tmpC); });
   [bakery, agency].forEach((s) => { const lit = s.shopBase.getHex() !== 0x3a3a3a; s.shopGlass.color.copy(tmpC2.copy(s.shopBase).lerp(warm, lit ? env.glow * 0.6 : 0).multiplyScalar(lit ? 1 + env.glow * 0.6 : 1)); }); // a closed shop stays dark
-  if (STYLE !== 'gouache') specs.forEach((s) => { const m = s.cache[STYLE]; if (m) m.envMapIntensity = env.envI; });
+  if (STYLE !== 'gouache') specs.forEach((s) => { const m = s.cache[STYLE]; if (m) m.envMapIntensity = env.envI; }); if (flatMat && STYLE !== 'gouache') flatMat.envMapIntensity = env.envI;
 }
 
 /* ===== CAMERA & STYLE ===== */
 const focus = (x, zoom = 1) => { cam.x = x; cam.zoom = zoom; };
-if (FAST) window.__dbg = { focus, cam, setMode: (m) => setMode(m, true), showPaper, choose: (a) => choose(a) }; // test mode only
+if (FAST) window.__dbg = { focus, cam, setMode: (m) => setMode(m, true), showPaper, THREE, H, scene, renderer }; // test mode only (captures des facades)
 function placeCamera(dt, t) {
   const k = 1 - Math.exp(-dt * 1.6);
   cam.cx += (cam.x - cam.cx) * k; cam.cz += (cam.zoom - cam.cz) * k; cam.cu += (cam.up - cam.cu) * k;
@@ -1276,17 +1297,59 @@ async function card(sub, title, during) {
   for (let i = hots.length - 1; i >= 0; i--) if (hots[i].el.classList.contains('done')) { hots[i].el.remove(); hots.splice(i, 1); } // markers of the previous chapter
   el.classList.remove('off'); await wait(1100); if (during) await during(); await wait(1500); el.classList.add('off'); await wait(700);
 }
+const MINE = [ // le bilan de fin : chaque choix, ce qu'il a change, et le fait reel qui lui repond
+  ['caf', 'An 1 · La lettre de la CAF', { mot: 'Tu as glissé l\'adresse de Bernadette. Les Benali ont gardé leurs allocations un an de plus, et Samia t\'a fait confiance.', depot: 'Tu as déposé la lettre. Les Benali ont perdu leurs allocations.' }, 'Vitrolles, 1998 : un recours fait annuler une prime réservée aux Français.', 'https://www.universalis.fr/evenement/8-novembre-2000-condamnation-a-deux-ans-d-ineligibilite-de-catherine-megret/'],
+  ['rassemblement', 'An 2 · Le rassemblement', { reste: 'Tu es restée. Filmée, convoquée par La Poste. Julien t\'a rappelée.', rentre: 'Tu es rentrée. Personne ne t\'a vue.' }, 'Hongrie, 2025 : la reconnaissance faciale contre les manifestants.', 'https://www.amnesty.fr/discriminations/actualites/interdiction-marches-fiertes-hongrie'],
+  ['moussa', 'An 4 · Le recommandé de Moussa', { prevenir: 'Tu l\'as prévenu. Moussa est parti à temps. Bernadette a été arrêtée.', perdre: 'Tu as « perdu » la lettre. Ça n\'a rien changé pour lui, et tu as reçu un avertissement.', normal: 'Tu as donné la lettre. Moussa a été arrêté le soir même.' }, 'Paris, 1942 : des familles échappent à la rafle du Vél\' d\'Hiv parce qu\'on les a prévenues.', 'https://en.wikipedia.org/wiki/Vel%27_d%27Hiv_roundup'],
+  ['leo', 'An 6 · Léo au commissariat', { signer: 'Tu as signé. Léo est rentré, la vidéo a été effacée.', refuser: 'Tu as refusé. Léo a passé la nuit au poste, la vidéo a circulé.' }, 'France, 2021 : le Conseil constitutionnel protège le droit de filmer la police.', 'https://lcp.fr/actualites/censure-de-l-ex-article-24-de-la-loi-de-securite-globale-nous-ne-lacherons-rien-promet'],
+  ['rafle', 'An 7 · La rafle', { cacher: 'Tu as caché les enfants de Samia. Ils sont en vie, en Belgique.', rideau: 'Tu n\'as pas ouvert. Les enfants sont partis dans le car avec leur mère.', absent: 'Les enfants de Samia ne sont pas venus chez toi : elle ne te connaissait pas assez.' }, 'France, 1940–1944 : plus de 4 300 Français reconnus Justes parmi les nations.', 'https://www.guichetdusavoir.org/question/voir/139945'],
+  ['tract', 'An 8 · La propagande', { tract: 'Tu as glissé le tract de Julien dans les boîtes. Quelqu\'un l\'a lu.', distribuer: 'Tu as distribué la profession de foi du candidat unique.' }, 'Paris, 1944 : le journal clandestin Défense de la France tire à 450 000 exemplaires.', 'https://en.wikipedia.org/wiki/D%C3%A9fense_de_la_France'],
+  ['partir', 'An 8 · Rester ou partir', { rester: 'Tu es restée à Valberne.', partir: 'Tu es partie au Portugal avec Léo.' }, '', ''],
+];
+function renderMine() {
+  const ul = $('#mine'); ul.textContent = ''; let n = 0;
+  MINE.forEach(([k, title, txt, echo, src]) => {
+    if (!C[k] || !txt[C[k]]) return; n++;
+    const li = document.createElement('li'); const b = document.createElement('b'); b.textContent = title + ' · '; li.append(b, txt[C[k]]);
+    if (echo) { const sm = document.createElement('small'); sm.textContent = echo + ' '; const a = document.createElement('a'); a.href = src; a.target = '_blank'; a.rel = 'noopener'; a.textContent = 'Source'; sm.append(a); li.append(sm); }
+    ul.append(li);
+  });
+  $('#mineBox').hidden = !n;
+}
 const STAMP = { real: 'Déjà arrivé', prog: 'Au programme du RN', prop: 'Déjà proposé', fic: 'Pas encore arrivé' };
 let paperLog = null; // the letters a hotspot opened, so it can be read again
 // telephone : si la lettre depasse l'ecran, un bouton signale qu'il reste les tampons en bas
-function moreHint() { const L = $('#letter'); $('#lMore').hidden = L.hidden || !$('#lPick').hidden || L.scrollTop + L.clientHeight >= L.scrollHeight - 8; }
+function moreHint() { const L = $('#letter'); $('#lMore').hidden = L.hidden || L.scrollTop + L.clientHeight >= L.scrollHeight - 8; }
 $('#letter').addEventListener('scroll', moreHint, { passive: true }); addEventListener('resize', moreHint);
 $('#lMore').onclick = () => { const L = $('#letter'); L.scrollBy({ top: L.clientHeight * 0.75, behavior: 'smooth' }); };
 function paper(args) { if (paperLog) paperLog.push(args); return showPaper(args); }
+// Six moments ou le joueur decide. C garde ses decisions (sauvees avec le chapitre).
+let C = {};
+let firstChoice = true;
+function decide(args, choices, { timer = 0, fallback = null } = {}) {
+  if (paperLog) paperLog.push({ ...args, body: args.body }); // relire = la lettre, sans les boutons
+  return new Promise((res) => {
+    const ask = $('#lAsk'), box = $('#lChoices'), bar = $('#lTimer');
+    ask.textContent = firstChoice ? 'À toi de décider. Il n\'y a pas de bonne réponse sans risque, et ce choix aura des suites.' : 'À toi de décider.';
+    firstChoice = false;
+    box.textContent = '';
+    let done = false, t0 = performance.now(), raf = 0;
+    const pick = (id) => { if (done) return; done = true; cancelAnimationFrame(raf); ask.hidden = box.hidden = bar.hidden = true; $('#lClose').hidden = false; $('#letter').hidden = true; $('#lMore').hidden = true; res(id); };
+    choices.forEach((c) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = c.label; if (c.hint) { const sm = document.createElement('small'); sm.textContent = c.hint; b.append(sm); } b.onclick = () => pick(c.id); box.append(b); });
+    showPaper(args); // affiche la lettre ; on remplace « Continuer » par les choix
+    $('#lClose').hidden = true; ask.hidden = box.hidden = false; box.tabIndex = -1; box.focus({ preventScroll: true }); // pas de bouton pre-selectionne : aucun choix n'est suggere
+    if (timer) { bar.hidden = false; const i = bar.querySelector('i'); const tick = () => { const k = Math.min(1, (performance.now() - t0) / (timer * 1000 * (FAST ? 0.2 : 1))); i.style.transform = `scaleX(${1 - k})`; if (k >= 1) pick(fallback); else raf = requestAnimationFrame(tick); }; tick(); }
+    requestAnimationFrame(moreHint);
+  });
+}
+// « Ce que ca change » : la suite d'un choix, avec le fait reel qui lui repond
+async function outcome(from, body, stamps = []) {
+  await showPaper({ kind: 'Ce que ça change', from, body, stamps, scene: true });
+}
 function showPaper({ kind, from, body, stamps = [], scene: isScene = false }) {
   return new Promise((res) => {
-    $('#paper').className = 'paper' + (isScene ? ' scene' : '') + (stamps.length ? ' duo' : '') + (stamps.length > 2 ? ' many' : '');
-    $('#lStep').hidden = true; $('#lHelp').hidden = true; $('#lPick').hidden = true; $('#lClose').hidden = false;
+    $('#paper').className = 'paper' + (isScene ? ' scene' : '') + (stamps.length ? ' duo' : '') + (stamps.length > 2 ? ' many' : '') + (kind === 'Ce que ça change' ? ' outcome' : '');
+    $('#lClose').hidden = false; $('#lAsk').hidden = $('#lChoices').hidden = $('#lTimer').hidden = true;
     $('#lKind').textContent = kind || ''; $('#lFrom').textContent = from; $('#lBody').textContent = body;
     const box = $('#lStamps'); box.textContent = '';
     stamps.forEach((st, i) => {
@@ -1300,50 +1363,6 @@ function showPaper({ kind, from, body, stamps = [], scene: isScene = false }) {
     if (stamps.some((st) => st.t === 'real')) sfx('tampon');
     $('#lClose').onclick = () => { L.hidden = true; $('#lMore').hidden = true; res(); };
   });
-}
-
-/* ===== CHOIX : six moments ou le joueur agit ===== */
-const CKEY = 'rien-de-grave-choix';
-let C = {}; try { C = JSON.parse(localStorage.getItem(CKEY) || '{}') || {}; } catch (e) { C = {}; }
-const keepC = () => { try { localStorage.setItem(CKEY, JSON.stringify(C)); } catch (e) {} };
-const CHOICE_N = 7;
-function choose({ id, n: _n, from, body, ask = 'Que fais-tu ?', options, timer = 0, fallback, scene = true }) {
-  return new Promise((res) => {
-    const n = Object.keys(C).length + 1; // numerotes dans l'ordre ou on les rencontre
-    $('#paper').className = 'paper choice' + (scene ? ' scene' : '');
-    $('#lStep').hidden = false; $('#lStep').textContent = `À toi de choisir · ${n} sur ${CHOICE_N}`;
-    $('#lKind').textContent = ''; $('#lFrom').textContent = from; $('#lBody').textContent = body; $('#lStamps').textContent = '';
-    const help = $('#lHelp');
-    if (n === 1) { help.hidden = false; help.textContent = 'Pour la première fois, tu peux agir. Il y aura sept moments comme celui-ci. Tu ne pourras pas empêcher ce qui arrive à tout le monde, mais tu peux changer le sort de quelqu\'un. Chaque geste a un prix : sous chaque choix, tu vois ce que tu risques.'; }
-    else if (timer) { help.hidden = false; help.textContent = 'Le temps compte. Si tu ne choisis pas, c\'est aussi un choix.'; }
-    else help.hidden = true;
-    $('#lAsk').textContent = ask; $('#lPick').hidden = false; $('#lClose').hidden = true;
-    const box = $('#lChoices'); box.textContent = '';
-    let done = false, tid = 0;
-    const pick = (key) => { if (done) return; done = true; clearTimeout(tid); C[id] = key; keepC(); $('#lTimer').hidden = true; $('#lPick').hidden = true; $('#lClose').hidden = false; $('#letter').hidden = true; $('#lMore').hidden = true; res(key); };
-    options.forEach((o) => { const b = document.createElement('button'); b.type = 'button'; b.dataset.key = o.key; const t = document.createElement('b'); t.textContent = o.label; const h = document.createElement('small'); h.textContent = o.hint; b.append(t, h); b.onclick = () => pick(o.key); box.append(b); });
-    const tb = $('#lTimer');
-    if (timer) { const ms = timer * (PHONE ? 1.4 : 1) * 1000; tb.hidden = false; const bar = tb.firstElementChild; bar.style.transition = 'none'; bar.style.transform = 'scaleX(1)'; requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.transition = `transform ${ms}ms linear`; bar.style.transform = 'scaleX(0)'; })); tid = setTimeout(() => pick(fallback), ms); }
-    else tb.hidden = true;
-    const L = $('#letter'); L.hidden = false; L.scrollTop = 0; box.firstElementChild.focus({ preventScroll: true }); requestAnimationFrame(moreHint);
-  });
-}
-const RECAP = {
-  benali: { mot: 'Tu as glissé un mot dans la lettre des Benali : leur recours leur a fait gagner un an d\'allocations.', rien: 'Tu as déposé la lettre de la CAF des Benali, sans rien ajouter.' },
-  rassemblement: { rester: 'Tu es restée au rassemblement : un blâme dans ton dossier, pour toujours. Julien t\'a reparlé.', rentrer: 'Tu es rentrée avant le rassemblement. Personne ne t\'a rien reproché.' },
-  moussa: { prevenir: 'Tu as prévenu Moussa : il a échappé à l\'arrestation. Bernadette, non.', garder: 'Tu as gardé la lettre de Moussa dans ta sacoche : la police n\'en avait pas besoin, il a été arrêté.', distribuer: 'Tu as fait signer son recommandé à Moussa. Il a été arrêté le soir même.' },
-  leo: { signer: 'Tu as signé pour que Léo sorte, et la vidéo a été effacée. Léo a mis un an à te reparler.', refuser: 'Tu as refusé d\'effacer la vidéo de Léo : elle a fait libérer Adam. Ton employeur a reçu un signalement.' },
-  rafle: { cacher: 'Tu as caché Rayan et Nour dans ta cave. Ils vivent, sous d\'autres prénoms.', fermer: 'Tu n\'as pas ouvert ta porte à Rayan et Nour. On les a fait monter dans le car avec leur mère.' },
-  tract: { tract: 'Tu as glissé les tracts de Julien dans les boîtes. D\'autres ont fait pareil.', rien: 'Tu as distribué la propagande du candidat unique, et rien d\'autre.' },
-  depart: { partir: 'Avec Léo, vous partez au Portugal.', rester: 'Avec Léo, vous restez à Valberne.' },
-};
-function recap() {
-  const el = $('#recap'), items = Object.keys(RECAP).filter((k) => C[k] && RECAP[k][C[k]]);
-  if (!items.length) { el.hidden = true; return; }
-  el.textContent = ''; const h = document.createElement('h3'); h.textContent = 'Ce que tu as fait'; const ul = document.createElement('ul');
-  items.forEach((k) => { const li = document.createElement('li'); li.textContent = RECAP[k][C[k]]; ul.append(li); });
-  const m = document.createElement('p'); m.className = 'moral'; m.textContent = 'Tu as pu sauver quelqu\'un, ou pas. Tu n\'as pas pu empêcher ce qui est arrivé à tous les autres : une fois le pouvoir installé, chaque geste coûte cher et ne sauve qu\'une personne à la fois. Le seul jour où chacun pouvait changer le cours des choses pour tout le monde, sans risque, c\'était le jour du vote.';
-  el.append(h, ul, m); el.hidden = false;
 }
 const hots = [];
 function hotspots(list) {
@@ -1384,6 +1403,8 @@ function placeHots() {
   const top = (bar.hidden ? 0 : $('#clock').getBoundingClientRect().bottom) + 8;
   const bottom = (cap.hidden ? innerHeight : cap.getBoundingClientRect().top) - 8;
   const placed = [];
+  // beaucoup de pastilles ou ecran bas : etiquettes sur une ligne (la couleur du rond dit deja Tournee ou Citoyenne)
+  $('#hots').classList.toggle('compact', hots.filter((h) => h.el.style.opacity !== '0').length > 6 || innerHeight < 620);
   hots.forEach((h) => {
     v3.copy(h.pos).project(camera);
     const el = h.el, w = el.offsetWidth, ht = el.offsetHeight;
@@ -1399,7 +1420,8 @@ function placeHots() {
     let x = sx, y = base;
     if (hit(x, y)) {
       const ys = []; for (let v = lo; v <= hi; v += 4) ys.push(v); ys.sort((m, n) => Math.abs(m - base) - Math.abs(n - base));
-      const dir = sx > innerWidth / 2 ? -1 : 1, xs = [sx, sx + dir * (w + 10), sx + dir * 2 * (w + 10)].map((v) => Math.min(Math.max(v, 28), maxX));
+      const xs = [sx]; for (let k = 1; k < 30; k++) xs.push(sx - k * 40, sx + k * 40); // de plus en plus loin, des deux cotes
+      xs.forEach((v, n) => (xs[n] = Math.min(Math.max(v, 28), maxX)));
       let found = false;
       for (const cx of xs) { const cy = ys.find((v) => !hit(cx, v)); if (cy !== undefined) { x = cx; y = cy; found = true; break; } }
       if (!found) { x = sx; y = base; }
@@ -1454,7 +1476,8 @@ function resetWorld() { cam.up = 0;
 const CHAPTERS = ['Le soir de l\'élection', 'An 1', 'An 2', 'An 4', 'An 6', 'An 7', 'An 8'];
 const SAVE = 'rien-de-grave-chapitre';
 const saved = () => { try { const v = +localStorage.getItem(SAVE); return v >= 1 && v < CHAPTERS.length ? v : 0; } catch (e) { return 0; } };
-const save = (i) => { try { if (i) localStorage.setItem(SAVE, String(i)); else localStorage.removeItem(SAVE); } catch (e) {} };
+const save = (i) => { try { if (i) { localStorage.setItem(SAVE, String(i)); localStorage.setItem(SAVE + '-choix', JSON.stringify(C)); } else { localStorage.removeItem(SAVE); localStorage.removeItem(SAVE + '-choix'); } } catch (e) {} };
+const savedChoices = () => { try { return JSON.parse(localStorage.getItem(SAVE + '-choix') || '{}') || {}; } catch (e) { return {}; } };
 const CH = [
   async () => {
   resetWorld(); focus(X.claire, 0.75); H.claire.wins[1].tv = true; music('nuit'); setEra(0);
@@ -1492,14 +1515,14 @@ const CH = [
       stamps: [
         { t: 'real', text: 'Vitrolles (FN), 1998 : une prime de naissance réservée aux familles françaises ou européennes. Annulée par la justice ; la maire est condamnée.', src: 'https://www.universalis.fr/evenement/8-novembre-2000-condamnation-a-deux-ans-d-ineligibilite-de-catherine-megret/' },
         { t: 'prog', text: 'La « priorité nationale » pour les aides sociales, inscrite dans la Constitution par référendum.', src: 'https://lcp.fr/actualites/legislatives-2024-le-programme-du-rassemblement-national-en-matiere-d-immigration-a-l' }] });
-      const k = await choose({ id: 'benali', n: 1, from: 'Devant le n° 6 · 7 h 20',
-        body: 'La lettre est dans ta main. Samia travaille de nuit à l\'hôpital : à cette heure-ci, elle dort.\n\nTu sais que Bernadette, au Local, aide les familles à faire des recours. Tu as un stylo et le dos d\'un bordereau.',
-        options: [
-          { key: 'mot', label: 'Glisser un mot avec la lettre', hint: '« Bernadette, au Local, peut vous aider à faire un recours. » Une factrice ne doit pas se mêler du courrier. Personne ne le saura… pour l\'instant.' },
-          { key: 'rien', label: 'Déposer la lettre, c\'est tout', hint: 'C\'est ton travail. Ce ne sont pas tes affaires.' }] });
-      if (k === 'mot') await paper({ scene: true, kind: 'Ce que ça change', from: 'Le soir, à ta porte · 19 h',
-        body: 'Samia frappe chez toi avec une boîte de makrouts. Bernadette l\'a aidée à écrire le recours ; le tribunal administratif suspend la décision. Un an d\'allocations de gagné.\n\nUn an, pas plus. Mais maintenant, Samia sait qu\'elle peut compter sur toi.',
-        stamps: [{ t: 'real', text: 'Les recours marchent souvent : à Vitrolles, la prime de naissance réservée aux familles françaises a été annulée par la justice, et la maire condamnée.', src: 'https://www.universalis.fr/evenement/8-novembre-2000-condamnation-a-deux-ans-d-ineligibilite-de-catherine-megret/' }] });
+      C.caf = await decide({ scene: true, kind: 'Ta tournée', from: 'Devant le n° 6 · 7 h 20',
+        body: 'La lettre est dans ta main. Tu sais ce qu\'elle contient : tu as vu passer les mêmes chez d\'autres.\n\nBernadette, au n° 12, aide à faire les recours. Écrire son adresse sur un bout de papier, ça prend une minute.' },
+        [{ id: 'depot', label: 'Déposer la lettre, c\'est tout', hint: 'C\'est ton travail.' },
+         { id: 'mot', label: 'Glisser un mot avec l\'adresse de Bernadette', hint: 'Personne ne le saura.' }]);
+      await outcome(C.caf === 'mot' ? 'Une semaine plus tard' : 'Le 1er mai', C.caf === 'mot'
+        ? 'Samia a appelé Bernadette. Le recours suspend la décision : la famille garde ses allocations un an de plus.\n\nLe lendemain, Samia t\'a dit merci, à voix basse. Elle sait maintenant qu\'elle peut compter sur toi.'
+        : 'Samia ne savait pas qu\'on pouvait contester. Les allocations des Benali se sont arrêtées le 1er mai.\n\nTu as fait ton travail. Personne ne t\'a rien reproché.',
+        [{ t: 'real', text: 'Vitrolles (FN), 1998 : la prime de naissance réservée aux familles françaises ou européennes est attaquée en justice, puis annulée. Contre une décision injuste, un recours peut marcher, tant que les juges sont libres.', src: 'https://www.universalis.fr/evenement/8-novembre-2000-condamnation-a-deux-ans-d-ineligibilite-de-catherine-megret/' }]);
     } },
     { kind: 'post', label: 'Recommandé · n° 12', at: [8, 5], pos: local.door, walkX: local.doorX + 1.6, mail: local.box, run: async () => {
       localNotice.visible = true; await wait(400);
@@ -1590,20 +1613,16 @@ const CH = [
       await paper({ scene: true, kind: 'Ta vie', from: 'Devant le Local fermé · 18 h',
         body: 'Depuis un an, le Local n\'a plus de salle. Les colis se font dans le garage de Bernadette, 67 ans, ancienne secrétaire de mairie. L\'aide aux devoirs s\'est arrêtée.\n\nElle a organisé un rassemblement pour récupérer la salle. Il y a le Secours populaire, la chorale, deux parents d\'élèves. Une vingtaine de personnes.\n\nLa veille, la mairie a prévenu : « Les associations qui participeront n\'auront plus de subventions. » Le club de foot de Léo, qui touche 12 000 € de la ville, n\'est pas venu. Julien, ton frère, est venu de Lyon.',
         stamps: [{ t: 'real', text: 'Carcassonne (RN), avril 2026 : « Les associations qui participeront n\'auront plus de subventions de la mairie », prévient le maire la veille d\'une manifestation.', src: 'https://www.lagazettefrance.fr/article/a-carcassonne-conquise-par-le-rn-une-manifestation-contre-l-extreme-droite' }] });
-      const k = await choose({ id: 'rassemblement', n: 2, from: 'Devant le Local fermé · 18 h 05',
-        body: 'Julien te fait signe de venir à côté de lui. Derrière la fenêtre de la mairie, en face, un homme filme les visages avec son téléphone.\n\nDemain, tu commences à 6 h. Tu es fonctionnaire de La Poste.',
-        options: [
-          { key: 'rester', label: 'Rester, à côté de Julien', hint: 'Ton visage sera sur la vidéo. On ne sait pas ce qu\'ils en feront.' },
-          { key: 'rentrer', label: 'Rentrer chez toi', hint: 'Tu travailles tôt. Personne ne te reprochera rien.' }] });
-      if (k === 'rester') await paper({ scene: true, kind: 'Ce que ça change', from: 'Devant le Local fermé · 19 h',
-        body: 'Tu restes une heure. La chorale chante « Le Temps des cerises ». Julien te serre contre lui : « Je savais que tu viendrais. »\n\nEn rentrant, tu passes devant la mairie. La lumière est encore allumée derrière la fenêtre.' });
+      C.rassemblement = await decide({ scene: true, kind: 'Ta vie', from: 'Devant le Local fermé · 18 h 05',
+        body: 'Bernadette te fait signe de venir. Une vingtaine de personnes se serrent devant la porte fermée.\n\nÀ la fenêtre d\'en face, quelqu\'un filme les visages avec son téléphone.' },
+        [{ id: 'reste', label: 'Rester avec eux', hint: 'Une heure, pour que la salle revienne.' }, { id: 'rentre', label: 'Rentrer. Tu travailles tôt demain.' }]);
       banner.visible = false;
       crowd.forEach((p, i) => walk(p, X.local + 16 + i, -1.6, 1.8 + i * 0.2));
       await wait(1800);
     } },
   ]);
   crowd.forEach((p) => (p.visible = false));
-  await say(C.rassemblement === 'rester' ? 'Je suis restée au rassemblement. J\'ai eu peur, et j\'étais fière.' : 'Je ne suis pas restée au rassemblement. Je travaille tôt.', 'Claire');
+  await say(C.rassemblement === 'reste' ? 'Je suis restée une heure. On a chanté. À la fenêtre d\'en face, un homme a filmé jusqu\'au bout.' : 'Je ne suis pas restée au rassemblement. Je travaille tôt.', 'Claire');
   },
   async () => {
   // ---------- An 4
@@ -1614,26 +1633,22 @@ const CH = [
     closeHouse('camille', 4); closeHouse('ferreira', 1); closeHouse('local', 3);
     at(claire, X.claire + 1.2, -3.75); focus(X.claire, 1.15);
   });
-  if (C.rassemblement === 'rester') await paper({ kind: 'Ta tournée · pour toi', from: 'La Poste · Direction des ressources humaines',
-    body: 'Madame,\n\nVotre présence a été constatée le 12 juillet 2029 lors d\'un rassemblement non autorisé, devant le Local, grâce aux images transmises par la mairie.\n\nCe comportement est contraire au devoir de réserve. Un blâme est inscrit à votre dossier.',
-    stamps: [{ t: 'real', text: 'Hongrie, 2025 : une loi autorise la reconnaissance faciale pour identifier les participants à une marche interdite.', src: 'https://www.pbs.org/newshour/world/hungary-passes-anti-lgbtq-law-banning-pride-events' }, { t: 'fic', text: 'Le blâme de Claire.' }] });
+  if (C.rassemblement === 'reste') {
+    await paper({ kind: 'Ta tournée', from: 'La Poste · Direction des ressources humaines',
+      body: 'Madame,\n\nVous avez été identifiée sur la vidéo d\'un rassemblement non déclaré, le 12 juillet 2029, devant l\'ancien Local de la rue des Tilleuls.\n\nVous êtes convoquée le 23 octobre à un entretien préalable à sanction pour « manquement au devoir de réserve ».',
+      stamps: [{ t: 'real', text: 'Hongrie, mars 2025 : une loi autorise la reconnaissance faciale pour identifier, après coup, les participants d\'un rassemblement interdit.', src: 'https://www.amnesty.fr/discriminations/actualites/interdiction-marches-fiertes-hongrie' }, { t: 'fic', text: 'Une factrice sanctionnée pour un rassemblement, deux ans après.' }] });
+    await outcome('Le soir même', 'Julien t\'a appelée, pour la première fois depuis deux ans : « On m\'a montré la vidéo. Je suis fier de toi. »\n\nTu ne lui as pas parlé de la convocation.');
+  }
   note('La pluie. Des caméras à chaque coin de rue. Le Local est devenu un poste de police municipale. La médiathèque, un « office de la famille ».', 'An 4', true);
   await hotspots([
-    { kind: 'post', label: 'Recommandé · Moussa', at: [7, 40], pos: H.bakery.box, walkX: H.bakery.box.x + 0.7, mail: H.bakery.box, run: async () => {
-      await paper({ kind: 'Ta tournée', from: 'Préfecture · Lettre recommandée avec accusé de réception',
-        body: 'Monsieur Moussa Keïta,\n\nVotre titre de séjour n\'est pas renouvelé. Vous faites l\'objet d\'une obligation de quitter le territoire français, sans délai de départ volontaire.\n\nSur ta liste de distribution, à côté de son nom, quelqu\'un a écrit au crayon : « Op. Retour · jeudi 18 h ». Jeudi, c\'est aujourd\'hui.',
-        stamps: [{ t: 'real', text: 'En France, une obligation de quitter le territoire « sans délai de départ volontaire » permet de placer la personne en rétention dès qu\'elle est notifiée.', more: [['Obligation de quitter le territoire français', 'https://fr.wikipedia.org/wiki/Obligation_de_quitter_le_territoire_fran%C3%A7ais']] }] });
-      const k = await choose({ id: 'moussa', n: 3, from: 'Boulangerie · 7 h 40',
-        body: 'Moussa sort les baguettes du four. Il te sourit, comme tous les matins, et te tend un croissant. Il ne sait pas ce que dit le crayon.\n\nMichel est dans l\'arrière-boutique. Personne d\'autre dans la boulangerie.',
-        options: [
-          { key: 'prevenir', label: 'Le prévenir, à voix basse', hint: '« Ils viennent ce soir, à 18 h. Pars. » Si quelqu\'un l\'apprend, c\'est toi qu\'on poursuivra.' },
-          { key: 'garder', label: 'Garder la lettre dans ta sacoche', hint: 'Une lettre perdue, ça arrive. Mais la police n\'a pas besoin de la lettre pour venir.' },
-          { key: 'distribuer', label: 'Lui faire signer l\'accusé de réception', hint: 'C\'est la procédure. Tu fais ton travail.' }] });
-      if (k === 'prevenir') { await paper({ scene: true, kind: 'Ce que ça change', from: 'Boulangerie · 7 h 42',
-        body: 'Moussa ne dit rien. Il finit sa fournée, enlève son tablier et le plie sur le comptoir. À midi, il est parti, avec un sac de sport.\n\nIl n\'a pas eu le temps de prévenir Bernadette, qui l\'hébergeait.',
-        stamps: [{ t: 'real', text: 'Paris, 16 juillet 1942 : des Juifs échappent à la rafle du Vél\' d\'Hiv parce que la Résistance les a prévenus, ou grâce au « manque de zèle de certains policiers ».', src: 'https://fr.wikipedia.org/wiki/Rafle_du_V%C3%A9lodrome_d%27Hiver' }] }); moussa.visible = false; }
-      else if (k === 'garder') await paper({ scene: true, kind: 'Ce que ça change', from: 'Ta sacoche',
-        body: 'La lettre reste au fond de ta sacoche toute la journée. Elle pèse plus lourd que les colis.\n\nMoussa continue à travailler. Il ne sait toujours rien.' });
+    { kind: 'post', label: 'Recommandé · Moussa', at: [7, 30], pos: H.bakery.box, walkX: H.bakery.box.x + 0.7, mail: H.bakery.box, run: async () => {
+      C.moussa = await decide({ kind: 'Ta tournée', from: 'Préfecture · recommandé pour Moussa, boulangerie du n° 4',
+        body: 'Sur le bordereau du recommandé, un tampon que tu n\'avais jamais vu : « Opération Retour · exécution 18 h ».\n\nTu sais ce que ça veut dire. Moussa est derrière le comptoir, les mains dans la farine. Il te dit bonjour.' },
+        [{ id: 'normal', label: 'Lui donner la lettre, sans rien dire', hint: 'Le règlement.' },
+         { id: 'prevenir', label: 'Lui dire tout bas : « Ils viennent ce soir »', hint: 'Si on l\'apprend, tu perds ton travail.' },
+         { id: 'perdre', label: '« Perdre » la lettre au fond de ta sacoche' }]);
+      if (C.moussa === 'prevenir') { await say('Il n\'a rien dit. Il a enlevé son tablier, il l\'a plié, et il est sorti par la cour.', 'Claire'); moussa.visible = false; }
+      else if (C.moussa === 'perdre') await say('La lettre est au fond de ma sacoche. Je ne sais pas si ça change quelque chose.', 'Claire');
     } },
     { kind: 'cit', label: 'Le poste de police', at: [7, 15], pos: new THREE.Vector3(-1.5, 3.6, -3.25), walkX: -0.4, run: () => paper({
       scene: true, kind: 'Ta vie', from: 'Carrefour des Tilleuls',
@@ -1688,26 +1703,20 @@ const CH = [
   const vx = X.bakery + 0.6;
   await tween(3800, (p) => { van.position.x = 34 + (vx - 34) * (1 - Math.pow(1 - p, 3)); });
   cops.forEach((c, i) => at(c, X.bakery + 0.2 + i * 0.8, -2.6));
-  const fled = C.moussa === 'prevenir';
-  if (fled) {
-    moussa.visible = false;
-    note('Les policiers entrent dans la boulangerie. Moussa n\'est pas là. Son tablier est plié sur le comptoir.');
-    await Promise.all([walk(cops[0], X.bakery - 0.45, -4.0, 2.6), walk(cops[1], X.bakery + 0.5, -4.0, 2.6)]);
-    await wait(1800);
+  if (C.moussa !== 'prevenir') {
+    note('Moussa, 23 ans, fait le pain ici depuis quatre ans. Arrivé du Mali à 11 ans. Son titre de séjour n\'a pas été renouvelé ; la préfecture n\'a jamais dit pourquoi.');
+    await Promise.all([walk(cops[0], moussa.position.x - 0.45, -4.0, 2.6), walk(cops[1], moussa.position.x + 0.5, -4.0, 2.6)]);
+    await wait(1400);
     walk(michel, X.bakery + 0.6, -3.5, 1.5);
     walk(bernadette, X.bakery + 2.4, -3.4, 2.4);
-    await Promise.all([walk(cops[0], X.bakery, -2.6, 1.8), walk(cops[1], X.bakery + 0.9, -2.6, 1.8)]);
-    note('Ils cherchent qui l\'hébergeait. Michel montre Bernadette du menton.');
+    await Promise.all([walk(cops[0], X.bakery, -2.6, 1.8), walk(moussa, X.bakery + 0.45, -2.6, 1.8), walk(cops[1], X.bakery + 0.9, -2.6, 1.8)]);
+    moussa.visible = false;
   } else {
-  note('Moussa, 23 ans, fait le pain ici depuis quatre ans. Arrivé du Mali à 11 ans. Son titre de séjour n\'a pas été renouvelé ; la préfecture n\'a jamais dit pourquoi.');
-  await Promise.all([walk(cops[0], moussa.position.x - 0.45, -4.0, 2.6), walk(cops[1], moussa.position.x + 0.5, -4.0, 2.6)]);
-  await wait(1400);
-  walk(michel, X.bakery + 0.6, -3.5, 1.5);
-  walk(bernadette, X.bakery + 2.4, -3.4, 2.4);
-  await Promise.all([walk(cops[0], X.bakery, -2.6, 1.8), walk(moussa, X.bakery + 0.45, -2.6, 1.8), walk(cops[1], X.bakery + 0.9, -2.6, 1.8)]);
-  moussa.visible = false;
-  note('Bernadette l\'hébergeait chez elle, gratuitement.');
+    note('Ils cherchent Moussa. Il n\'est pas venu travailler cet après-midi. Michel dit qu\'il ne sait pas où il est.');
+    walk(michel, X.bakery + 0.6, -3.5, 1.5); walk(bernadette, X.bakery + 2.4, -3.4, 2.4);
+    await wait(2800);
   }
+  note(C.moussa === 'prevenir' ? 'Bernadette l\'hébergeait chez elle, gratuitement. Lui est parti à temps. Elle, elle était là.' : 'Bernadette l\'hébergeait chez elle, gratuitement.');
   await wait(1500);
   await walk(cops[1], bernadette.position.x - 0.4, -3.3, 2.4);
   note('« Aide au séjour irrégulier. » Elle aussi.');
@@ -1717,14 +1726,19 @@ const CH = [
   await wait(600);
   await tween(3000, (p) => { van.position.x = vx - 70 * p * p; });
   van.visible = false; vanFlash = false; hideNote();
-  await paper({ kind: 'Procès-verbal', from: 'Opération « Retour » · Valberne', body: fled ? 'Interpellations : 1.\n\n1 personne pour aide au séjour irrégulier, 67 ans.\n1 personne en situation irrégulière : en fuite. Recherches en cours.\n\nTémoins : néant.' : 'Interpellations : 2.\n\n1 personne en situation irrégulière.\n1 personne pour aide au séjour irrégulier, 67 ans.\n\nTémoins : néant.',
+  await paper({ kind: 'Procès-verbal', from: 'Opération « Retour » · Valberne', body: C.moussa === 'prevenir' ? 'Interpellations : 1.\n\n1 personne pour aide au séjour irrégulier, 67 ans.\n1 personne en fuite, recherchée.\n\nTémoins : néant.' : 'Interpellations : 2.\n\n1 personne en situation irrégulière.\n1 personne pour aide au séjour irrégulier, 67 ans.\n\nTémoins : néant.',
     stamps: [
       { t: 'real', text: 'Vallée de la Roya, 2017 : l\'agriculteur Cédric Herrou est condamné à quatre mois de prison avec sursis pour avoir transporté et hébergé chez lui environ 200 migrants, gratuitement. C\'était le « délit de solidarité » : aider un étranger sans papiers à entrer, circuler ou séjourner était puni, même sans contrepartie.', src: 'https://www.actu-juridique.fr/constitutionnel/laffaire-herrou-la-reconnaissance-de-la-valeur-constitutionnelle-du-principe-de-fraternite-et-ses-limites/', more: [['Cédric Herrou', 'https://fr.wikipedia.org/wiki/C%C3%A9dric_Herrou']] },
       { t: 'real', text: '6 juillet 2018 : le Conseil constitutionnel reconnaît le « principe de fraternité ». Aider gratuitement quelqu\'un à circuler ou à se loger n\'est plus puni. Aider quelqu\'un à entrer en France l\'est toujours. Herrou est définitivement relaxé en 2021.', src: 'https://www.actu-juridique.fr/constitutionnel/laffaire-herrou-la-reconnaissance-de-la-valeur-constitutionnelle-du-principe-de-fraternite-et-ses-limites/', more: [['Délit de solidarité', 'https://fr.wikipedia.org/wiki/D%C3%A9lit_de_solidarit%C3%A9']] },
       { t: 'fic', text: 'Que l\'aide gratuite redevienne un délit, comme avant 2018.' }] });
-  await say(fled ? 'Moussa est parti à temps. Bernadette a été arrêtée à sa place. Personne n\'a rien dit.' : 'J\'ai tout vu depuis le trottoir. Michel aussi. Personne n\'a rien dit.', 'Claire');
-  if (C.moussa === 'garder') await say('La lettre est toujours au fond de ma sacoche. Ils n\'en avaient pas eu besoin.', 'Claire');
+  await say('J\'ai tout vu depuis le trottoir. Michel aussi. Personne n\'a rien dit.', 'Claire');
   await say('Je suis rentrée. J\'ai fermé la fenêtre.', 'Claire');
+  await outcome('Opération « Retour »', C.moussa === 'prevenir'
+    ? 'Moussa est parti à temps. Bernadette a été arrêtée quand même : elle l\'avait hébergé.\n\nTu as sauvé quelqu\'un. Tu n\'as pas pu sauver tout le monde.'
+    : C.moussa === 'perdre'
+      ? 'Moussa n\'avait pas besoin de la lettre pour être arrêté. La semaine suivante, La Poste t\'a envoyé un avertissement : « courrier recommandé non distribué ».\n\nCacher la lettre ne suffisait pas. Il fallait le prévenir.'
+      : 'Tu as fait ton travail. Moussa a lu la lettre au comptoir. Il n\'a pas compris ce que voulait dire « exécution 18 h ».\n\nToi, tu avais compris.',
+    [{ t: 'real', text: 'Paris, 16 juillet 1942 : la police devait arrêter 22 000 Juifs ; elle en arrête 13 152. Un nombre inconnu échappe à la rafle, prévenu par un journal juif clandestin ou par la Résistance, ou grâce au manque de zèle de certains policiers.', src: 'https://en.wikipedia.org/wiki/Vel%27_d%27Hiv_roundup' }]);
   closeHouse('samia', 3); closeHouse('delmas', 1); closeHouse('bakery', 2); closeHouse('local', 3);
   await wait(2000);
   },
@@ -1752,7 +1766,7 @@ const CH = [
         { t: 'fic', text: 'Les Glycines sont inventées. Le manque de bras dans les maisons de retraite, lui, est déjà là.' }] }) },
     { kind: 'post', label: 'Ta fiche de paie', at: [12, 30], pos: H.claire.box, walkX: H.claire.box.x + 0.7, mail: H.claire.box, run: () => paper({
       kind: 'Ta tournée', from: 'La Poste · ton bulletin de salaire',
-      body: 'En mars, tu t\'es bloqué le dos. Arrêt maladie de dix jours.\n\nLes indemnités ont encore baissé, et un médecin-contrôleur de la Sécurité sociale est passé chez toi le troisième jour, « pour lutter contre la fraude ». Ton arrêt a été raccourci.\n\nLa retraite à 60 ans, promise en 2027 ? « Plus tard, quand les comptes le permettront. »' + (C.moussa === 'garder' ? '\n\nEn bas, une ligne : « Retenue disciplinaire · recommandé non distribué, octobre 2031 ». Ils l\'ont retrouvée.' : ''),
+      body: 'En mars, tu t\'es bloqué le dos. Arrêt maladie de dix jours.\n\nLes indemnités ont encore baissé, et un médecin-contrôleur de la Sécurité sociale est passé chez toi le troisième jour, « pour lutter contre la fraude ». Ton arrêt a été raccourci.\n\nLa retraite à 60 ans, promise en 2027 ? « Plus tard, quand les comptes le permettront. »',
       stamps: [
         { t: 'real', text: 'France, 1er avril 2025 : les indemnités journalières des arrêts maladie sont plafonnées plus bas (1,4 SMIC au lieu de 1,8). Le maximum passe de 53,31 € à 41,47 € par jour.', src: 'https://formation.lefebvre-dalloz.fr/actualite/indemnisation-des-arrets-maladie-baisse-des-indemnites-journalieres-compter-du-1er-avril-2025' },
         { t: 'real', text: 'Juin 2024 : interrogé sur l\'abrogation de la réforme des retraites, promise pendant la campagne, Jordan Bardella répond : « Nous verrons ».', src: 'https://www.boursorama.com/bourse/actualites/retraites-jordan-bardella-n-est-plus-si-presse-d-abroger-la-reforme-de-macron-101b949b9967c92520b3be1c9ef2c30f' }] }) },
@@ -1790,26 +1804,21 @@ const CH = [
         { t: 'real', text: 'Assemblée nationale, 28 mai 2025 : les zones à faibles émissions (ZFE), qui limitent les voitures les plus polluantes dans les grandes villes, sont supprimées par 98 voix contre 51, avec le RN, LR et LFI. La pollution de l\'air cause environ 40 000 morts par an en France (Santé publique France).', src: 'https://lcp.fr/actualites/zfe-la-suppression-des-zones-a-faibles-emissions-approuvee-par-l-assemblee-nationale' },
         { t: 'real', text: '23 janvier 2025 : Jordan Bardella demande « la suspension immédiate » du Pacte vert européen, le plan de l\'Union pour le climat.', src: 'https://www.linfodurable.fr/face-trump-bardella-appelle-la-suspension-du-pacte-vert-europeen-49044' },
         { t: 'fic', text: 'La carte « Valberne Famille » et la salle réservée : la « priorité nationale » appliquée à la chaleur.' }] }) },
-    { kind: 'cit', label: 'Léo, au commissariat', at: [16, 30], pos: new THREE.Vector3(-1.5, 2.4, -3.25), walkX: -0.4, run: async () => {
-      await paper({ scene: true, kind: 'Ta vie', from: 'Ton téléphone · 16 h 30',
-        body: '« Madame, ici le commissariat de Valberne. Nous avons votre fils. »\n\nDevant le collège, la Brigade a plaqué au sol Adam, un garçon de sa classe, pour un contrôle. Léo, 14 ans, a tout filmé. Il a refusé de donner son téléphone.\n\nQuand tu arrives, il est assis sur un banc, les poings serrés. Un officier pose une feuille devant toi.' });
-      const k = await choose({ id: 'leo', n: 4, from: 'Commissariat de Valberne · 17 h 10',
-        body: '« Vous signez que votre fils a perturbé une opération de police, il efface sa vidéo devant moi, et vous repartez tous les deux. Sinon, il passe la nuit ici. »\n\nLéo te regarde. Adam, lui, est toujours en garde à vue.',
-        options: [
-          { key: 'signer', label: 'Signer, et faire effacer la vidéo', hint: 'Léo rentre ce soir. La vidéo n\'existera plus, et rien ne prouvera ce qui est arrivé à Adam.' },
-          { key: 'refuser', label: 'Refuser : filmer la police n\'est pas un crime', hint: 'Léo passera la nuit au commissariat. Et ton nom sera noté.' }] });
-      if (k === 'signer') await paper({ scene: true, kind: 'Ce que ça change', from: 'Dans la voiture · 18 h',
-        body: 'Léo regarde par la fenêtre. « Tu les as laissés gagner. »\n\nAdam reste deux jours en garde à vue. Il est poursuivi pour « rébellion ». Léo ne te parlera presque plus pendant un an.' });
-      else await paper({ scene: true, kind: 'Ce que ça change', from: 'Le lendemain · 9 h',
-        body: 'Léo a passé la nuit au commissariat. Mais une copie de sa vidéo était déjà partie chez un ami : 40 000 vues au matin. L\'avocate d\'Adam s\'en sert et obtient sa libération.\n\nÀ 10 h, ton chef de centre te convoque : « signalement de la préfecture ».',
-        stamps: [{ t: 'real', text: 'France, 20 mai 2021 : le Conseil constitutionnel censure l\'article de la loi « sécurité globale » qui punissait de cinq ans de prison la diffusion malveillante d\'images de policiers. Filmer la police reste légal.', src: 'https://lcp.fr/actualites/censure-de-l-ex-article-24-de-la-loi-de-securite-globale-nous-ne-lacherons-rien-promet' }] });
-    } },
     { kind: 'cit', label: 'Julien', at: [22, 15], pos: new THREE.Vector3(X.claire - 0.6, 3.4, ZH + ZF + 0.3), walkX: X.claire + 1.2, run: () => paper({
       scene: true, kind: 'Ta vie', from: 'Ton téléphone · 22 h 15',
       body: 'Julien, ton petit frère, 41 ans, cheminot. Syndiqué, militant de gauche depuis toujours. Il continuait d\'aller aux réunions, dans des appartements.\n\nCe soir, il ne répond pas. Sa voisine a vu des hommes masqués, en civil, le faire monter dans une voiture sans plaque, vers 5 h du matin.\n\nAu commissariat : « Aucune interpellation à ce nom. »',
       stamps: [{ t: 'real', text: 'États-Unis, mars–avril 2025 : 252 Vénézuéliens sont expulsés sans procès vers la prison géante CECOT, au Salvador. Pendant des semaines, les autorités refusent de dire aux familles où ils sont. Human Rights Watch parle de disparitions forcées et documente des tortures.', src: 'https://www.hrw.org/fr/news/2025/11/12/etats-unis/salvador-des-venezueliens-expulses-vers-le-salvador-y-ont-ete-tortures' },
         { t: 'real', text: 'Chili, 1973–1990 : sous Pinochet, plus de 3 000 opposants tués ou « disparus », souvent militants de gauche ou syndicalistes, enlevés chez eux à l\'aube.', more: [['La dictature de Pinochet', 'https://fr.wikipedia.org/wiki/Dictature_militaire_d%27Augusto_Pinochet']] }] }) },
   ]);
+  setTime(23, 0);
+  C.leo = await decide({ scene: true, kind: 'Ta vie', from: 'Commissariat de Valberne · 23 h',
+    body: 'Léo, 14 ans, a filmé avec son téléphone un contrôle de la Brigade devant le collège. Ils l\'ont emmené.\n\nL\'officier pose un formulaire devant toi : « Signez ici. Il efface la vidéo et vous repartez avec lui. Sinon, il passe la nuit ici. »\n\nLéo te regarde. Il secoue la tête.' },
+    [{ id: 'signer', label: 'Signer. Il rentre ce soir.', hint: 'La vidéo sera effacée.' }, { id: 'refuser', label: 'Refuser. La vidéo reste.', hint: 'Léo passe la nuit au poste.' }]);
+  await outcome(C.leo === 'signer' ? 'Les mois suivants' : 'Le lendemain', C.leo === 'signer'
+    ? 'Léo est rentré avec toi. La vidéo est effacée.\n\nIl ne t\'a presque plus adressé la parole jusqu\'à Noël.'
+    : 'Léo a passé la nuit au poste. La vidéo a circulé : deux cent mille vues en trois jours.\n\nUne semaine plus tard, La Poste a reçu un « signalement » à ton nom.',
+    [{ t: 'real', text: 'France, 20 mai 2021 : le Conseil constitutionnel censure l\'article de la loi « sécurité globale » qui voulait punir de cinq ans de prison et 75 000 € d\'amende la diffusion d\'images de policiers « dans l\'intention de nuire ».', src: 'https://lcp.fr/actualites/censure-de-l-ex-article-24-de-la-loi-de-securite-globale-nous-ne-lacherons-rien-promet' },
+     { t: 'fic', text: 'Qu\'on oblige un adolescent à effacer une vidéo pour sortir du commissariat.' }]);
   await say('Julien n\'est jamais rentré. Michel a baissé son rideau. Maman pleure au téléphone.', 'Claire');
   await say('Je me dis que ceux qui ont voté pour eux pensaient être à l\'abri. Moi aussi.', 'Claire');
   },
@@ -1825,26 +1834,29 @@ const CH = [
   van.visible = true; van.position.set(X.samia + 1.5, 0, -1.1); vanFlash = true; sfx('sirene');
   cops.forEach((c, i) => at(c, X.samia - 0.6 + i * 1.3, -3.4));
   await say('4 h 55. Des moteurs dans la rue. Des portières. Des lampes torches sur les façades.', 'Claire');
-  const hid = (await choose({ id: 'rafle', n: 5, from: 'Ta porte de derrière · 4 h 57', timer: 15, fallback: 'fermer',
-    body: 'Trois petits coups. Par la fenêtre de la cuisine, tu vois Rayan et sa petite sœur Nour, en pyjama, pieds nus dans ton jardin. Samia les a fait passer par-dessus le muret.' + (C.benali === 'mot' ? ' Elle sait qu\'elle peut compter sur toi.' : ' Elle n\'a personne d\'autre.') + '\n\nDans la rue, les lampes torches se rapprochent. Ils sont à trois maisons.',
-    ask: 'Tu as quelques secondes.',
-    options: [
-      { key: 'cacher', label: 'Ouvrir, et les cacher à la cave', hint: 'Cacher un enfant recherché, c\'est la prison. Pour toi, et peut-être pour Léo.' },
-      { key: 'fermer', label: 'Ne pas ouvrir', hint: 'Personne ne saura que tu étais réveillée.' }] })) === 'cacher';
   focus(X.samia, 0.6);
+  if (C.caf === 'mot') {
+    C.rafle = await decide({ scene: true, kind: 'Ta vie', from: 'Ta porte de derrière · 4 h 58',
+      body: 'On gratte à la porte de la cuisine. Ce sont les deux petits de Samia, en pyjama. Elle les a fait passer par les jardins.\n\nLe plus grand chuchote : « Maman a dit qu\'on pouvait venir chez toi. »\n\nDans la rue, les lampes se rapprochent.' },
+      [{ id: 'cacher', label: 'Ouvrir et les cacher à la cave' }, { id: 'rideau', label: 'Ne pas ouvrir. Rester derrière le rideau.' }], { timer: 10, fallback: 'rideau' });
+  } else C.rafle = 'absent';
   await paper({ scene: true, kind: 'Ta vie', from: 'Rue des Tilleuls · 5 h du matin',
-    body: hid ? 'Ils ont une liste. Ils frappent au 6, chez les Benali, puis au 14, puis rue Jean-Jaurès.\n\nSamia descend seule, en chaussons. « Les enfants ? » Elle répond qu\'ils sont chez leur père, en Algérie. Elle ne regarde pas ta fenêtre.\n\nOn la fait monter dans un car. On dit aux voisins de rentrer chez eux. Personne ne dit où va le car.' : 'Ils ont une liste. Ils frappent au 6, chez les Benali, puis au 14, puis rue Jean-Jaurès.\n\nSamia descend en chaussons, avec les deux petits. Ils ont droit à un sac chacun. Rayan demande s\'il peut prendre son cartable.\n\nOn les fait monter dans un car. On dit aux voisins de rentrer chez eux. Personne ne dit où va le car.',
+    body: C.rafle === 'cacher' ? 'Ils ont une liste. Ils frappent au 6, chez les Benali, puis au 14, puis rue Jean-Jaurès.\n\nSamia descend en chaussons, seule. « Les enfants sont chez leur grand-mère », dit-elle. Ils fouillent l\'appartement, puis la font monter dans le car.\n\nDans ta cave, les deux petits ne font pas un bruit.' : 'Ils ont une liste. Ils frappent au 6, chez les Benali, puis au 14, puis rue Jean-Jaurès.\n\nSamia descend en chaussons, avec les deux petits. Ils ont droit à un sac chacun. Le plus jeune demande s\'il peut prendre son cartable.\n\nOn les fait monter dans un car. On dit aux voisins de rentrer chez eux. Personne ne dit où va le car.',
     stamps: [
       { t: 'real', text: 'Paris, 16 et 17 juillet 1942 : 13 152 Juifs arrêtés à l\'aube par environ 9 000 policiers et gendarmes français, dont plus de 4 000 enfants. Des enfants déportés, six adolescents seulement sont revenus.', src: 'https://en.wikipedia.org/wiki/Vel%27_d%27Hiv_Roundup' },
       { t: 'real', text: 'Italie, octobre 2024 : ouverture de centres en Albanie où sont envoyés des migrants interceptés en mer, hors du territoire italien, le temps d\'examiner leur demande.', src: 'https://abcnews.go.com/International/wireStory/italy-formally-opens-centers-albania-process-male-migrants-114712678' },
       { t: 'fic', text: 'La rafle de la rue des Tilleuls.' }] });
   van.visible = false; vanFlash = false; cops.forEach((c) => (c.visible = false)); at(samia, 0, 0, false);
-  if (hid) {
-    await say('Rayan et Nour sont dans ma cave, derrière les cartons de Noël. Ils ne pleurent pas. Ils ont appris à se taire.', 'Claire');
-    await paper({ scene: true, kind: 'Ce que ça change', from: 'Deux jours plus tard',
-      body: 'Ta tante vient les chercher en voiture, pour sa ferme du Morvan. Sur le trajet, Nour s\'entraîne à dire son nouveau prénom : Louise.\n\nLe jeudi, des policiers fouillent les caves de la rue. Pas la tienne. Pas cette fois.',
-      stamps: [{ t: 'real', text: 'Sous l\'Occupation, des Français ont caché des Juifs au péril de leur vie. 4 303 d\'entre eux ont été reconnus « Justes parmi les nations » (Yad Vashem, 1er janvier 2023).', src: 'https://www.guichetdusavoir.org/question/voir/139945', more: [['Les Justes parmi les nations', 'https://encyclopedia.ushmm.org/content/fr/article/righteous-among-the-nations']] }] });
-  } else await say('Je suis restée derrière le rideau. Je n\'ai rien fait. Comme tout le monde.', 'Claire');
+  if (C.rafle === 'cacher') {
+    await say('Je les ai gardés à la cave. Le lendemain, ils ont fouillé toute la rue. Pas ma cave.', 'Claire');
+    await outcome('Trois semaines plus tard', 'Une cousine de Samia est venue chercher les enfants, la nuit. Ils sont en Belgique.\n\nPendant trois semaines, chaque voiture qui ralentissait devant chez toi te coupait le souffle.', [{ t: 'real', text: 'France, 1940–1944 : des milliers de gens cachent des Juifs chez eux, au péril de leur vie. Plus de 4 300 Français sont aujourd\'hui reconnus « Justes parmi les nations ».', src: 'https://www.guichetdusavoir.org/question/voir/139945' }]);
+  } else if (C.rafle === 'rideau') {
+    await say('Ils ont frappé. Je n\'ai pas ouvert. Ils sont repartis vers le car, avec leur mère.', 'Claire');
+    await outcome('Ce matin-là', 'Tu n\'as pas ouvert. Tu avais peur pour Léo. C\'est ce que la plupart des gens ont fait.\n\nD\'autres ont ouvert.', [{ t: 'real', text: 'France, 1940–1944 : des milliers de gens cachent des Juifs chez eux, au péril de leur vie. Plus de 4 300 Français sont aujourd\'hui reconnus « Justes parmi les nations ».', src: 'https://www.guichetdusavoir.org/question/voir/139945' }]);
+  } else {
+    await say('Je suis restée derrière le rideau. Je n\'ai rien fait. Comme tout le monde.', 'Claire');
+    await outcome('Ce matin-là', 'Les enfants de Samia ne sont pas venus frapper chez toi : elle ne te connaissait pas assez pour te les confier.\n\nSix ans plus tôt, un mot glissé dans une lettre de la CAF aurait pu créer ce lien.', [{ t: 'real', text: 'France, 1940–1944 : des milliers de gens cachent des Juifs chez eux, au péril de leur vie. Plus de 4 300 Français sont aujourd\'hui reconnus « Justes parmi les nations ».', src: 'https://www.guichetdusavoir.org/question/voir/139945' }]);
+  }
   bike.userData.parked = false; at(claire, X.claire + 1.2, -3.75); focus(X.claire + 3, 1.15);
   note('Sept ans. Il n\'y a plus besoin de loi pour être puni. Une décision suffit.', 'An 7', true);
   await hotspots([
@@ -1914,14 +1926,13 @@ const CH = [
       kind: 'Ta tournée', from: 'Commission de propagande · Élection présidentielle',
       body: 'Madame, Monsieur,\n\nVous trouverez ci-joint la profession de foi du seul candidat.\n\nCette année, un seul candidat a réuni les parrainages. Les autres dossiers ont été « déclarés irrecevables ».',
       stamps: [{ t: 'real', text: 'Russie, février 2024 : Boris Nadejdine, seul candidat opposé à la guerre, écarté de la présidentielle par la commission électorale.', src: 'https://www.dhnet.be/actu/monde/2024/02/08/presidentielle-russe-le-seul-candidat-anti-poutine-annonce-que-sa-candidature-a-ete-rejetee-64CLXDYUXZHV5GUUGZZED7TGBE/' }, { t: 'real', text: 'Portugal de Salazar, 1958 : Humberto Delgado, seul opposant autorisé à se présenter, obtient officiellement 23 % dans une élection dénoncée comme truquée. En 1965, il est assassiné par la police politique.', src: 'https://fr.wikipedia.org/wiki/Humberto_Delgado' }] });
-      const k = await choose({ id: 'tract', n: 6, from: 'Ta sacoche · 8 h 25',
-        body: 'Au fond de ta sacoche, il y a encore la liasse que Julien avait laissée chez toi, il y a deux ans. Une feuille pliée en quatre : « Ils ne sont pas invincibles. Parlez-vous. Votez blanc. »\n\nTa tournée compte 214 boîtes aux lettres. Il y a une caméra au carrefour, une autre devant la mairie.',
-        options: [
-          { key: 'tract', label: 'Glisser aussi un tract de Julien dans chaque boîte', hint: 'Si on te reconnaît sur les images, tu disparais comme lui.' },
-          { key: 'rien', label: 'Distribuer seulement la profession de foi', hint: 'C\'est ton travail. Tout le monde sait déjà qui va gagner.' }] });
-      if (k === 'tract') await paper({ scene: true, kind: 'Ce que ça change', from: 'Le lendemain matin',
-        body: 'Rue Jean-Jaurès, il y a des tracts dans les boîtes. Ce ne sont pas les tiens : quelqu\'un d\'autre a eu la même idée.\n\nTu n\'es pas seule.',
-        stamps: [{ t: 'real', text: 'Munich, 18 février 1943 : Hans et Sophie Scholl, étudiants du groupe de la Rose blanche, sont arrêtés en distribuant des tracts contre le régime nazi. Ils sont exécutés le 22 février.', src: 'https://www.deutschland.de/fr/topic/politique/sophie-scholl-resistante-engagee-contre-le-regime-nazi-allemand' }] });
+      C.tract = await decide({ scene: true, kind: 'Ta tournée', from: 'Ta sacoche · 8 h 25',
+        body: 'Au fond de la sacoche, il reste le paquet de tracts que Julien avait laissé chez toi, il y a deux ans : « Ils n\'ont pas gagné. Ils ont interdit les autres. »\n\nIl y a cent quarante boîtes dans la rue. Les caméras filment les trottoirs, pas l\'intérieur des boîtes.' },
+        [{ id: 'distribuer', label: 'Distribuer la profession de foi, comme prévu' }, { id: 'tract', label: 'Glisser aussi le tract de Julien', hint: 'Une boîte sur deux, sans t\'arrêter.' }]);
+      await outcome('Le lendemain', C.tract === 'tract'
+        ? 'Personne ne t\'a vue. Le lendemain, trois tracts étaient recollés sur l\'affiche du candidat unique. Quelqu\'un les avait lus.'
+        : 'Tu as distribué la profession de foi dans les cent quarante boîtes. Le tract de Julien est resté dans ta sacoche.',
+        [{ t: 'real', text: 'Paris, août 1941 : des étudiants fondent « Défense de la France », un journal clandestin. En janvier 1944, il tire à 450 000 exemplaires, le plus fort tirage de la presse clandestine.', src: 'https://en.wikipedia.org/wiki/D%C3%A9fense_de_la_France' }]);
     } },
     { kind: 'post', label: 'Abonnement · n° 10', at: [9, 0], pos: H.delmas.box, walkX: H.delmas.box.x + 0.7, mail: H.delmas.box, run: () => paper({
       kind: 'Ta tournée', from: 'La Poste · avis de non-distribution',
@@ -1929,34 +1940,30 @@ const CH = [
       stamps: [{ t: 'real', text: 'Hongrie, octobre 2016 : Népszabadság, premier quotidien d\'opposition, fermé du jour au lendemain.', src: 'https://www.hrw.org/news/2016/10/10/hungarys-biggest-oppositional-daily-shut-down' }, { t: 'real', text: 'Espagne de Franco, 1938 : la loi sur la presse interdit de critiquer le régime, ses lois et sa version de l\'histoire. Elle restera en vigueur près de trente ans.', src: 'https://www.briefhistory.co.uk/1939/scw-post-war-censorship' }] }) },
     { kind: 'cit', label: 'Chez Bernadette', at: [9, 30], pos: local.door, walkX: local.doorX + 1.6, run: () => paper({
       scene: true, kind: 'Ta vie', from: 'Boîte aux lettres de Bernadette',
-      body: 'Le courrier de Bernadette s\'entasse depuis quatre ans.\n\nAu commissariat, on a dit : « transférée ». À la préfecture : « aucune trace ». Au tribunal : « pas de dossier ».\n\n' + (C.moussa === 'prevenir' ? 'Une carte postale de Barcelone est arrivée pour elle l\'an dernier, sans signature. Juste : « Merci. Pardon. »' : 'Moussa a été expulsé. Vers où, personne ne sait.') + ' Julien non plus n\'est jamais revenu.',
+      body: 'Le courrier de Bernadette s\'entasse depuis quatre ans.\n\nAu commissariat, on a dit : « transférée ». À la préfecture : « aucune trace ». Au tribunal : « pas de dossier ».\n\n' + (C.moussa === 'prevenir' ? 'Moussa, lui, est parti à temps. Une carte postale est arrivée une fois, sans adresse au dos.' : 'Moussa a été expulsé. Vers où, personne ne sait.') + ' Julien non plus n\'est jamais revenu.',
       stamps: [{ t: 'real', text: 'États-Unis, mars 2025 : Kilmar Abrego Garcia, père de famille installé dans le Maryland, expulsé vers une méga-prison du Salvador. Le gouvernement lui-même parle d\'une « erreur administrative ».', src: 'https://www.truthdig.com/articles/deportation-of-el-salvador-national-to-mega-prison-deemed-administrative-error/' }] }) },
     { kind: 'cit', label: 'Le lycée de Léo', at: [17, 10], pos: new THREE.Vector3(X.ecole + 1.15, 1.5, ZH + ZF + 0.3), walkX: X.ecole + 2.1, run: async () => { await paper({
       scene: true, kind: 'Ta vie', from: 'Léo, 16 ans',
-      body: (C.leo === 'refuser' ? 'Léo filme tout, maintenant. Il garde ses vidéos sur une carte mémoire cachée dans sa chaussure.' : 'Léo ne dessine plus. Il parle peu.') + ' Au lycée, on vérifie les téléphones à l\'entrée.\n\nHier soir, il a demandé si on pouvait partir. Au Portugal, comme Jeanne Duarte. Ou ailleurs.',
+      body: 'Léo ne dessine plus. Au lycée, on vérifie les téléphones à l\'entrée.\n\nHier soir, il a demandé si on pouvait partir. Au Portugal, comme Jeanne Duarte. Ou ailleurs.\n\nJ\'ai dit qu\'on verrait.',
       stamps: [{ t: 'fic', text: 'Léo est inventé. Les départs, eux, sont réels : des centaines de milliers de Russes ont quitté leur pays après 2022.' }] });
-      await choose({ id: 'depart', n: 7, from: 'Ta cuisine · 22 h',
-        body: 'Ta mère est aux Glycines. Ta maison est payée. Tu as dix-neuf ans d\'ancienneté à La Poste.\n\nLéo a seize ans. Dans deux ans, il aura le droit de voter, si on vote encore.',
-        ask: 'Et maintenant ?',
-        options: [
-          { key: 'partir', label: 'Partir avec Léo', hint: 'Tout recommencer ailleurs, sans retraite, sans ta mère. Tant que les frontières sont ouvertes.' },
-          { key: 'rester', label: 'Rester', hint: 'Quelqu\'un doit encore porter les lettres. Et se souvenir des noms.' }] });
+      C.partir = await decide({ scene: true, kind: 'Ta vie', from: 'La cuisine · 22 h',
+        body: 'Léo attend ta réponse. Jeanne Duarte a trouvé du travail à Porto, elle peut vous héberger quelques semaines.\n\nPartir, c\'est laisser Maman aux Glycines, la maison, la tournée. Rester, c\'est continuer ici, avec eux au pouvoir.' },
+        [{ id: 'rester', label: 'Rester. C\'est chez nous.' }, { id: 'partir', label: 'Partir au Portugal avec Léo' }]);
     } },
   ]);
   focus(X.claire, 0.75); await walk(claire, X.claire + 1.2, -3.75, 4); claire.visible = false; bike.userData.parked = true; parkBike(X.claire + 1.0);
   H.claire.wins[1].closed = false; H.claire.wins[1].tv = true;
+  if (C.partir) await say(C.partir === 'partir' ? 'On part en juin. Je n\'ai encore rien dit à La Poste.' : 'On reste. Quelqu\'un doit bien continuer à porter le courrier.', 'Claire');
   setDay('Dimanche 22 avril 2035', 6); setTime(20, 0);
   await say('« 20 h 00. Le chef de l\'État sortant est réélu au premier tour avec 98,4 % des voix. La participation est de 31 %. »', 'Télévision');
   await say('C\'est grave, maman ?', 'Léo, 16 ans');
   await say('Il y a huit ans, je t\'avais dit que ça ne changerait rien pour nous.', 'Claire');
   await say('Oui. C\'est grave.', 'Claire');
-  if (C.depart === 'partir') await say('Dans un mois, on part. Léo a choisi la ville : Porto. Je laisse la clé de la cave à ma voisine.', 'Claire');
-  else if (C.depart === 'rester') await say('On reste. Demain, à 6 h 30, je reprends ma tournée. Je connais tous les noms de la rue. Je ne les oublierai pas.', 'Claire');
   H.claire.wins[1].tv = false; closeHouse('claire', 3);
   await wait(2200);
   await card('Valberne n\'existe pas.', 'Rien de grave');
   music(null);
-  recap(); $('#bar').hidden = true; $('#endBack').hidden = true; $('#again').hidden = false; $('#end').hidden = false; $('#end').scrollTop = 0;
+  renderMine(); $('#bar').hidden = true; $('#endBack').hidden = true; $('#again').hidden = false; $('#end').hidden = false; $('#end').scrollTop = 0;
   },
 ];
 function catchUp(from) { // ce que les chapitres sautes ont laisse dans la rue
@@ -1964,7 +1971,7 @@ function catchUp(from) { // ce que les chapitres sautes ont laisse dans la rue
   if (from >= 3) pool.userData.rule.visible = true;
 }
 async function play(from = 0) {
-  if (from === 0) { C = {}; keepC(); }
+  C = from ? savedChoices() : {}; firstChoice = !Object.keys(C).length;
   resetWorld(); catchUp(from);
   for (let i = from; i < CH.length; i++) { save(i); await CH[i](); }
   save(0);
@@ -2022,10 +2029,112 @@ function frame() {
   if (env.rain > 0.01) { const a = rainGeo.attributes.position.array, dy = 13 * dt, dx = 13 * dt * SLANT / DROP; for (let i = 0; i < a.length; i += 6) { a[i + 1] -= dy; a[i + 4] -= dy; a[i] += dx; a[i + 3] += dx; if (a[i + 1] < 0.1) { a[i + 1] += 12; a[i + 4] += 12; a[i] -= 12 * SLANT / DROP; a[i + 3] -= 12 * SLANT / DROP; } } rainGeo.attributes.position.needsUpdate = true; }
   if (vanFlash) { const on = Math.floor(t * 6) % 2 === 0; barA.color.set(on ? '#5d8bff' : '#1b2a6b').multiplyScalar(on ? 2.5 : 1); barB.color.set(on ? '#1b2a6b' : '#5d8bff').multiplyScalar(on ? 1 : 2.5); blue.intensity = on ? 40 : 8; } else blue.intensity = 0;
   turbines.forEach((g) => { if (g.visible) g.userData.rotor.rotation.z -= dt * g.userData.speed; });
-  streetLife(dt, t); cutaway(dt); placeHots(); grade.uniforms.time.value = (t * 7.3) % 100;
+  streetLife(dt, t); cutaway(dt); placeHots(); syncFlat(); grade.uniforms.time.value = (t * 7.3) % 100;
   composer.render();
   requestAnimationFrame(frame);
 }
+/* ===== MAISONS EN APLATS : chaque maison fusionnee en un seul objet de couleurs unies =====
+   Avant : ~2 800 objets et ~1 800 materiaux pour 11 maisons (~3 000 appels de dessin par image).
+   Apres : 1 objet par maison, les volets et les vitres dessines « en serie » (instanciation).
+   ?detail dans l'adresse = ancien rendu, pour comparer. */
+const FLAT = !new URLSearchParams(location.search).has('detail');
+const flatSync = [];
+if (FLAT) {
+  const avg = new Map(); const cv = document.createElement('canvas'); cv.width = cv.height = 1; const cx = cv.getContext('2d', { willReadFrequently: true });
+  const texAvg = (t) => { // couleur moyenne d'une texture (les aplats remplacent les textures)
+    if (!t || !t.image) return null; if (avg.has(t.uuid)) return avg.get(t.uuid);
+    let c = null; try { cx.clearRect(0, 0, 1, 1); cx.drawImage(t.image, 0, 0, 1, 1); const d = cx.getImageData(0, 0, 1, 1).data; c = new THREE.Color().setRGB(d[0] / 255, d[1] / 255, d[2] / 255, THREE.SRGBColorSpace); } catch (e) {}
+    avg.set(t.uuid, c); return c;
+  };
+  const colorOf = (m) => { const c = (m.color ? m.color.clone() : new THREE.Color(1, 1, 1)); const t = texAvg(m.map); if (t) c.multiply(t); return c; };
+  // une geometrie a plat (position, normale, couleur) placee par une matrice
+  const bake = (mesh, matrix) => {
+    let g = mesh.geometry.index ? mesh.geometry.toNonIndexed() : mesh.geometry.clone();
+    for (const k of Object.keys(g.attributes)) if (k !== 'position' && k !== 'normal') g.deleteAttribute(k);
+    if (!g.attributes.normal) g.computeVertexNormals();
+    g.applyMatrix4(matrix); const c = colorOf(mesh.material), n = g.attributes.position.count, col = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) { col[i * 3] = c.r; col[i * 3 + 1] = c.g; col[i * 3 + 2] = c.b; }
+    g.setAttribute('color', new THREE.BufferAttribute(col, 3)); return g;
+  };
+  flatMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.88, metalness: 0, envMap: envTex, envMapIntensity: 0.4 }); // meme eclairage que l'ancien rendu (reflets du ciel compris), mais un seul materiau
+  const visibleChain = (o, root) => { for (let a = o; a && a !== root; a = a.parent) if (!a.visible) return false; return true; };
+  // 1. les volets : une geometrie par modele de volet, une instance par volet (ils tournent encore)
+  const groups = new Map();
+  windows.forEach((w) => w.shutters.forEach((pv) => {
+    const parts = pv.children.filter((c) => c.isMesh); if (!parts.length) return;
+    pv.updateMatrixWorld(true);
+    const g = mergeGeometries(parts.map((c) => bake(c, c.matrix)));
+    const key = g.attributes.position.count + ':' + g.attributes.position.array.slice(0, 12).map((v) => v.toFixed(3)).join(',') + ':' + Array.from(g.attributes.color.array.slice(0, 3)).map((v) => v.toFixed(3)).join(',');
+    if (!groups.has(key)) groups.set(key, { g, pivots: [] }); else g.dispose();
+    groups.get(key).pivots.push(pv); parts.forEach((c) => pv.remove(c));
+  }));
+  groups.forEach(({ g, pivots }) => {
+    const im = new THREE.InstancedMesh(g, flatMat, pivots.length); im.castShadow = im.receiveShadow = true; im.frustumCulled = false; scene.add(im);
+    flatSync.push(() => { pivots.forEach((pv, i) => { pv.updateWorldMatrix(true, false); im.setMatrixAt(i, pv.matrixWorld); }); im.instanceMatrix.needsUpdate = true; });
+  });
+  // 2. les vitres : une instance par fenetre, la couleur suit glassMat (allumee, tele, nuit)
+  const glassBySize = new Map();
+  Object.values(H).forEach((h) => h.g.traverse((o) => {
+    const w = o.isMesh && windows.find((x) => x.glassMat === o.material); if (!w) return;
+    const p = o.geometry.parameters, key = p.width.toFixed(3) + 'x' + p.height.toFixed(3);
+    if (!glassBySize.has(key)) glassBySize.set(key, { geo: o.geometry, list: [] });
+    o.updateWorldMatrix(true, false); glassBySize.get(key).list.push({ m: o.matrixWorld.clone(), w, o });
+  }));
+  glassBySize.forEach(({ geo, list }) => {
+    const im = new THREE.InstancedMesh(geo, new THREE.MeshBasicMaterial({ color: '#ffffff' }), list.length); im.frustumCulled = false; scene.add(im);
+    list.forEach((it, i) => { im.setMatrixAt(i, it.m); im.setColorAt(i, it.w.glassMat.color); it.o.parent.remove(it.o); });
+    flatSync.push(() => { list.forEach((it, i) => im.setColorAt(i, it.w.glassMat.color)); im.instanceColor.needsUpdate = true; });
+  });
+  // 3. le reste de chaque maison (murs, toits, encadrements, balcons) : un seul objet
+  Object.entries(H).forEach(([key, h]) => {
+    h.g.updateMatrixWorld(true); const inv = new THREE.Matrix4().copy(h.g.matrixWorld).invert(), take = [];
+    h.g.traverse((o) => {
+      if (!o.isMesh || o.isInstancedMesh || !o.material || Array.isArray(o.material)) return;
+      const m = o.material; if (m.isMeshBasicMaterial || m.transparent || (m.map && m.map.isCanvasTexture)) return; // vitres, enseignes ecrites : a part
+      if (!visibleChain(o, h.g)) return; // ce qui apparait plus tard dans l'histoire reste a part
+      take.push(o);
+    });
+    if (!take.length) return;
+    const merged = mergeGeometries(take.map((o) => bake(o, new THREE.Matrix4().multiplyMatrices(inv, o.matrixWorld))));
+    const mesh = new THREE.Mesh(merged, flatMat); mesh.castShadow = mesh.receiveShadow = true; mesh.userData.flat = true; h.g.add(mesh);
+    take.forEach((o) => o.parent.remove(o));
+  });
+}
+function syncFlat() { for (const f of flatSync) f(); }
+/* ===== FACADES PEINTES : une peinture projetee sur chaque maison, depuis la camera qui a servi a la capturer ===== */
+// projector : la camera orthographique de la capture (position, rotation, cadre), cf. facades/projecteurs.json
+const PAINTED = {
+  bakery: { src: 'tex/facade-bakery.jpg', projector: { position: [-3.6, 14.475362556187388, 52.77147908584916], quaternion: [-0.08715574274765815, 0, 0, 0.9961946980917455], left: -2.07, right: 2.07, top: 4.500822223112176, bottom: -4.500822223112178 } },
+};
+function paintFacade(key, { src, projector: P }) {
+  const h = H[key]; if (!h) return;
+  const pc = new THREE.OrthographicCamera(P.left, P.right, P.top, P.bottom, 0.1, 200);
+  pc.position.fromArray(P.position); pc.quaternion.fromArray(P.quaternion); pc.updateMatrixWorld(); pc.updateProjectionMatrix();
+  const uProj = new THREE.Matrix4().multiplyMatrices(pc.projectionMatrix, pc.matrixWorldInverse);
+  const uDir = new THREE.Vector3(0, 0, 1).applyQuaternion(pc.quaternion).normalize(); // vers la camera de projection
+  const uPaint = { value: null };
+  // les volets bougent (ils se ferment au fil des ans) : ils gardent leur matiere d'origine
+  const skip = new Set(); h.wins.forEach((w) => (w.shutters || []).forEach((sh) => sh.traverse((o) => skip.add(o))));
+  new THREE.TextureLoader().load(src, (t) => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; uPaint.value = t; }, undefined, () => {});
+  h.g.traverse((o) => {
+    if (!o.isMesh || skip.has(o) || !o.material || Array.isArray(o.material)) return;
+    // les vitres (elles s'allument la nuit) et les enseignes ecrites (nettes) restent en 3D
+    if (o.material.isMeshBasicMaterial || (o.material.map && o.material.map.isCanvasTexture)) return;
+    const ud = o.material.userData; o.material.userData = {}; const m = o.material.clone(); o.material.userData = ud; // userData contient des references circulaires
+    m.onBeforeCompile = (sh) => {
+      sh.uniforms.uPaint = uPaint; sh.uniforms.uProj = { value: uProj }; sh.uniforms.uDir = { value: uDir };
+      sh.vertexShader = 'uniform mat4 uProj; varying vec4 vPaint; varying vec3 vPN;\n' + sh.vertexShader.replace('#include <project_vertex>', '#include <project_vertex>\n vec4 pw = modelMatrix * vec4(transformed, 1.0); vPaint = uProj * pw; vPN = normalize(mat3(modelMatrix) * normal);');
+      sh.fragmentShader = 'uniform sampler2D uPaint; uniform vec3 uDir; varying vec4 vPaint; varying vec3 vPN;\n' + sh.fragmentShader.replace('#include <color_fragment>', `#include <color_fragment>
+ vec2 puv = vPaint.xy / vPaint.w * 0.5 + 0.5;
+ float face = smoothstep(0.12, 0.35, dot(normalize(vPN), uDir));
+ if (face > 0.0 && puv.x > 0.0 && puv.x < 1.0 && puv.y > 0.0 && puv.y < 1.0) { vec3 pc = texture2D(uPaint, puv).rgb; diffuseColor.rgb = mix(diffuseColor.rgb, pc * 1.15, face); }`);
+    };
+    m.customProgramCacheKey = () => 'paint-' + key;
+    o.material = m;
+  });
+}
+const NOPAINT = !new URLSearchParams(location.search).has('paint'); // facades peintes : a l'essai (?paint) tant qu'il n'y a que la boulangerie // comparaison avant / apres
+if (!NOPAINT) Object.entries(PAINTED).forEach(([k, v]) => paintFacade(k, v));
 applyStyle(STYLE); resetWorld(); frame();
 setMaqLabel(); $('#start').disabled = false; $('#start').textContent = 'Commencer';
 const go = async (from) => { loadAudio(); $('#title').hidden = true; $('#bar').hidden = false; await play(from); };
