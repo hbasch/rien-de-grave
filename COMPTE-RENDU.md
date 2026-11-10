@@ -118,6 +118,14 @@ Demandé : réduire le coût des bâtiments « au plus simple et moins cher » (
 - Supprimé le panneau « RUE DES TILLEULS » sur poteau au premier plan (en France, le nom de rue est sur les murs).
 - La plaque qui tombait entre la Bourse et la maison n° 1 est remplacée par deux plaques émaillées réalistes (bleu nuit, liseré blanc, petit « VALBERNE » au-dessus, vis, reflet de l'émail, épaisseur), vissées sur le mur, entre le rez-de-chaussée et l'étage : angle gauche du n° 1, angle droit du n° 6 (sous la jardinière). Pas sur le café : son enseigne la cachait.
 
+## 5 nonies. v36 : aller et venir entre les années (10 novembre 2026)
+
+- La frise de l'horloge (Élection 2027 … An 8 2035) est cliquable, et le menu a une section « Aller à une année ». Avant de partir, une phrase dit ce qui va se passer (« Revenir à An 2 (2029) ? Les choix que tu as faits à partir de cette année seront oubliés… »), puis « Oui, y aller » / « Annuler ».
+- L'écran de fin propose « Revivre une année, et faire d'autres choix ».
+- Fonctionnement : `jumpTo(i)` garde les choix des chapitres antérieurs (`CH_OF` : choix → chapitre), les écrit dans l'adresse (`#an=i&c=…`) et dans localStorage, puis recharge la page ; au chargement, `JUMP` lance directement le chapitre sans repasser par l'écran titre (le son reprend au premier toucher). Recharger évite de laisser une scène à moitié jouée.
+- Écran titre : « Tu peux revenir à une année à tout moment : touche la frise en haut à gauche, ou ouvre le menu. »
+- Tests : An 6 → An 2 (seul le choix de l'An 1 conservé), saut vers l'An 8 joué jusqu'à la fin, menu sur iPhone, paquet itch : sans erreur.
+
 ## 6. Prochaines étapes
 
 1. **Son (bruitages, pas de musique)** : l'auteur hésite entre Soundly (sa bibliothèque), ElevenLabs, ou banques gratuites (Sonniss GDC bundle, Freesound CC0). Proposition : ~20 sons (lettre dans la boîte, tampon, volets, sonnette de vélo, pigeons, pas sur pavés, portières, sirène, terrasse de café, cour d'école, pluie sur zinc, télé) déposés dans `sons\`, puis découpe, normalisation et branchement ; fonds continus (pluie, rumeur) générables en WebAudio. Silence pendant la rafle et la veillée.

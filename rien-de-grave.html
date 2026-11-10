@@ -232,10 +232,23 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
 #fsBtn[hidden] { display: none; }
 #menuBtn { font: 700 0.8rem var(--f-body); background: var(--paper); color: var(--paper-ink); border: 0; border-radius: 0.3rem; padding: 0.4rem 0.75rem; cursor: pointer; box-shadow: 0 0.3rem 1rem rgba(0,0,0,.35); }
 #menu { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 1rem; background: rgba(5,8,16,.78); backdrop-filter: blur(3px); }
-.menu-in { width: min(26rem, 100%); background: #141c30; border: 1px solid rgba(244,238,227,.15); border-radius: 0.6rem; padding: 1.5rem 1.4rem; display: grid; gap: 0.9rem; box-shadow: 0 1.5rem 3rem rgba(0,0,0,.5); }
+.menu-in { max-height: calc(100dvh - 2rem); overflow-y: auto; width: min(26rem, 100%); background: #141c30; border: 1px solid rgba(244,238,227,.15); border-radius: 0.6rem; padding: 1.5rem 1.4rem; display: grid; gap: 0.9rem; box-shadow: 0 1.5rem 3rem rgba(0,0,0,.5); }
 .menu-in h2 { margin: 0; font: 700 2.8rem/1 var(--f-hand); }
 .menu-btns { display: grid; gap: 0.5rem; }
 .menu-btns button { justify-self: stretch; text-align: left; }
+/* aller et venir entre les annees */
+.years { display: grid; grid-template-columns: repeat(auto-fill, minmax(5.6rem, 1fr)); gap: 0.4rem; }
+.years button { font: 400 0.8rem/1.2 var(--f-body); padding: 0.45rem 0.4rem; text-align: center; border-radius: 0.35rem; cursor: pointer; background: transparent; color: inherit; border: 1px solid rgba(244,238,227,.35); }
+.years button b { display: block; font: 700 0.9rem/1.2 var(--f-body); color: inherit; text-transform: none; letter-spacing: 0; }
+.years button:hover, .years button:focus-visible { border-color: #f3c23a; color: #f3c23a; }
+.years button.now { background: #f3c23a; color: #141c30; border-color: #f3c23a; }
+.years-ask { margin: 0; font-size: 0.92rem; line-height: 1.45; }
+.years-ask[hidden] { display: none; }
+.years-ask span { display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap; }
+#endYears { margin: 1.2rem 0 0; }
+#endYears .tag { margin-bottom: 0.5rem; }
+#clkLine li { cursor: pointer; }
+#clkLine li:hover, #clkLine li:focus-visible { color: #b3261e; outline: none; }
 .about { margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--muted); }
 .end-btns { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 #mute { font: 700 0.8rem var(--f-body); background: rgba(10,14,26,.78); color: var(--ink); border: 1px solid rgba(244,238,227,.2); border-radius: 0.3rem; padding: 0.4rem 0.65rem; cursor: pointer; }
@@ -291,6 +304,9 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
       <button id="mFacts" class="ghost" type="button">Les faits et les sources</button>
       <button id="mRestart" class="ghost" type="button">Recommencer depuis le début</button>
     </div>
+    <p class="tag">Aller à une année</p>
+    <div id="mYears" class="years"></div>
+    <p id="mYearsAsk" class="years-ask" hidden></p>
     <p class="about">Fiction d'anticipation. Claire, Valberne et ses habitants sont inventés. Les tampons rouges « Déjà arrivé » renvoient à des faits réels et sourcés, les tampons « Au programme du RN » à des mesures annoncées, et les tampons bleus « Pas encore arrivé » à la fiction, toujours inspirée de faits réels. Aucune parole inventée n'est prêtée à une personne réelle.</p>
   </div>
 </div>
@@ -316,7 +332,7 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
       <p><span class="mini fic">Pas encore arrivé</span> la fiction, toujours inspirée de faits réels</p>
     </div>
     <div class="start-row"><button id="start" class="big" type="button" disabled>Chargement…</button><button id="resume" class="ghost" type="button" hidden>Reprendre</button><button id="tFull" class="ghost" type="button" hidden>Plein écran</button></div>
-    <p class="warn">Touche les points jaunes pour ta tournée de factrice, les bleus pour ta vie de citoyenne. Six fois, tu devras choisir, et tes choix auront des suites. Contient des scènes d'arrestation.</p>
+    <p class="warn">Touche les points jaunes pour ta tournée de factrice, les bleus pour ta vie de citoyenne. Six fois, tu devras choisir, et tes choix auront des suites. Tu peux revenir à une année à tout moment : touche la frise en haut à gauche, ou ouvre le menu. Contient des scènes d'arrestation.</p>
   </div>
 </section>
 
@@ -440,6 +456,7 @@ button:focus-visible { outline: 3px solid var(--post); outline-offset: 2px; }
     </div>
     <p class="credits"><strong>Rien de grave</strong>, un projet de Hadrien Basch. Un récit interactif indépendant, gratuit, sans publicité ni collecte de données. Sons : ElevenLabs. Modèles et textures : Poly Haven (CC0). Moteur 3D : three.js (licence MIT). Polices : Atkinson Hyperlegible, Caveat, Special Elite (licence SIL OFL). Sources consultées en octobre 2026.</p>
     <div class="end-btns"><button id="endBack" class="big" type="button" hidden>Revenir au jeu</button><button id="again" class="ghost" type="button">Rejouer</button></div>
+    <div id="endYears"><p class="tag">Revivre une année, et faire d'autres choix</p><div class="years"></div></div>
   </div>
 </section>
 
@@ -511,7 +528,7 @@ function sfx(name) { const def = AUDIO.sfx[name]; if (!def || !SND.ctx || !SND.b
 function toggleSound() { SND.on = !SND.on; if (SND.m) SND.m.gain.value = SND.on ? 1 : 0; $('#mute').textContent = SND.on ? 'Couper le son' : 'Remettre le son'; $('#mute').setAttribute('aria-pressed', String(!SND.on)); $('#mSound').textContent = 'Son : ' + (SND.on ? 'activé' : 'coupé'); }
 $('#mute').onclick = toggleSound;
 /* ===== MENU ===== */
-const openMenu = () => { $('#menu').hidden = false; $('#mResume').focus({ preventScroll: true }); };
+const openMenu = () => { $('#mYearsAsk').hidden = true; yearButtons($('#mYears'), askJump); $('#menu').hidden = false; $('#mResume').focus({ preventScroll: true }); };
 const closeMenu = () => { $('#menu').hidden = true; };
 $('#menuBtn').onclick = openMenu;
 const setMaqLabel = () => ($('#mMaq').textContent = 'Vue : ' + (MAQ ? 'maquette (test)' : 'rue'));
@@ -528,7 +545,7 @@ const fsLabel = () => { const t = isFull() ? 'Quitter le plein écran' : 'Plein 
 $('#tFull').onclick = toggleFull; $('#fsBtn').onclick = toggleFull;
 $('#mFull').onclick = () => { toggleFull(); closeMenu(); };
 $('#mRestart').onclick = () => { save(0); location.reload(); };
-$('#mFacts').onclick = () => { closeMenu(); renderMine(); $('#endBack').hidden = false; $('#again').hidden = true; $('#end').hidden = false; $('#end').scrollTop = 0; };
+$('#mFacts').onclick = () => { closeMenu(); renderMine(); $('#endBack').hidden = false; $('#again').hidden = true; $('#endYears').hidden = true; $('#end').hidden = false; $('#end').scrollTop = 0; };
 $('#endBack').onclick = () => { $('#end').hidden = true; $('#endBack').hidden = true; $('#again').hidden = false; };
 addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#bar').hidden) { if ($('#menu').hidden && $('#end').hidden) openMenu(); else if (!$('#menu').hidden) closeMenu(); } });
 
@@ -1478,6 +1495,36 @@ const SAVE = 'rien-de-grave-chapitre';
 const saved = () => { try { const v = +localStorage.getItem(SAVE); return v >= 1 && v < CHAPTERS.length ? v : 0; } catch (e) { return 0; } };
 const save = (i) => { try { if (i) { localStorage.setItem(SAVE, String(i)); localStorage.setItem(SAVE + '-choix', JSON.stringify(C)); } else { localStorage.removeItem(SAVE); localStorage.removeItem(SAVE + '-choix'); } } catch (e) {} };
 const savedChoices = () => { try { return JSON.parse(localStorage.getItem(SAVE + '-choix') || '{}') || {}; } catch (e) { return {}; } };
+// Aller et venir entre les annees : on recharge la page au debut du chapitre choisi (rien de l'histoire
+// en cours ne reste a moitie joue), en gardant les choix faits AVANT cette annee.
+const CH_OF = { caf: 1, rassemblement: 2, moussa: 3, leo: 4, rafle: 5, tract: 6, partir: 6 }; // choix -> chapitre
+const YEARS = ['2027', '2028', '2029', '2031', '2033', '2034', '2035'];
+let curChap = -1, JUMP = null;
+{ const m = /(?:^#|&)an=(\d)(?:&c=([^&]*))?/.exec(location.hash); // #an=3&c={...} : arrivee apres un saut
+  if (m) { JUMP = { i: Math.min(+m[1], CHAPTERS.length - 1), c: {} }; try { JUMP.c = JSON.parse(decodeURIComponent(m[2] || '%7B%7D')) || {}; } catch (e) {}
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {} } }
+function jumpTo(i) {
+  const keep = {}; Object.entries(C).forEach(([k, v]) => { if ((CH_OF[k] ?? 9) < i) keep[k] = v; });
+  try { if (i) { localStorage.setItem(SAVE, String(i)); localStorage.setItem(SAVE + '-choix', JSON.stringify(keep)); } else { localStorage.removeItem(SAVE); localStorage.removeItem(SAVE + '-choix'); } } catch (e) {}
+  location.hash = 'an=' + i + '&c=' + encodeURIComponent(JSON.stringify(keep)); location.reload();
+}
+function yearButtons(box, onPick) {
+  box.textContent = '';
+  CHAPTERS.forEach((name, i) => { const b = document.createElement('button'); b.type = 'button'; if (i === curChap) b.className = 'now';
+    const t = document.createElement('b'); t.textContent = i ? name : 'Élection'; b.append(t, YEARS[i]); b.onclick = () => onPick(i); box.append(b); });
+}
+function askJump(i) { // dans le menu : on dit ce qui va se passer avant de partir
+  const ask = $('#mYearsAsk'), name = i ? CHAPTERS[i] + ' (' + YEARS[i] + ')' : 'le soir de l\'élection (2027)';
+  const lost = Object.keys(C).filter((k) => (CH_OF[k] ?? 9) >= i).length;
+  ask.textContent = (i === curChap ? 'Recommencer ' + name + ' depuis le début ?' : (i < curChap ? 'Revenir à ' : 'Aller à ') + name + ' ?') +
+    (lost ? ' Les choix que tu as faits à partir de cette année seront oubliés : tu pourras les refaire autrement.' : i > curChap + 1 ? ' Les choix des années sautées seront laissés de côté.' : '');
+  const row = document.createElement('span'); const yes = document.createElement('button'); yes.type = 'button'; yes.className = 'big'; yes.textContent = 'Oui, y aller';
+  const no = document.createElement('button'); no.type = 'button'; no.className = 'ghost'; no.textContent = 'Annuler';
+  yes.onclick = () => jumpTo(i); no.onclick = () => { ask.hidden = true; }; row.append(yes, no); ask.append(row); ask.hidden = false; yes.focus({ preventScroll: true });
+}
+function openYears(i) { openMenu(); if (i != null) askJump(i); }
+document.querySelectorAll('#clkLine li').forEach((li, i) => { li.tabIndex = 0; li.setAttribute('role', 'button'); li.title = 'Aller à ' + (i ? CHAPTERS[i] : 'l\'élection') + ', ' + YEARS[i];
+  li.onclick = () => openYears(i); li.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openYears(i); } }; });
 const CH = [
   async () => {
   resetWorld(); focus(X.claire, 0.75); H.claire.wins[1].tv = true; music('nuit'); setEra(0);
@@ -1963,7 +2010,7 @@ const CH = [
   await wait(2200);
   await card('Valberne n\'existe pas.', 'Rien de grave');
   music(null);
-  renderMine(); $('#bar').hidden = true; $('#endBack').hidden = true; $('#again').hidden = false; $('#end').hidden = false; $('#end').scrollTop = 0;
+  renderMine(); $('#bar').hidden = true; $('#endBack').hidden = true; $('#again').hidden = false; $('#endYears').hidden = false; yearButtons($('#endYears .years'), jumpTo); $('#end').hidden = false; $('#end').scrollTop = 0;
   },
 ];
 function catchUp(from) { // ce que les chapitres sautes ont laisse dans la rue
@@ -1971,9 +2018,9 @@ function catchUp(from) { // ce que les chapitres sautes ont laisse dans la rue
   if (from >= 3) pool.userData.rule.visible = true;
 }
 async function play(from = 0) {
-  C = from ? savedChoices() : {}; firstChoice = !Object.keys(C).length;
+  C = JUMP ? JUMP.c : from ? savedChoices() : {}; JUMP = null; firstChoice = !Object.keys(C).length;
   resetWorld(); catchUp(from);
-  for (let i = from; i < CH.length; i++) { save(i); await CH[i](); }
+  for (let i = from; i < CH.length; i++) { curChap = i; save(i); await CH[i](); }
   save(0);
 }
 
@@ -2139,6 +2186,7 @@ applyStyle(STYLE); resetWorld(); frame();
 setMaqLabel(); $('#start').disabled = false; $('#start').textContent = 'Commencer';
 const go = async (from) => { loadAudio(); $('#title').hidden = true; $('#bar').hidden = false; await play(from); };
 $('#start').onclick = () => go(0);
+if (JUMP) { go(JUMP.i); addEventListener('pointerdown', () => { loadAudio(); music(SND.want, true); }, { once: true }); }
 { const k = saved(); if (k) { $('#resume').hidden = false; $('#resume').textContent = 'Reprendre : ' + CHAPTERS[k]; $('#resume').onclick = () => go(k); } }
 $('#again').onclick = async () => { $('#end').hidden = true; $('#bar').hidden = false; await play(); };
 </script>
